@@ -1,0 +1,7 @@
+{
+  lspconfig = {
+    enabled = true,
+    options = {
+    },
+  }
+}
