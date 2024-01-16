@@ -10,13 +10,23 @@
 -- * disable/enabled LazyVim plugins
 -- * override the configuration of LazyVim plugins
 return {
-  -- Use Tabs instead of spaces 
+  {
+    -- Disable indent-blankline
+    "lukas-reineke/indent-blankline.nvim",
+    enabled = false,
+    opts = {
+    }
+  },
+
 	-- Configure LazyVim to load morning theme
 	{
 		"LazyVim/LazyVim",
 		opts = {
-			colorscheme = "evening",
+	--		colorscheme = "evening",
+      colorscheme = "desert",
       indent = "tabs",
+      -- Hide the tab character
+      showtabline = 0,
 		},
 	},
 
@@ -24,7 +34,10 @@ return {
 	{
 		"folke/trouble.nvim",
 		-- opts will be merged with the parent spec
-		opts = { use_diagnostic_signs = true },
+    enabled = true,
+		opts = {
+      use_diagnostic_signs = true 
+    },
 	},
 
   {
@@ -44,9 +57,6 @@ return {
       { "<leader>fw", "<cmd>Telescope live_grep<cr>", desc = "Find Word" },
     },
   },
-
-	-- disable trouble
-	{ "folke/trouble.nvim", enabled = false },
 
 	-- add symbols-outline
 	{
@@ -101,7 +111,6 @@ return {
 		},
 	},
 
-	-- add pyright to lspconfig
 	{
 		"neovim/nvim-lspconfig",
 		---@class PluginLspOpts

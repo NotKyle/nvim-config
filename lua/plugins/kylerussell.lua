@@ -2,7 +2,8 @@ return {
 	{
 		"LazyVim/LazyVim",
 		opts = {
-			colorScheme = "morning",
+	--		colorScheme = "morning",
+      colorScheme = "default",
 		},
 	},
 
