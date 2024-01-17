@@ -18,12 +18,19 @@ return {
     }
   },
 
+  -- Git blame plugin 
+  {
+    'f-person/git-blame.nvim',
+    enabled = true,
+  },
+
 	-- Configure LazyVim to load morning theme
 	{
 		"LazyVim/LazyVim",
 		opts = {
 	--		colorscheme = "evening",
-      colorscheme = "desert",
+      -- colorscheme = "desert",
+      colorsceme = "navarasu/onedark.nvim",
       indent = "tabs",
       -- Hide the tab character
       showtabline = 0,
