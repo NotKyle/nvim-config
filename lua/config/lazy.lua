@@ -10,12 +10,21 @@ vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 vim.opt.listchars = "tab:  "
 vim.opt.list = false
 -- vim.opt.listchars = false
---
+
+-- Change search behaviour
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+
+
 vim.api.nvim_create_autocmd("VimEnter", {
   callback = function()
     vim.cmd("set nolist")
   end,
 });
+
+-- Disable autochdir
+-- lvim.builtin.project.manual_mode = true
+vim.o.autochdir = true
 
 require("lazy").setup({
 	spec = {
