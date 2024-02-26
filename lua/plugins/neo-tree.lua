@@ -13,6 +13,9 @@ return {
           -- 'thumbs.db',
         },
         never_show = {},
+        always_show = {
+          ".env"
+        },
       },
     }
   }

@@ -1,6 +1,6 @@
 {
   lspconfig = {
-    enabled = true,
+    enabled = false,
     options = {
     },
   }
