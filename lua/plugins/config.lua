@@ -10,6 +10,42 @@
 -- * override the configuration of LazyVim plugins
 return {
   {
+    'natecraddock/workspaces.nvim',
+    enabled = true,
+    config = function()
+      require('workspaces').setup({
+        auto_open = true,
+      })
+    end,
+  },
+
+  {
+  'mvllow/modes.nvim',
+    enabled = true,
+    config = function()
+      require('modes').setup({
+        colors = {
+          insert = '#00ff00',
+          normal = '#0000ff',
+          command = '#ff0000',
+          visual = '#ff00ff',
+          replace = '#ffff00',
+          terminal = '#00ffff',
+          delete = '#ff0000',
+          copy = '#00ff00',
+        },
+    })
+    end,
+  },
+
+  {
+    'shaunsingh/nord.nvim',
+    config = function()
+      require('nord').set()
+    end,
+  },
+
+  {
     -- Disable indent-blankline
     "lukas-reineke/indent-blankline.nvim",
     enabled = false,
@@ -135,7 +171,7 @@ return {
     opts = {
       --		colorscheme = "evening",
       -- colorscheme = "desert",
-      colorsceme = "navarasu/onedark.nvim",
+      colorscheme = "nord",
       indent = "tabs",
       -- Hide the tab character
       showtabline = 0,

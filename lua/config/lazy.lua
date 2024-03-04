@@ -24,7 +24,8 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 -- Disable autochdir
 -- lvim.builtin.project.manual_mode = true
-vim.o.autochdir = true
+vim.o.autochdir = false
+vim.cmd("filetype plugin indent off")
 
 require("lazy").setup({
 	spec = {

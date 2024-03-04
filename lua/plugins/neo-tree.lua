@@ -16,7 +16,11 @@ return {
         always_show = {
           ".env"
         },
+
       },
-    }
+    },
+    keys = {
+      { "<leader>e", "<cmd>Neotree toggle<cr>", desc = "NeoTree" },
+    },
   }
 }
