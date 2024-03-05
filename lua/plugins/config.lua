@@ -10,6 +10,27 @@
 -- * override the configuration of LazyVim plugins
 return {
   {
+    'mvllow/stand.nvim',
+    config = function()
+      minute_interval = 60
+    end,
+  },
+
+  {
+    'coffebar/neovim-project',
+    config = function()
+      require('neovim-project').setup({
+        projects = {
+          "~/Desktop/Sites/*"
+        },
+        vim.keymap.set("n", ";", ":Telescope neovim-project discover<CR>", {}),
+      })
+    end,
+    dependencies = {
+      { "Shatur/neovim-session-manager" },
+    },
+  },
+  {
     'natecraddock/workspaces.nvim',
     enabled = true,
     config = function()
@@ -20,7 +41,7 @@ return {
   },
 
   {
-  'mvllow/modes.nvim',
+    'mvllow/modes.nvim',
     enabled = true,
     config = function()
       require('modes').setup({
@@ -34,7 +55,7 @@ return {
           delete = '#ff0000',
           copy = '#00ff00',
         },
-    })
+      })
     end,
   },
 
