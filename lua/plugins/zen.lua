@@ -3,7 +3,11 @@ return {
   event = "VeryLazy",
   opts = {
     window = {
-      width = 100,
+      width = 120,
+      options = {
+        relativenumber = true,
+        number = true,
+      },
     },
     plugins = {
       options = {

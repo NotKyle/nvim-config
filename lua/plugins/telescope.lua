@@ -20,9 +20,9 @@ return {
         sorting_strategy = "ascending",
         winblend = 0,
         file_ignore_patterns = {
-          "node_modules",
-          ".git",
-          "*.min*",
+          "^node_modules/.*",
+          "^./.git",
+          "^.*min.*",
         },
       },
     },
