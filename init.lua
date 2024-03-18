@@ -1,5 +1,10 @@
 require("config.lazy")
 
+local o = vim.o
+local wo = vim.wo
+local opt = vim.opt
+local g = vim.g
+
 vim.cmd.colorscheme("nord")
 
 -- This is the old line number highlight behaviour
@@ -32,3 +37,20 @@ vim.cmd("autocmd VimEnter * lua SetRandomLineNrColor()")
 -- Setting highlights for lines above and below
 vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#6e738d", bold = false })
 vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#6e738d", bold = false })
+
+if g.neovide then
+  g.neovide_transparency = 0.6
+  g.neovide_window_blurred = true
+  g.neovide_floating_shadow = true
+
+  g.neovide_floating_shadow = true
+  g.neovide_floating_z_height = 03
+  g.neovide_light_angle_degrees = 25
+  g.neovide_light_radius = 2
+
+  g.neovide_refresh_rate = 120
+  g.neovide_cursor_vfx_mode = "ripple"
+  g.neovide_cursor_animation_length = 0.03
+  g.neovide_cursor_trail_size = 0.9
+  g.neovide_remember_window_size = true
+end
