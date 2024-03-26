@@ -1,0 +1,28 @@
+-- Autocmds
+-- vim.cmd([[
+--   augroup vimrc
+--     autocmd!
+--     " Highlight on yank
+--     autocmd TextYankPost * silent! lua vim.highlight.on_yank {higroup="IncSearch", timeout=150}
+--   augroup END
+-- ]])
+--
+-- -- PHP
+-- vim.cmd([[
+--   augroup php
+--     autocmd!
+--     autocmd FileType php setlocal shiftwidth=4 tabstop=4
+--   augroup END
+-- ]])
+-- When opening a project, set the working directory to the root of the project
+-- Run the yarn webpack-dev command
+-- Run command to kill any existing docker containers
+-- Run the docker-compose up command
+--
+-- Open http://localhost in the browser
+-- vim.cmd([[
+--   augroup project
+--     autocmd!
+--     autocmd BufEnter * if filereadable("package.json") | lcd %:p:h | silent !yarn webpack-dev | silent !docker kill $(docker ps -q) | silent !docker-compose up -d | silent !open http://localhost | endif
+--   augroup END
+-- ]])

@@ -53,6 +53,12 @@ vim.keymap.set("n", "<leader>z", "<cmd>ZenMode<CR>", { desc = "Toggle Zen Mode" 
 -- Find word
 vim.keymap.set("n", "<leader>fw", "<cmd>Telescope live_grep<CR>", { desc = "Find word" })
 
+-- Key mappings
+-- Map <leader>sv to :source $MYVIMRC
+vim.keymap.set("n", "<leader>sv", ":source $MYVIMRC<CR>", { desc = "Reload config", noremap = true, silent = true })
+-- Search and replace :%s/<Start>/<End>/ - we don't need the /g flag as the command will be used across the whole file because of the %
+vim.keymap.set("n", "<leader>ssr", ":%s//<Left>", { desc = "Search and replace", noremap = true, silent = true })
+
 -- Accept Copilot suggestion
 -- vim.keymap.set("i", "<tab>", "<cmd>Copilot suggestion accept<CR>", { expr = true, silent = true })
 

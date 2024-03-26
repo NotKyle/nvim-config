@@ -5,8 +5,6 @@ local wo = vim.wo
 local opt = vim.opt
 local g = vim.g
 
-vim.cmd.colorscheme("nord")
-
 -- This is the old line number highlight behaviour
 --vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#6e738d", bold = false })
 --vim.api.nvim_set_hl(0, "LineNr", { fg = "#b4befe", bold = true })
@@ -35,11 +33,14 @@ end
 vim.cmd("autocmd VimEnter * lua SetRandomLineNrColor()")
 
 -- Setting highlights for lines above and below
-vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#6e738d", bold = false })
+vim.api.nvim_set_hl(0, "LineNrAbove", { fg = "#8D6E73", bold = false })
 vim.api.nvim_set_hl(0, "LineNrBelow", { fg = "#6e738d", bold = false })
 
+-- Font options
+o.guifont = "JetBrainsMono Nerd Font:h16"
+
 if g.neovide then
-  g.neovide_transparency = 0.6
+  g.neovide_transparency = 0.68
   g.neovide_window_blurred = true
   g.neovide_floating_shadow = true
 
@@ -54,3 +55,17 @@ if g.neovide then
   g.neovide_cursor_trail_size = 0.9
   g.neovide_remember_window_size = true
 end
+
+vim.cmd.colorscheme("nord")
+
+-- Add required LSP servers
+-- SCSS, Emmet, Intelephense, phpactor
+require("lspconfig").scss.setup({})
+require("lspconfig").emmet_ls.setup({})
+require("lspconfig").intelephense.setup({})
+require("lspconfig").phpactor.setup({})
+require("lspconfig").tsserver.setup({})
+require("lspconfig").jsonls.setup({})
+require("lspconfig").html.setup({})
+require("lspconfig").cssls.setup({})
+require("lspconfig").yamlls.setup({})
