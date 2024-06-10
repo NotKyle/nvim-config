@@ -1,0 +1,4 @@
+~/Desktop/Sites/*
+~/.config/nvim
+~/Desktop/Training/*
+~/Desktop/Email Campaigns/*
