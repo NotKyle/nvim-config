@@ -3,3 +3,4 @@
 -- Add any additional options here
 vim.opt.showtabline = 0
 vim.opt.laststatus = 0
+vim.api.nvim_set_option("clipboard", "unnamed")

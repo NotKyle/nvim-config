@@ -49,3 +49,17 @@ require("lazy").setup({
     },
   },
 })
+
+-- I keep getting fed up of losing my LSP servers whenever I need to reset my configuration
+-- Making it so it's easier to reinstall them
+function initLSP()
+  local file = io.open(vim.fn.stdpath("config") .. "/lsps.txt", "r")
+  if file == nil then
+    print("No lsps.txt file found in your config directory. Please create one and add your LSP servers.")
+    return
+  end
+  for line in file:lines() do
+    -- Install LSP using LspInstall
+    vim.cmd("LspInstall " .. line)
+  end
+end

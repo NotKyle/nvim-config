@@ -3,8 +3,38 @@
 -- Add any additional keymaps here
 
 -- Telescope / File explorer
-vim.api.nvim_set_keymap("n", "<leader>fw", "<cmd>Telescope live_grep<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>fw", "<cmd>Telescope live_grep<cr>", { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { noremap = true, silent = true })
+
+-- vim.keymap.del("n", "<leader>ff")
+-- vim.keymap.del("n", "<leader>fw")
+-- vim.keymap.del("n", "<leader>fg")
+
+-- Remove default keymaps for Telescope
+require("telescope").setup({
+  defaults = {
+    mappings = {
+      i = {
+        -- To disable a keymap, put [map] = false
+        -- So, to not map "<C-n>", just put
+        ["<leader>ff"] = false,
+        ["<leader>fw"] = false,
+        ["<leader>fg"] = false,
+        ["<leader><leader>"] = false,
+      },
+    },
+  },
+})
+
+-- Add new keymaps for Telescope
+vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Pick files<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader><leader>", "<cmd>Pick files<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Pick files tool='git'<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>fw", "<cmd>Pick grep_live<cr>", { noremap = true, silent = true })
+
+-- Code Actions
+-- <LEADER>cr - Rename variable
+vim.api.nvim_set_keymap("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", { noremap = true, silent = true })
 
 -- Mini Files
 vim.keymap.set("n", "<leader>e", "<cmd>lua require('mini.files').open()<cr>")
@@ -41,27 +71,6 @@ end)
 vim.keymap.set("n", "<C-4>", function()
   harpoon:list():select(4)
 end)
-
--- vim.keymap.set("n", "<C-h>", function()
---   harpoon:list():select(1)
--- end)
--- vim.keymap.set("n", "<C-t>", function()
---   harpoon:list():select(2)
--- end)
--- vim.keymap.set("n", "<C-n>", function()
---   harpoon:list():select(3)
--- end)
--- vim.keymap.set("n", "<C-s>", function()
---   harpoon:list():select(4)
--- end)
-
--- Toggle previous & next buffers stored within Harpoon list
--- vim.keymap.set("n", "<C-S-P>", function()
---   harpoon:list():prev()
--- end)
--- vim.keymap.set("n", "<C-S-N>", function()
---   harpoon:list():next()
--- end)
 
 -- Project Manager
 function initProjectManager()
