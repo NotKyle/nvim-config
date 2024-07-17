@@ -73,25 +73,80 @@ vim.keymap.set("n", "<C-4>", function()
 end)
 
 -- Project Manager
-function initProjectManager()
-  local file = io.open(vim.fn.stdpath("config") .. "/project_locations.txt", "r")
+-- function initProjectManager()
+--   local file = io.open(vim.fn.stdpath("config") .. "/project_locations.txt", "r")
+--
+--   if file == nil then
+--     print(
+--       "No project_locations.txt file found in your config directory. Please create one and add your project locations."
+--     )
+--     return
+--   end
+--
+--   local found_projects = {}
+--   for line in file:lines() do
+--     table.insert(found_projects, line)
+--   end
+--
+--   local project_manager = require("neovim-project").setup({
+--     projects = found_projects,
+--   })
+--
+--   vim.keymap.set("n", "<leader>pp", ":Telescope neovim-project discover<CR>", {})
+-- end
+-- initProjectManager()
 
-  if file == nil then
-    print(
-      "No project_locations.txt file found in your config directory. Please create one and add your project locations."
-    )
-    return
-  end
+vim.opt.splitbelow = true -- split windows below
+vim.opt.splitright = true -- split windows right
 
-  local found_projects = {}
-  for line in file:lines() do
-    table.insert(found_projects, line)
-  end
+-- Map <leader>r to run search-replace: :%s/original/replacement
+-- End cursor on the original word
+-- Description: Search and replace
+vim.api.nvim_set_keymap("n", "<leader>r", ":%s//g<left><left>", {
+  noremap = true,
+  silent = true,
+  desc = "Search and Replace",
+})
 
-  local project_manager = require("neovim-project").setup({
-    projects = found_projects,
-  })
+-- Search and replace but use word under cursor as search term
+-- Description: Search and replace word under cursor
+vim.api.nvim_set_keymap("n", "<leader>R", ":%s/\\<<C-r><C-w>\\>//g<left><left>", {
+  noremap = true,
+  silent = true,
+  desc = "Search and Replace Word Under Cursor",
+})
 
-  vim.keymap.set("n", "<leader>pp", ":Telescope neovim-project discover<CR>", {})
-end
-initProjectManager()
+-- Search and replace but use visual selection as search term
+-- Description: Search and replace visual selection
+vim.api.nvim_set_keymap("v", "<leader>r", ":'<,'>s//g<left><left>", {
+  noremap = true,
+  silent = true,
+  desc = "Search and Replace Visual Selection",
+})
+
+-- Search and replace but use visual selection as search term
+-- Description: Search and replace visual selection
+vim.api.nvim_set_keymap("v", "<leader>R", ":'<,'>s/\\<<C-r><C-w>\\>//g<left><left>", {
+  noremap = true,
+  silent = true,
+  desc = "Search and Replace Visual Selection",
+})
+
+-- Movement
+local keyset = vim.keymap.set
+keyset("i", "jk", "<esc>")
+
+keyset("v", "J", ":m '>+1<cr>gv=gv")
+keyset("v", "K", ":m '<-2<cr>gv=gv")
+keyset("n", "<space>h", "<c-w>h")
+keyset("n", "<space>j", "<c-w>j")
+keyset("n", "<space>k", "<c-w>k")
+keyset("n", "<space>l", "<c-w>l")
+keyset("n", "<leader>wh", "<c-w>t<c-h>H")
+keyset("n", "<leader>wk", "<c-w>t<c-h>K")
+keyset("n", "<down>", ":resize +5<cr>")
+keyset("n", "<up>", ":resize -5<cr>")
+keyset("n", "<right>", ":vertical resize +5<cr>")
+keyset("n", "<left>", ":vertical resize -5<cr>")
+keyset("n", "j", "(v:count ? 'j' : 'gj')", { expr = true })
+keyset("n", "k", "(v:count ? 'k' : 'gk')", { expr = true })

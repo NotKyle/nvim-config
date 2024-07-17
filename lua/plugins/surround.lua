@@ -1,6 +1,6 @@
 return {
-  "ur4ltz/surround.nvim",
+  "kylechui/nvim-surround", -- surround objects
   config = function()
-    require("surround").setup({})
+    require("nvim-surround").setup({})
   end,
 }
