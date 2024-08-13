@@ -15,6 +15,32 @@ return {
 
   config = function()
     require("noice").setup({
+      routes = {
+        -- Hide 'written' messages
+        {
+          filter = {
+            event = "msg_show",
+            kind = "",
+            find = "written",
+          },
+          opts = {
+            skip = true,
+          },
+        },
+
+        -- skip phpactor lsp progress messages (e.g; the annoying "Resolving code actions" message)
+        {
+          filter = {
+            event = "lsp",
+            kind = "progress",
+            cond = function(message)
+              local client = vim.tbl_get(message.opts, "progress", "client")
+              return client == "phpactor"
+            end,
+          },
+          opts = { skip = true },
+        },
+      },
       lsp = {
         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
         override = {
@@ -30,6 +56,37 @@ return {
         long_message_to_split = true, -- long messages will be sent to a split
         inc_rename = false, -- enables an input dialog for inc-rename.nvim
         lsp_doc_border = false, -- add a border to hover docs and signature help
+      },
+      -- Clean command-line
+      views = {
+        cmdline_popup = {
+          position = {
+            row = 5,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = "auto",
+          },
+        },
+        popupmenu = {
+          relative = "editor",
+          position = {
+            row = 8,
+            col = "50%",
+          },
+          size = {
+            width = 60,
+            height = 10,
+          },
+          border = {
+            style = "rounded",
+            padding = { 0, 1 },
+          },
+          win_options = {
+            winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+          },
+        },
       },
     })
   end,
