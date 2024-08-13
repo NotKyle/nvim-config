@@ -1,5 +1,36 @@
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
+-- Neovide configuration
+if vim.g.neovide then
+  vim.g.neovide_remember_window_size = true
+  vim.g.neovide_cursor_vfx_mode = "pixiedust"
+  vim.g.neovide_cursor_vfx_particle_lifetime = 1.5
+  vim.g.neovide_cursor_vfx_particle_density = 10
+  vim.g.neovide_cursor_vfx_particle_speed = 0.1
+  vim.g.neovide_cursor_vfx_particle_phase = 0.0
+
+  vim.g.neovide_cursor_vfx_color_offset = 120
+
+  -- Enable true colors
+  vim.opt.termguicolors = true
+  -- Set the background to transparent
+  vim.opt.background = "dark"
+  vim.g.neovide_transparency = 0.95
+  vim.g.neovide_refresh_rate = 144
+  vim.g.neovide_cursor_antialiasing = true
+
+  -- Set the cursor line to a different color
+  vim.cmd("highlight CursorLine guibg=#2e3440")
+
+  -- Set the cursor column to a different color
+  vim.cmd("highlight CursorColumn guibg=#2e3440")
+
+  -- Set the cursor line number to a different color
+  vim.cmd("highlight LineNr guibg=#2e3440")
+  vim.cmd("highlight CursorLineNr guibg=#2e3440")
+end
+-- End of Neovide configuration
+
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({
     "git",
@@ -32,7 +63,8 @@ require("lazy").setup({
     version = false, -- always use the latest git commit
     -- version = "*", -- try installing the latest stable version for plugins that support semver
   },
-  install = { colorscheme = { "tokyonight", "habamax" } },
+  -- install = { colorscheme = { "flow", "tokyonight", "habamax" } },
+  install = { colorscheme = { "tokyonight-storm" } },
   checker = { enabled = true }, -- automatically check for plugin updates
   performance = {
     rtp = {
@@ -50,20 +82,6 @@ require("lazy").setup({
   },
 })
 
--- I keep getting fed up of losing my LSP servers whenever I need to reset my configuration
--- Making it so it's easier to reinstall them
-function InitLSP()
-  local file = io.open(vim.fn.stdpath("config") .. "/lsps.txt", "r")
-  if file == nil then
-    print("No lsps.txt file found in your config directory. Please create one and add your LSP servers.")
-    return
-  end
-  for line in file:lines() do
-    -- Install LSP using LspInstall
-    vim.cmd("LspInstall " .. line)
-  end
-end
-
 -- Mini setup
 -- Mini Pick
 -- Mini Sessions
@@ -72,9 +90,16 @@ end
 function InitMini()
   require("mini.pick").setup({
     autoread = true,
+    options = {
+      default = "files",
+    },
+    -- Exclude files ending with ~
+    content = {
+      filter = function(fs_entry)
+        return not vim.endswith(fs_entry.name, "~")
+      end,
+    },
   })
-
-  require("mini.pick").setup()
 
   require("mini.files").setup({
     options = {
@@ -102,7 +127,8 @@ function InitMini()
         end
 
         -- Return true if the file name does not start with a dot
-        return not vim.startswith(fs_entry.name, ".")
+        local is_valid = not vim.startswith(fs_entry.name, ".") or not vim.endswith(fs_entry.name, "~")
+        return is_valid
       end,
     },
   })
@@ -114,59 +140,76 @@ function InitMini()
   })
 
   require("mini.statusline").setup({
-      use_icons = vim.g.have_nerd_font,
+    use_icons = vim.g.have_nerd_font,
 
-      content = {
-        active = function()
-          local check_macro_recording = function()
-            if vim.fn.reg_recording() ~= "" then
-              return "[Macro] Recording @" .. vim.fn.reg_recording()
-            else
-              return ""
-            end
+    content = {
+      active = function()
+        local check_macro_recording = function()
+          if vim.fn.reg_recording() ~= "" then
+            return "[Macro] Recording @" .. vim.fn.reg_recording()
+          else
+            return ""
           end
+        end
 
-          local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-          local git = MiniStatusline.section_git({ trunc_width = 40 })
-          local diff = MiniStatusline.section_diff({ trunc_width = 75 })
-          local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
-          local filename = MiniStatusline.section_filename({ trunc_width = 140 })
-          local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
-          local location = MiniStatusline.section_location({ trunc_width = 200 })
-          local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
-          local macro = check_macro_recording()
+        local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+        local git = MiniStatusline.section_git({ trunc_width = 40 })
+        local diff = MiniStatusline.section_diff({ trunc_width = 75 })
+        local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+        local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+        local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+        local location = MiniStatusline.section_location({ trunc_width = 200 })
+        local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+        local macro = check_macro_recording()
 
-          return MiniStatusline.combine_groups({
-            { hl = mode_hl, strings = { mode } },
-            { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics } },
-            "%<", -- Mark general truncate point
-            { hl = "MiniStatuslineFilename", strings = { filename } },
-            "%=", -- End left alignment
-            { hl = "MiniStatuslineFilename", strings = { macro } },
-            { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
-            { hl = mode_hl, strings = { search, location } },
-          })
-        end,
-      },
-    })
-
+        return MiniStatusline.combine_groups({
+          { hl = mode_hl, strings = { mode } },
+          { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics } },
+          "%<", -- Mark general truncate point
+          { hl = "MiniStatuslineFilename", strings = { filename } },
+          "%=", -- End left alignment
+          { hl = "MiniStatuslineFilename", strings = { macro } },
+          { hl = "MiniStatuslineFileinfo", strings = { fileinfo } },
+          { hl = mode_hl, strings = { search, location } },
+        })
+      end,
+    },
+  })
 end
 InitMini()
 
-local isLspDiagnosticsVisible = true
-vim.keymap.set("n", "<leader>lx", function()
-    isLspDiagnosticsVisible = not isLspDiagnosticsVisible
-    vim.diagnostic.config({
-        virtual_text = isLspDiagnosticsVisible,
-        underline = isLspDiagnosticsVisible
-    }) end)
+-- local isLspDiagnosticsVisible = true
+-- vim.keymap.set("n", "<leader>lx", function()
+--   isLspDiagnosticsVisible = not isLspDiagnosticsVisible
+--   vim.diagnostic.config({
+--     virtual_text = isLspDiagnosticsVisible,
+--     underline = isLspDiagnosticsVisible,
+--   })
+-- end)
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] =
-    vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-        -- Disable underline, it's very annoying
-        underline = false,
-        -- Enable virtual text, override spacing to 4
-        virtual_text = {spacing = 4},
-        signs = true,
-        update_in_insert = false
-    })
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+--   -- Disable underline, it's very annoying
+--   underline = false,
+--   -- Enable virtual text, override spacing to 4
+--   virtual_text = { spacing = 4 },
+--   signs = true,
+--   update_in_insert = false,
+-- })
+
+-- Load config/lsp.lua
+require("config.lsp")
+require("config.lsp-more")
+
+-- I keep getting fed up of losing my LSP servers whenever I need to reset my configuration
+-- Making it so it's easier to reinstall them
+function InitLSP()
+  local file = io.open(vim.fn.stdpath("config") .. "/lsps.txt", "r")
+  if file == nil then
+    print("No lsps.txt file found in your config directory. Please create one and add your LSP servers.")
+    return
+  end
+  for line in file:lines() do
+    -- Install LSP using LspInstall
+    vim.cmd("LspInstall " .. line)
+  end
+end

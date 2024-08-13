@@ -52,7 +52,6 @@ return {
           "Trouble",
           "trouble",
           "lazy",
-          "mason",
           "notify",
           "better_term",
           "toggleterm",

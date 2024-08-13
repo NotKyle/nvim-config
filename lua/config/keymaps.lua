@@ -150,3 +150,43 @@ keyset("n", "<right>", ":vertical resize +5<cr>")
 keyset("n", "<left>", ":vertical resize -5<cr>")
 keyset("n", "j", "(v:count ? 'j' : 'gj')", { expr = true })
 keyset("n", "k", "(v:count ? 'k' : 'gk')", { expr = true })
+
+-- Tiny Code Actions
+-- vim.api.nvim_set_keymap("n", "<leader>ca", function()
+--   require("tiny-code-action").code_action()
+-- end, { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>ca",
+  "<cmd>lua require('tiny-code-action').code_action()<cr>",
+  { noremap = true, silent = true }
+)
+
+-- Project Explorer
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>pp",
+  "<cmd>ProjectExplorer<CR>",
+  { noremap = true, silent = true, desc = "Open Project Explorer" }
+)
+
+-- Persistence
+vim.keymap.set("n", "<leader>qs", function()
+  require("persistence").load()
+end)
+
+vim.keymap.set("n", "<leader>qS", function()
+  require("persistence").select()
+end)
+
+vim.keymap.set("n", "<leader>ql", function()
+  require("persistence").load({ last = true })
+end)
+
+vim.keymap.set("n", "<leader>qd", function()
+  require("persistence").stop()
+end)
+
+-- ctrl+j open diagnostic info
+vim.api.nvim_set_keymap("n", "<C-j>", "<cmd>Lspsaga show_cursor_diagnostics<cr>", { noremap = true, silent = true })

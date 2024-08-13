@@ -17,13 +17,7 @@ lua_ls
 markdown-toc
 markdownlint
 marksman
-php-cs-fixer
-php-debug-adapter
-phpactor
-phpcs
-prettier
 prettierd
-pretty-php
 psalm
 pyright
 ruff_lsp

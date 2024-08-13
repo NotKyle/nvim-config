@@ -9,7 +9,6 @@ return {
         "css",
         "graphql",
         "html",
-        "php",
         "javascript",
         "javascriptreact",
         "json",

@@ -39,8 +39,8 @@ vim.opt.timeoutlen = 1200
 vim.opt.history = 10000
 vim.opt.background = "dark"
 vim.opt.list = true
-vim.opt.listchars = {
-  tab = "> ",
-  space = " ",
-  trail = "·",
-}
+-- vim.opt.listchars = {
+--   tab = "> ",
+--   space = " ",
+--   trail = "·",
+-- }
