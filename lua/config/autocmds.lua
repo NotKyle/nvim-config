@@ -1,7 +1,8 @@
 -- Autocmds are automatically loaded on the VeryLazy event
--- Default autocmds that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
+-- Default autocmds are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
+-- MiniFiles Window Open Autocmd
 vim.api.nvim_create_autocmd("User", {
   pattern = "MiniFilesWindowOpen",
   callback = function(args)
@@ -15,62 +16,52 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
+-- Toggle Dotfiles Visibility in MiniFiles
 local show_dotfiles = true
-
 local filter_show = function(fs_entry)
   return true
 end
-
 local filter_hide = function(fs_entry)
   return not vim.startswith(fs_entry.name, ".")
 end
 
 local toggle_dotfiles = function()
   show_dotfiles = not show_dotfiles
-  local new_filter = show_dotfiles and filter_show or filter_hide
-  MiniFiles.refresh({ content = { filter = new_filter } })
+  MiniFiles.refresh({ content = { filter = show_dotfiles and filter_show or filter_hide } })
 end
 
+-- Map 'g.' to toggle dotfiles visibility in MiniFiles
 vim.api.nvim_create_autocmd("User", {
   pattern = "MiniFilesBufferCreate",
   callback = function(args)
-    local buf_id = args.data.buf_id
-    -- Tweak left-hand side of mapping to your liking
-    vim.keymap.set("n", "g.", toggle_dotfiles, { buffer = buf_id })
+    vim.keymap.set("n", "g.", toggle_dotfiles, { buffer = args.data.buf_id })
   end,
 })
 
+-- Split Window Mapping in MiniFiles
 local map_split = function(buf_id, lhs, direction)
   local rhs = function()
-    -- Make new window and set it as target
     local new_target_window
     vim.api.nvim_win_call(MiniFiles.get_target_window(), function()
       vim.cmd(direction .. " split")
       new_target_window = vim.api.nvim_get_current_win()
     end)
-
     MiniFiles.set_target_window(new_target_window)
   end
-
-  -- Adding `desc` will result into `show_help` entries
-  local desc = "Split " .. direction
-  vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
+  vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = "Split " .. direction })
 end
 
 vim.api.nvim_create_autocmd("User", {
   pattern = "MiniFilesBufferCreate",
   callback = function(args)
-    local buf_id = args.data.buf_id
-    -- Tweak keys to your liking
-    map_split(buf_id, "gs", "belowright horizontal")
-    map_split(buf_id, "gv", "belowright vertical")
+    map_split(args.data.buf_id, "gs", "belowright horizontal")
+    map_split(args.data.buf_id, "gv", "belowright vertical")
   end,
 })
 
-local files_set_cwd = function(path)
-  -- Works only if cursor is on the valid file system entry
-  local cur_entry_path = MiniFiles.get_fs_entry().path
-  local cur_directory = vim.fs.dirname(cur_entry_path)
+-- Set Current Working Directory to the Directory of the Current File in MiniFiles
+local files_set_cwd = function()
+  local cur_directory = vim.fs.dirname(MiniFiles.get_fs_entry().path)
   vim.fn.chdir(cur_directory)
 end
 
@@ -81,21 +72,24 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
-local autocmd = vim.api.nvim_create_autocmd
-vim.api.nvim_create_augroup("Random", { clear = true })
+-- Create a Group for Miscellaneous Autocommands
+local group_name = "Random"
+vim.api.nvim_create_augroup(group_name, { clear = true })
 
-autocmd("VimResized", {
-  group = "Random",
+-- Auto-resize Windows Equally on Vim Resize
+vim.api.nvim_create_autocmd("VimResized", {
+  group = group_name,
   desc = "Keep windows equally resized",
   command = "tabdo wincmd =",
 })
 
-autocmd("TermOpen", {
-  group = "Random",
+-- Set Terminal Windows to No Number, No Relative Number, and No Sign Column
+vim.api.nvim_create_autocmd("TermOpen", {
+  group = group_name,
   command = "setlocal nonumber norelativenumber signcolumn=no",
 })
 
--- Do not continue with comments on the next line
+-- Prevent Auto-continuation of Comments
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
@@ -103,15 +97,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Automatically check for changes in files
+-- Automatically Check for File Changes When Focus is Gained
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
-  callback = function()
-    vim.api.nvim_command("checktime")
-  end,
+  command = "checktime",
 })
 
+-- Show LSP Diagnostics in Floating Window on Cursor Hold
 vim.api.nvim_create_autocmd("CursorHold", {
-  buffer = bufnr,
   callback = function()
     local opts = {
       focusable = false,
@@ -125,6 +117,7 @@ vim.api.nvim_create_autocmd("CursorHold", {
   end,
 })
 
+-- LSP Diagnostic Configuration
 vim.diagnostic.config({
   virtual_text = false,
   signs = true,
@@ -133,16 +126,10 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-  virtual_text = false,
-})
-
--- Disable diagnostic virtual text on load
+-- Disable Virtual Text for Diagnostics on Buffer Enter
 vim.api.nvim_create_autocmd("BufEnter", {
   pattern = "*",
   callback = function()
-    vim.diagnostic.config({
-      virtual_text = false,
-    })
+    vim.diagnostic.config({ virtual_text = false })
   end,
 })
