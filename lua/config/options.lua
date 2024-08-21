@@ -43,10 +43,10 @@ vim.opt.background = "dark"
 vim.opt.list = true
 vim.opt.listchars = {
   tab = "› ",
-  space = "·",
   trail = "·",
   extends = "⟩",
   precedes = "⟨",
 }
+-- space = "·",
 
 vim.cmd([[filetype plugin indent on]])
