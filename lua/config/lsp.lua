@@ -1,7 +1,14 @@
 -- Anything LSP related to go in here
 local nvim_lsp = nvim_lsp -- composer global require php-stubs/wordpress-globals php-stubs/wordpress-stubs php-stubs/woocommerce-stubs php-stubs/acf-pro-stubs wpsyntex/polylang-stubs php-stubs/genesis-stubs php-stubs/wp-cli-stubs
+local lspconfig = require("lspconfig")
+
+vim.lsp.set_log_level("off")
 
 local on_attach = function(client, bufnr)
+  if not vim.lsp.completion then
+    return
+  end
+
   vim.lsp.completion.enable(true, client, bufnr, { autotrigger = true })
   require("lsp_signature").on_attach({
     bind = true,
@@ -34,6 +41,82 @@ local on_attach = function(client, bufnr)
     })
   end
 end
+
+lspconfig.intelephense.setup({
+  on_attach = on_attach,
+  stubs = {
+    "wordpress",
+    "woocommerce",
+    "acf-pro",
+    "wordpress-globals",
+    "wp-cli",
+  },
+})
+
+local phpactor_capabilities = vim.lsp.protocol.make_client_capabilities()
+phpactor_capabilities.textDocument.foldingRange = {
+  dynamicRegistration = false,
+  lineFoldingOnly = true,
+}
+phpactor_capabilities["textDocument"]["codeAction"] = {}
+
+lspconfig.phpactor.setup({
+  on_attach = on_attach,
+  capabilities = phpactor_capabilities,
+  settings = {
+    stubs = {
+      "bcmath",
+      "bz2",
+      "Core",
+      "curl",
+      "date",
+      "dom",
+      "fileinfo",
+      "filter",
+      "gd",
+      "gettext",
+      "hash",
+      "iconv",
+      "imap",
+      "intl",
+      "json",
+      "libxml",
+      "mbstring",
+      "mcrypt",
+      "mysql",
+      "mysqli",
+      "password",
+      "pcntl",
+      "pcre",
+      "PDO",
+      "pdo_mysql",
+      "Phar",
+      "readline",
+      "regex",
+      "session",
+      "SimpleXML",
+      "sockets",
+      "sodium",
+      "standard",
+      "superglobals",
+      "tokenizer",
+      "xml",
+      "xdebug",
+      "xmlreader",
+      "xmlwriter",
+      "yaml",
+      "zip",
+      "zlib",
+      "wordpress-stubs",
+      "woocommerce-stubs",
+      "acf-pro-stubs",
+      "wordpress-globals",
+      "wp-cli-stubs",
+      "genesis-stubs",
+      "polylang-stubs",
+    },
+  },
+})
 
 return {
   -- treesitter, mason and typescript.nvim. So instead of the above, you can use:
@@ -70,69 +153,6 @@ return {
     },
   },
 
-  -- {
-  --   -- phpactor
-  --   "phpactor/phpactor",
-  --   config = function()
-  --     require("phpactor").setup({
-  --       settings = {
-  --         stubs = {
-  --           "bcmath",
-  --           "bz2",
-  --           "Core",
-  --           "curl",
-  --           "date",
-  --           "dom",
-  --           "fileinfo",
-  --           "filter",
-  --           "gd",
-  --           "gettext",
-  --           "hash",
-  --           "iconv",
-  --           "imap",
-  --           "intl",
-  --           "json",
-  --           "libxml",
-  --           "mbstring",
-  --           "mcrypt",
-  --           "mysql",
-  --           "mysqli",
-  --           "password",
-  --           "pcntl",
-  --           "pcre",
-  --           "PDO",
-  --           "pdo_mysql",
-  --           "Phar",
-  --           "readline",
-  --           "regex",
-  --           "session",
-  --           "SimpleXML",
-  --           "sockets",
-  --           "sodium",
-  --           "standard",
-  --           "superglobals",
-  --           "tokenizer",
-  --           "xml",
-  --           "xdebug",
-  --           "xmlreader",
-  --           "xmlwriter",
-  --           "yaml",
-  --           "zip",
-  --           "zlib",
-  --           "wordpress-stubs",
-  --           "woocommerce-stubs",
-  --           "acf-pro-stubs",
-  --           "wordpress-globals",
-  --           "wp-cli-stubs",
-  --           "genesis-stubs",
-  --           "polylang-stubs",
-  --         },
-  --       },
-  --     })
-  --   end,
-  --   on_attach = on_attach,
-  -- },
-
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
@@ -142,6 +162,91 @@ return {
         "typescript",
       })
     end,
+  },
+
+  -- Add inteliphense to lspconfig
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        intelephense = {
+          on_attach = on_attach,
+          stubs = {
+            "wordpress",
+            "woocommerce",
+            "acf-pro",
+            "wordpress-globals",
+            "wp-cli",
+          },
+        },
+      },
+    },
+  },
+
+  -- Add phpactor to lspconfig
+  {
+    "neovim/nvim-lspconfig",
+    opts = {
+      servers = {
+        -- phpactor will be automatically installed with mason and loaded with lspconfig
+        phpactor = {
+          on_attach = on_attach,
+          settings = {
+            stubs = {
+              "bcmath",
+              "bz2",
+              "Core",
+              "curl",
+              "date",
+              "dom",
+              "fileinfo",
+              "filter",
+              "gd",
+              "gettext",
+              "hash",
+              "iconv",
+              "imap",
+              "intl",
+              "json",
+              "libxml",
+              "mbstring",
+              "mcrypt",
+              "mysql",
+              "mysqli",
+              "password",
+              "pcntl",
+              "pcre",
+              "PDO",
+              "pdo_mysql",
+              "Phar",
+              "readline",
+              "regex",
+              "session",
+              "SimpleXML",
+              "sockets",
+              "sodium",
+              "standard",
+              "superglobals",
+              "tokenizer",
+              "xml",
+              "xdebug",
+              "xmlreader",
+              "xmlwriter",
+              "yaml",
+              "zip",
+              "zlib",
+              "wordpress-stubs",
+              "woocommerce-stubs",
+              "acf-pro-stubs",
+              "wordpress-globals",
+              "wp-cli-stubs",
+              "genesis-stubs",
+              "polylang-stubs",
+            },
+          },
+        },
+      },
+    },
   },
 
   -- add pyright to lspconfig

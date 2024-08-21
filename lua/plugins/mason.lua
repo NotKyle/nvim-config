@@ -34,6 +34,7 @@ return {
           "shellharden",
           "stylua",
           "zls",
+          "phpactor",
         },
       })
     end,

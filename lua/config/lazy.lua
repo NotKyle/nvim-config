@@ -198,7 +198,6 @@ InitMini()
 
 -- Load config/lsp.lua
 require("config.lsp")
-require("config.lsp-more")
 
 -- I keep getting fed up of losing my LSP servers whenever I need to reset my configuration
 -- Making it so it's easier to reinstall them

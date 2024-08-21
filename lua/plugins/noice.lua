@@ -40,6 +40,16 @@ return {
           },
           opts = { skip = true },
         },
+
+        -- Disable phpcs missing messages
+        {
+          filter = {
+            event = "msg_show",
+            kind = "",
+            find = "phpcs",
+          },
+          opts = { skip = true },
+        },
       },
       lsp = {
         -- override markdown rendering so that **cmp** and other plugins use **Treesitter**

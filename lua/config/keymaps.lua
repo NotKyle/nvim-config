@@ -190,3 +190,16 @@ end)
 
 -- ctrl+j open diagnostic info
 vim.api.nvim_set_keymap("n", "<C-j>", "<cmd>Lspsaga show_cursor_diagnostics<cr>", { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap(
+  "n",
+  "[d",
+  "<cmd>Lspsaga diagnostic_jump_prev<cr>",
+  { noremap = true, silent = true, desc = "Jump to previous diagnostic" }
+)
+vim.api.nvim_set_keymap(
+  "n",
+  "]d",
+  "<cmd>Lspsaga diagnostic_jump_next<cr>",
+  { noremap = true, silent = true, desc = "Jump to next diagnostic" }
+)
