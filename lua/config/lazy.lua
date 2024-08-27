@@ -37,6 +37,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
     lazypath,
   })
 end
+
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
@@ -47,7 +48,7 @@ require("lazy").setup({
     { import = "plugins.editor" },
     { import = "plugins.appearance" },
     { import = "plugins.formatting" },
-    -- { import = "plugins.ui" },
+    -- { import = 'plugins.ui' },
     { import = "plugins.git" },
     { import = "plugins.coding" },
     { import = "plugins.misc" },
@@ -75,8 +76,7 @@ require("lazy").setup({
 })
 
 -- Mini.nvim Setup
-local function InitMini()
-  -- MiniPick Setup
+local function setup_mini_pick()
   require("mini.pick").setup({
     autoread = true,
     options = { default = "files" },
@@ -86,8 +86,9 @@ local function InitMini()
       end,
     },
   })
+end
 
-  -- MiniFiles Setup
+local function setup_mini_files()
   require("mini.files").setup({
     options = {
       use_as_default_explorer = true,
@@ -112,13 +113,15 @@ local function InitMini()
       end,
     },
   })
+end
 
-  -- MiniStarter Setup
+local function setup_mini_starter()
   require("mini.starter").setup({
     options = { default = "files" },
   })
+end
 
-  -- MiniStatusline Setup
+local function setup_mini_statusline()
   require("mini.statusline").setup({
     use_icons = vim.g.have_nerd_font,
     content = {
@@ -131,9 +134,7 @@ local function InitMini()
         local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
         local location = MiniStatusline.section_location({ trunc_width = 200 })
         local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
-
         local macro = (vim.fn.reg_recording() ~= "") and "[Macro] Recording @" .. vim.fn.reg_recording() or ""
-
         return MiniStatusline.combine_groups({
           { hl = mode_hl, strings = { mode } },
           { hl = "MiniStatuslineDevinfo", strings = { git, diff, diagnostics } },
@@ -148,6 +149,14 @@ local function InitMini()
     },
   })
 end
+
+local function InitMini()
+  setup_mini_pick()
+  setup_mini_files()
+  setup_mini_starter()
+  setup_mini_statusline()
+end
+
 InitMini()
 
 -- LSP Initialization
@@ -156,7 +165,10 @@ local function InitLSP()
   local file = io.open(lsp_file, "r")
 
   if not file then
-    print("No lsps.txt file found in your config directory. Please create one and add your LSP servers.")
+    vim.notify(
+      "No lsps.txt file found in your config directory. Please create one and add your LSP servers.",
+      vim.log.levels.ERROR
+    )
     return
   end
 
@@ -165,8 +177,11 @@ local function InitLSP()
   end
 
   file:close()
+  vim.notify("LSP servers installed successfully.", vim.log.levels.INFO)
 end
--- InitLSP()
+
+-- Register the command to run InitLSP manually
+vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 
 -- Load additional LSP configurations
 require("config.lsp")
