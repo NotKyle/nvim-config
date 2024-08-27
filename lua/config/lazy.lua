@@ -39,27 +39,27 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Lazy.nvim Setup
 require("lazy").setup({
   spec = {
-    -- Import LazyVim and its plugins
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    -- Additional plugin modules
-    { import = "lazyvim.plugins.extras.lang.typescript" },
-    { import = "lazyvim.plugins.extras.lang.json" },
-    { import = "lazyvim.plugins.extras.ui.mini-animate" },
-    -- User plugins
-    { import = "plugins" },
+    { import = "plugins.must-use" },
+    { import = "plugins.lsp" },
+    { import = "plugins.editor" },
+    { import = "plugins.appearance" },
+    { import = "plugins.formatting" },
+    -- { import = "plugins.ui" },
+    { import = "plugins.git" },
+    { import = "plugins.coding" },
+    { import = "plugins.misc" },
   },
   defaults = {
-    lazy = false, -- Custom plugins load during startup
-    version = false, -- Always use the latest commit
+    lazy = false, -- Set true if you want lazy-loading for custom plugins
+    version = false, -- Use the latest git commit
   },
   install = { colorscheme = { "tokyonight-storm" } },
-  checker = { enabled = true }, -- Automatically check for updates
+  checker = { enabled = true }, -- Automatically check for plugin updates
   performance = {
     rtp = {
-      -- Disable unnecessary plugins
       disabled_plugins = {
         "gzip",
         "tarPlugin",
@@ -72,6 +72,42 @@ require("lazy").setup({
     },
   },
 })
+
+-- OLD WORKING CONFIG
+-- Lazy.nvim Setup
+-- require("lazy").setup({
+--   spec = {
+--     -- Import LazyVim and its plugins
+--     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
+--     -- Additional plugin modules
+--     { import = "lazyvim.plugins.extras.lang.typescript" },
+--     { import = "lazyvim.plugins.extras.lang.json" },
+--     { import = "lazyvim.plugins.extras.ui.mini-animate" },
+--     { import = "plugins.init" },
+--     -- User plugins
+--     -- { import = "plugins" },
+--   },
+--   defaults = {
+--     lazy = false, -- Custom plugins load during startup
+--     version = false, -- Always use the latest commit
+--   },
+--   install = { colorscheme = { "tokyonight-storm" } },
+--   checker = { enabled = true }, -- Automatically check for updates
+--   performance = {
+--     rtp = {
+--       -- Disable unnecessary plugins
+--       disabled_plugins = {
+--         "gzip",
+--         "tarPlugin",
+--         "tohtml",
+--         "tutor",
+--         "zipPlugin",
+--         "neo-tree",
+--         "neotree",
+--       },
+--     },
+--   },
+-- })
 
 -- Mini.nvim Setup
 local function InitMini()

@@ -1,3 +1,9 @@
+local load_starter = false
+
+if not load_starter then
+  return
+end
+
 return {
   {
     "LazyVim/LazyVim",
