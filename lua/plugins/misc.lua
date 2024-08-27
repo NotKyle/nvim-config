@@ -34,7 +34,6 @@ return {
       "nvim-lua/plenary.nvim",
     },
   },
-
   {
     "ptdewey/pendulum-nvim",
     config = function()
@@ -71,5 +70,8 @@ return {
       "ChuufMaster/buffer-vacuum",
       opts = {},
     },
+  },
+  {
+    "psych3r/vim-remembers",
   },
 }

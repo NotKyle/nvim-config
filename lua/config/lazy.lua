@@ -51,6 +51,7 @@ require("lazy").setup({
     { import = "plugins.git" },
     { import = "plugins.coding" },
     { import = "plugins.misc" },
+    { import = "plugins.disabled" },
   },
   defaults = {
     lazy = false, -- Set true if you want lazy-loading for custom plugins
@@ -72,42 +73,6 @@ require("lazy").setup({
     },
   },
 })
-
--- OLD WORKING CONFIG
--- Lazy.nvim Setup
--- require("lazy").setup({
---   spec = {
---     -- Import LazyVim and its plugins
---     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
---     -- Additional plugin modules
---     { import = "lazyvim.plugins.extras.lang.typescript" },
---     { import = "lazyvim.plugins.extras.lang.json" },
---     { import = "lazyvim.plugins.extras.ui.mini-animate" },
---     { import = "plugins.init" },
---     -- User plugins
---     -- { import = "plugins" },
---   },
---   defaults = {
---     lazy = false, -- Custom plugins load during startup
---     version = false, -- Always use the latest commit
---   },
---   install = { colorscheme = { "tokyonight-storm" } },
---   checker = { enabled = true }, -- Automatically check for updates
---   performance = {
---     rtp = {
---       -- Disable unnecessary plugins
---       disabled_plugins = {
---         "gzip",
---         "tarPlugin",
---         "tohtml",
---         "tutor",
---         "zipPlugin",
---         "neo-tree",
---         "neotree",
---       },
---     },
---   },
--- })
 
 -- Mini.nvim Setup
 local function InitMini()

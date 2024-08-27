@@ -6,7 +6,6 @@ return {
     priority = 1000,
     opts = {},
   },
-
   {
     "mg979/vim-visual-multi",
   },
@@ -23,7 +22,6 @@ return {
     "folke/twilight.nvim",
     opts = {},
   },
-
   {
     "folke/noice.nvim",
     event = "VeryLazy",
