@@ -88,7 +88,6 @@ return {
         })
       end,
     },
-
     {
       "echasnovski/mini.indentscope",
       version = false,
@@ -126,7 +125,6 @@ return {
     -- helper keymaps to move forward and backward using [key ]key
     { "echasnovski/mini.bracketed", version = false, opts = {} },
   },
-
   {
     "github/copilot.vim",
     config = function()
@@ -163,5 +161,11 @@ return {
   },
   {
     "metakirby5/codi.vim",
+  },
+  {
+    "tpope/vim-abolish",
+    config = function()
+      vim.g.abolish_case = "smart"
+    end,
   },
 }
