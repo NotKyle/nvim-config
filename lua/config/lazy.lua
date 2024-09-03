@@ -74,21 +74,52 @@ require("lazy").setup({
     },
   },
 })
-
--- Mini.nvim Setup
-local function setup_mini_pick()
-  require("mini.pick").setup({
-    autoread = true,
-    options = { default = "files" },
-    content = {
-      filter = function(fs_entry)
-        return not vim.endswith(fs_entry.name, "~")
-      end,
-    },
-  })
+-- Function to create the filter array dynamically
+local function create_filter_array(filter_array)
+  local filter = {}
+  for _, filter_item in ipairs(filter_array) do
+    local filter_function = filter_item[1] -- e.g., "startswith", "endswith", "regex"
+    local filter_values = filter_item[2] -- e.g., {".env"}, {"~"}, {"%.log$"}
+    filter[filter_function] = filter_values
+  end
+  return filter
 end
 
-local function setup_mini_files()
+-- General function to apply filters (hides results if they match any filter)
+local function apply_filters(fs_entry, filters)
+  -- Check if the entry matches any of the 'startswith' filters
+  for _, value in ipairs(filters.startswith or {}) do
+    if vim.startswith(fs_entry.name, value) then
+      return false -- Hide result if it matches the 'startswith' filter
+    end
+  end
+
+  -- Check if the entry matches any of the 'endswith' filters
+  for _, value in ipairs(filters.endswith or {}) do
+    if vim.endswith(fs_entry.name, value) then
+      return false -- Hide result if it matches the 'endswith' filter
+    end
+  end
+
+  -- Check if the entry matches any of the 'regex' filters
+  for _, pattern in ipairs(filters.regex or {}) do
+    if string.match(fs_entry.name, pattern) then
+      return false -- Hide result if it matches the 'regex' filter
+    end
+  end
+
+  -- If none of the filters matched, show the result
+  return true
+end
+
+-- Mini.nvim Files Setup
+local function setup_mini_files(custom_filters)
+  local filters = create_filter_array(custom_filters or {
+    { "startswith", { ".env" } },
+    { "endswith", { "~" } },
+    { "regex", { "%.log$", "^config.*%.json$" } },
+  })
+
   require("mini.files").setup({
     options = {
       use_as_default_explorer = true,
@@ -103,17 +134,46 @@ local function setup_mini_files()
     },
     content = {
       filter = function(fs_entry)
-        local whitelist = { ".env" }
-        for _, whitelist_item in ipairs(whitelist) do
-          if fs_entry.name == whitelist_item then
-            return true
-          end
-        end
-        return not (vim.startswith(fs_entry.name, ".") or vim.endswith(fs_entry.name, "~"))
+        return apply_filters(fs_entry, filters)
       end,
     },
   })
 end
+
+-- Mini.nvim Pick Setup
+local function setup_mini_pick(custom_filters)
+  local filters = create_filter_array(custom_filters or {
+    { "endswith", { "~" } },
+    { "regex", { "%.tmp$", "%.bak$" } }, -- Example: different filters for file pick
+  })
+
+  require("mini.pick").setup({
+    autoread = true,
+    options = { default = "files" },
+    content = {
+      filter = function(fs_entry)
+        return apply_filters(fs_entry, filters)
+      end,
+    },
+  })
+end
+
+-- Usage Example:
+
+-- Setup for Mini Files with default filters (hiding files matching any filter)
+setup_mini_files({
+  { "startswith", { ".env" } },
+  { "endswith", { "~" } },
+  { "regex", { "%.md$", "*.min.js", "*.min.css" } }, -- Example: Hide all markdown files
+})
+
+-- Setup for Mini Pick with custom filters, allowing more specific results
+setup_mini_pick({
+  { "startswith", { ".env" } },
+  { "endswith", { "~" } },
+  { "startswith", { "README" } }, -- Example: Hide files starting with 'README'
+  { "regex", { "%.md$", "*.min.*" } }, -- Example: Hide all markdown files
+})
 
 local function setup_mini_starter()
   require("mini.starter").setup({

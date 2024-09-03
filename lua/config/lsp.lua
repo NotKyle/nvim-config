@@ -144,7 +144,12 @@ return {
             "shellharden",
             "stylua",
             "zls",
-            "phpactor",
+            -- "phpactor",
+            "intelephense",
+            "php-cs-fixer",
+            "phpstan",
+            "phpmd",
+            "phpunit",
           },
         })
       end,

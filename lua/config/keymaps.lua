@@ -31,6 +31,15 @@ vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Pick files<cr>", { noremap = tr
 vim.api.nvim_set_keymap("n", "<leader><leader>", "<cmd>Pick files<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Pick files tool='git'<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>fw", "<cmd>Pick grep_live<cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>fc", "<cmd>Pick resume<cr>", { noremap = true, silent = true })
+
+-- Telescope config files
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>pc",
+  "<cmd>lua require('telescope.builtin').find_files({cwd = vim.fn.stdpath('config')})<cr>",
+  { noremap = true, silent = true, desc = "Find config files" }
+)
 
 -- Code Actions
 -- <LEADER>cr - Rename variable
@@ -52,13 +61,12 @@ local harpoon = require("harpoon")
 harpoon:setup()
 -- REQUIRED
 
-vim.keymap.set("n", "<leader>a", function()
+vim.keymap.set("n", "<C-a>", function()
   harpoon:list():add()
 end)
 vim.keymap.set("n", "<C-e>", function()
   harpoon.ui:toggle_quick_menu(harpoon:list())
 end)
-
 vim.keymap.set("n", "<C-1>", function()
   harpoon:list():select(1)
 end)

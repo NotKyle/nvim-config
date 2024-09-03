@@ -56,7 +56,7 @@ return {
 
           -- Format php
           php = {
-            prettier,
+            -- prettier,
           },
 
           -- Use the special "*" filetype for defining formatter configurations on
@@ -91,6 +91,7 @@ return {
           "typescript",
           "typescriptreact",
           "yaml",
+          -- "php",
         },
       })
     end,

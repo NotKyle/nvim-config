@@ -72,6 +72,6 @@ return {
     },
   },
   {
-    "psych3r/vim-remembers",
+    -- "psych3r/vim-remembers",
   },
 }

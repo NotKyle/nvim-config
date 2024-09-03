@@ -1,0 +1,12 @@
+-- Mini.nvim Setup
+local function setup_mini_pick()
+  require("mini.pick").setup({
+    autoread = true,
+    options = { default = "files" },
+    content = {
+      filter = function(fs_entry)
+        return not vim.endswith(fs_entry.name, "~")
+      end,
+    },
+  })
+end
