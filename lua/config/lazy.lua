@@ -164,7 +164,7 @@ end
 setup_mini_files({
   { "startswith", { ".env" } },
   { "endswith", { "~" } },
-  { "regex", { "%.md$", "*.min.js", "*.min.css" } }, -- Example: Hide all markdown files
+  { "regex", { "%.md$", "*.min.js", "*.min.css", "*.css" } }, -- Example: Hide all markdown files
 })
 
 -- Setup for Mini Pick with custom filters, allowing more specific results
@@ -172,7 +172,7 @@ setup_mini_pick({
   { "startswith", { ".env" } },
   { "endswith", { "~" } },
   { "startswith", { "README" } }, -- Example: Hide files starting with 'README'
-  { "regex", { "%.md$", "*.min.*" } }, -- Example: Hide all markdown files
+  { "regex", { "%.md$", "*.min.*", "*.css" } }, -- Example: Hide all markdown files
 })
 
 local function setup_mini_starter()

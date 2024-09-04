@@ -136,4 +136,9 @@ return {
     "tzachar/highlight-undo.nvim",
     opts = {},
   },
+  -- {
+  --   "OXY2DEV/bars-N-lines.nvim",
+  --   -- No point in lazy loading this
+  --   lazy = false,
+  -- },
 }

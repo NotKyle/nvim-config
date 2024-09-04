@@ -205,9 +205,14 @@ vim.api.nvim_set_keymap(
   "<cmd>Lspsaga diagnostic_jump_prev<cr>",
   { noremap = true, silent = true, desc = "Jump to previous diagnostic" }
 )
+
 vim.api.nvim_set_keymap(
   "n",
   "]d",
   "<cmd>Lspsaga diagnostic_jump_next<cr>",
   { noremap = true, silent = true, desc = "Jump to next diagnostic" }
 )
+
+-- Increment and Decrement numbers
+vim.api.nvim_set_keymap("n", "<C-a>", "<C-a>", { noremap = true, silent = true, desc = "Increment number" })
+vim.api.nvim_set_keymap("n", "<C-x>", "<C-x>", { noremap = true, silent = true, desc = "Decrement number" })
