@@ -1,11 +1,17 @@
 -- lua/plugins/appearance.lua
 return {
   {
-    "folke/tokyonight.nvim",
+    "catppuccin/catppuccin",
     lazy = false,
     priority = 1000,
     opts = {},
   },
+  -- {
+  --   "folke/tokyonight.nvim",
+  --   lazy = false,
+  --   priority = 1000,
+  --   opts = {},
+  -- },
   {
     "mg979/vim-visual-multi",
   },

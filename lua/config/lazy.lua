@@ -58,7 +58,7 @@ require("lazy").setup({
     lazy = false, -- Set true if you want lazy-loading for custom plugins
     version = false, -- Use the latest git commit
   },
-  install = { colorscheme = { "tokyonight-storm" } },
+  install = { colorscheme = { "catppuccine-latte" } },
   checker = { enabled = true }, -- Automatically check for plugin updates
   performance = {
     rtp = {
@@ -245,3 +245,9 @@ vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 
 -- Load additional LSP configurations
 require("config.lsp")
+
+-- Set colorscheme to catppuccin-latte
+vim.cmd("colorscheme catppuccin-latte")
+
+-- Set background to light
+vim.cmd("set background=light")
