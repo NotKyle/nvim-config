@@ -49,6 +49,7 @@
   "mini.nvim": { "branch": "main", "commit": "64e95aa77587d04f97a5579b2106a82a08a7d968" },
   "mini.pairs": { "branch": "main", "commit": "919a89ed3c9f4142215a44c9fffca72fa8c8e792" },
   "mini.surround": { "branch": "main", "commit": "e1ac1ce5c7499aa4cc2ca9fb1adec9e730dd9394" },
+  "minty": { "branch": "main", "commit": "8809b2c7c2edbeb3fa9c3b05bd2e89934d54f526" },
   "neovim-project": { "branch": "main", "commit": "f841cf801031e56f5193a52402f9cc488ea1a8e6" },
   "neovim-session-manager": { "branch": "master", "commit": "cbaebd92dce84e9ba63cb07d3199e5a19b204c1a" },
   "noice.nvim": { "branch": "main", "commit": "df448c649ef6bc5a6a633a44f2ad0ed8d4442499" },

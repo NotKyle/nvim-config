@@ -147,6 +147,9 @@ return {
   --   -- No point in lazy loading this
   --   lazy = false,
   -- },
+
+  -- NvChad stuff
+  { "nvchad/minty", lazy = true },
   { "nvchad/volt", lazy = true },
   { "nvchad/menu", lazy = true },
 }
