@@ -247,7 +247,11 @@ vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 require("config.lsp")
 
 -- Set colorscheme to catppuccin-latte
-vim.cmd("colorscheme catppuccin-latte")
+-- vim.cmd("colorscheme catppuccin-latte")
 
 -- Set background to light
 vim.cmd("set background=light")
+
+-- Set cursor colour to contrast the theme
+-- vim.cmd("highlight Cursor guifg=black guibg=black")
+-- vim.cmd("highlight CursorLine guibg=#f1f1f1 guifg=black")

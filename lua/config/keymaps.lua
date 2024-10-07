@@ -213,6 +213,19 @@ vim.api.nvim_set_keymap(
   { noremap = true, silent = true, desc = "Jump to next diagnostic" }
 )
 
+-- Keyboard users
+vim.keymap.set("n", "<C-t>", function()
+  require("menu").open("default")
+end, {})
+
+-- mouse users + nvimtree users!
+vim.keymap.set("n", "<RightMouse>", function()
+  vim.cmd.exec('"normal! \\<RightMouse>"')
+
+  local options = vim.bo.ft == "NvimTree" and "nvimtree" or "default"
+  require("menu").open(options, { mouse = true })
+end, {})
+
 -- Increment and Decrement numbers
 vim.api.nvim_set_keymap("n", "<C-a>", "<C-a>", { noremap = true, silent = true, desc = "Increment number" })
 vim.api.nvim_set_keymap("n", "<C-x>", "<C-x>", { noremap = true, silent = true, desc = "Decrement number" })
