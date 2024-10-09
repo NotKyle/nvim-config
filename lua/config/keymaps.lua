@@ -46,7 +46,13 @@ vim.api.nvim_set_keymap(
 vim.api.nvim_set_keymap("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", { noremap = true, silent = true })
 
 -- Mini Files
-vim.keymap.set("n", "<leader>e", "<cmd>lua require('mini.files').open()<cr>")
+vim.keymap.set("n", "<leader>e", function()
+  local MiniFiles = require("mini.files")
+  local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+  vim.defer_fn(function()
+    MiniFiles.reveal_cwd()
+  end, 30)
+end)
 
 -- LSP
 vim.api.nvim_set_keymap("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { noremap = true, silent = true })
