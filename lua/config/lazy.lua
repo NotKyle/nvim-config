@@ -244,7 +244,7 @@ end
 vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 
 -- Load additional LSP configurations
-require("config.lsp")
+-- require("config.lsp").setup({})
 
 -- Set colorscheme to catppuccin-latte
 -- vim.cmd("colorscheme catppuccin-latte")

@@ -133,3 +133,24 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.diagnostic.config({ virtual_text = false })
   end,
 })
+
+local null_ls = require("null-ls")
+null_ls.setup({
+  sources = {
+    -- Only enable diagnostics, and let PHP CS Fixer handle formatting
+    null_ls.builtins.diagnostics.phpstan,
+    null_ls.builtins.formatting.phpcsfixer.with({
+      extra_args = { "--config=.php-cs-fixer.dist.php" }, -- Make sure it points to your config file
+    }),
+  },
+  on_attach = function(client, bufnr)
+    if client.server_capabilities.documentFormattingProvider then
+      client.server_capabilities.documentFormattingProvider = false -- Disable LSP formatting
+    end
+    -- Your other on_attach code...
+  end,
+})
+
+vim.cmd([[
+  autocmd FileType php setlocal tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab
+]])

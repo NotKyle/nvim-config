@@ -13,7 +13,7 @@ vim.opt.splitbelow = true
 
 -- Indentation
 vim.opt.smartindent = true
-vim.opt.expandtab = true
+vim.opt.expandtab = false
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4

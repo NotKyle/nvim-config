@@ -1,10 +1,77 @@
 -- lua/plugins/coding.lua
 return {
+  -- Adding PHPActor as a language server
+  {
+    "neovim/nvim-lspconfig",
+    config = function()
+      local lspconfig = require("lspconfig")
+      lspconfig.phpactor.setup({
+        on_attach = function(client, bufnr)
+          -- Custom key bindings for LSP functionality
+          local bufopts = { noremap = true, silent = true, buffer = bufnr }
+          vim.keymap.set("n", "gd", vim.lsp.buf.definition, bufopts)
+          vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+          vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, bufopts)
+          vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
+        end,
+        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+      })
+    end,
+  },
+
+  -- LSPSaga for enhanced LSP UI
+  {
+    "nvimdev/lspsaga.nvim",
+    config = function()
+      require("lspsaga").setup({
+        code_action_lightbulb = {
+          enable = true,
+          enable_in_insert = false,
+        },
+        finder = {
+          max_height = 0.5,
+        },
+      })
+    end,
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
+  },
+  -- Null-ls with formatting only (no diagnostics for PHPActor)
+  {
+    "jose-elias-alvarez/null-ls.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      local null_ls = require("null-ls")
+
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.formatting.phpcsfixer.with({
+            extra_args = { "--config=.php-cs-fixer.dist.php" },
+          }),
+        },
+        on_attach = function(client) end,
+      })
+    end,
+  },
+
+  {
+    "Shatur/neovim-session-manager",
+    config = function()
+      require("session_manager").setup({
+        autoload_mode = require("session_manager.config").AutoloadMode.Disabled,
+        autosave_last_session = true,
+      })
+    end,
+  },
+
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     config = true,
   },
+
   {
     "andymass/vim-matchup",
     config = function()
