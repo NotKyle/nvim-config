@@ -58,7 +58,7 @@ require("lazy").setup({
     lazy = false, -- Set true if you want lazy-loading for custom plugins
     version = false, -- Use the latest git commit
   },
-  install = { colorscheme = { "catppuccine-latte" } },
+  -- install = { colorscheme = { "catppuccine-latte" } },
   checker = { enabled = true }, -- Automatically check for plugin updates
   performance = {
     rtp = {
@@ -250,7 +250,7 @@ require("config.lsp")
 -- vim.cmd("colorscheme catppuccin-latte")
 
 -- Set background to light
-vim.cmd("set background=light")
+vim.cmd("set background=dark")
 
 -- Set cursor colour to contrast the theme
 -- vim.cmd("highlight Cursor guifg=black guibg=black")
