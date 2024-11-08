@@ -270,3 +270,60 @@ vim.api.nvim_set_keymap(
   "<cmd>lua StartProject()<cr>",
   { noremap = true, silent = true, desc = "Start Project" }
 )
+
+-- Helper function to arrange buffers with the center pane larger
+function arrange_buffers()
+  local buffers = vim.fn.getbufinfo({ buflisted = true })
+  if #buffers < 3 then
+    print("Not enough buffers")
+    return
+  end
+
+  -- Get the 3 most recent buffers
+  local recent_buffers = { buffers[#buffers - 2].bufnr, buffers[#buffers - 1].bufnr, buffers[#buffers].bufnr }
+
+  -- Open each buffer in a vertical split and capture window IDs
+  vim.cmd("vsplit")
+  vim.cmd("vsplit")
+  vim.cmd("b " .. recent_buffers[1])
+  local win1 = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd h")
+  vim.cmd("b " .. recent_buffers[2])
+  local win2 = vim.api.nvim_get_current_win()
+  vim.cmd("wincmd l")
+  vim.cmd("b " .. recent_buffers[3])
+  local win3 = vim.api.nvim_get_current_win()
+
+  -- Resize the panes by navigating to each window directly
+  vim.api.nvim_set_current_win(win1)
+  vim.cmd("vertical resize 40") -- Set left pane width to 40
+
+  vim.api.nvim_set_current_win(win2)
+  vim.cmd("vertical resize 80") -- Set center pane width to 80
+
+  vim.api.nvim_set_current_win(win3)
+  vim.cmd("vertical resize 40") -- Set right pane width to 40
+end
+
+-- Helper function to toggle layout
+function toggle_layout()
+  if vim.g.center_layout_active then
+    vim.cmd("wincmd =") -- Equalize all windows
+    vim.g.center_layout_active = false
+  else
+    arrange_buffers() -- Arrange with a larger center pane
+    vim.g.center_layout_active = true
+  end
+end
+
+-- Keymaps to trigger the layout change and toggle
+vim.api.nvim_set_keymap("n", "<leader>3buf", ":lua arrange_buffers()<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<leader>toggle", ":lua toggle_layout()<CR>", { noremap = true, silent = true })
+
+-- Keymap to reload the config
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>rr",
+  ':source $MYVIMRC<CR>:lua print("Config reloaded!")<CR>',
+  { noremap = true, silent = true }
+)

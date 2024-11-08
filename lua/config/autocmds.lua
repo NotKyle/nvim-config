@@ -197,6 +197,6 @@ vim.cmd("command! StartProject lua StartProject()")
 vim.cmd("command! StopProject lua StopProject()")
 
 -- Optionally stop project processes on Neovim exit
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = StopProject,
-})
+-- vim.api.nvim_create_autocmd("VimLeavePre", {
+--   callback = StopProject,
+-- })
