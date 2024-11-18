@@ -122,7 +122,7 @@ local function setup_mini_files(custom_filters)
 
   require("mini.files").setup({
     options = {
-      use_as_default_explorer = true,
+      use_as_default_explorer = false,
       permanent_delete = false,
     },
     windows = {
@@ -138,7 +138,19 @@ local function setup_mini_files(custom_filters)
       end,
     },
   })
+
+  -- Open `mini.files` always at the root directory
+  vim.api.nvim_create_user_command("FilesRoot", function()
+    require("mini.files").open(vim.fn.getcwd())
+  end, { nargs = 0 })
 end
+
+-- Ensure `mini.files` does not open on startup
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    -- Do not open `mini.files` automatically
+  end,
+})
 
 -- Mini.nvim Pick Setup
 local function setup_mini_pick(custom_filters)

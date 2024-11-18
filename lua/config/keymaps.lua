@@ -28,18 +28,11 @@ require("telescope").setup({
 
 -- Add new keymaps for Telescope
 vim.api.nvim_set_keymap("n", "<leader>ff", "<cmd>Pick files<cr>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<leader><leader>", "<cmd>Pick files<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>fg", "<cmd>Pick files tool='git'<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>fw", "<cmd>Pick grep_live<cr>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap("n", "<leader>fc", "<cmd>Pick resume<cr>", { noremap = true, silent = true })
 
--- Telescope config files
-vim.api.nvim_set_keymap(
-  "n",
-  "<leader>pc",
-  "<cmd>lua require('telescope.builtin').find_files({cwd = vim.fn.stdpath('config')})<cr>",
-  { noremap = true, silent = true, desc = "Find config files" }
-)
+vim.api.nvim_set_keymap("n", "<leader><leader>", "<cmd>Pick files<cr>", { noremap = true, silent = true })
 
 -- Code Actions
 -- <LEADER>cr - Rename variable
@@ -48,7 +41,27 @@ vim.api.nvim_set_keymap("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", 
 -- Mini Files
 vim.keymap.set("n", "<leader>e", function()
   local MiniFiles = require("mini.files")
-  local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+
+  -- Function to find the root directory (based on .git or fallback to cwd)
+  local function find_git_root()
+    local git_root = vim.fn.finddir(".git", vim.fn.getcwd() .. ";")
+    if git_root == "" then
+      return vim.fn.getcwd()
+    else
+      return vim.fn.fnamemodify(git_root, ":h")
+    end
+  end
+
+  -- Get the root directory
+  local root_dir = find_git_root()
+
+  -- Toggle Mini Files
+  if MiniFiles.close() then
+    return
+  end
+  MiniFiles.open(root_dir, false)
+
+  -- Reveal the cwd within the opened Mini Files
   vim.defer_fn(function()
     MiniFiles.reveal_cwd()
   end, 30)

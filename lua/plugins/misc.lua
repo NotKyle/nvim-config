@@ -10,16 +10,6 @@ return {
     opts = {},
   },
   {
-    "joshuadanpeterson/typewriter",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-    },
-    config = function()
-      require("typewriter").setup()
-    end,
-    opts = {},
-  },
-  {
     "echasnovski/mini.nvim",
     version = "*",
   },
@@ -71,7 +61,6 @@ return {
       opts = {},
     },
   },
-  {
-    -- "psych3r/vim-remembers",
-  },
+  { "nvzone/timerly", dependencies = { "nvzone/volt" } },
+  -- { "tadaa/vimade" },
 }
