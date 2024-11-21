@@ -1,30 +1,7 @@
--- LSP-related configuration
-local nvim_lsp = require("lspconfig")
+local use_lsp = true
 
-local on_attach = function(client, bufnr)
-  -- Enable LSP completion and signature
-  require("lsp_signature").on_attach({
-    bind = true,
-    floating_window = true,
-    handler_opts = { border = "rounded" },
-  })
-
-  -- Document highlighting
-  if client.server_capabilities.documentHighlightProvider then
-    local highlight_group = vim.api.nvim_create_augroup("lsp_document_highlight", { clear = false })
-
-    vim.api.nvim_clear_autocmds({ buffer = bufnr, group = highlight_group })
-    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-      group = highlight_group,
-      buffer = bufnr,
-      callback = vim.lsp.buf.document_highlight,
-    })
-    vim.api.nvim_create_autocmd("CursorMoved", {
-      group = highlight_group,
-      buffer = bufnr,
-      callback = vim.lsp.buf.clear_references,
-    })
-  end
+if not use_lsp then
+  return {}
 end
 
 return {
@@ -69,16 +46,6 @@ return {
     end,
   },
 
-  -- LSP configuration with pyright and tsserver
-  {
-    "neovim/nvim-lspconfig",
-    opts = {
-      servers = {
-        pyright = {}, -- Python support
-      },
-    },
-  },
-
   -- Setting up TypeScript LSP with typescript.nvim
   {
     "neovim/nvim-lspconfig",
@@ -98,6 +65,7 @@ return {
       },
     },
   },
+  -- Mason
   {
     {
       "williamboman/mason.nvim",

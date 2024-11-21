@@ -1,4 +1,15 @@
+local use_formatting = true
+
+if not use_formatting then
+  return {}
+end
+
 return {
+  {
+    "stevearc/conform.nvim",
+    lazy = true,
+    event = { "BufReadPre", "BufNewFile" },
+  },
   {
     "mhartington/formatter.nvim",
     config = function()

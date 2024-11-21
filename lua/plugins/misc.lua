@@ -1,15 +1,6 @@
 -- lua/plugins/misc.lua
 return {
   {
-    "tpope/vim-obsession",
-    cmd = "Obsession",
-  },
-  {
-    "folke/persistence.nvim",
-    event = "BufReadPre",
-    opts = {},
-  },
-  {
     "echasnovski/mini.nvim",
     version = "*",
   },
@@ -42,25 +33,4 @@ return {
       require("nvim-surround").setup({})
     end,
   },
-  {
-    "wellle/targets.vim", -- adds more targets like [ or ,
-  },
-  {
-    "aserowy/tmux.nvim",
-    config = function()
-      return require("tmux").setup()
-    end,
-  },
-  {
-    "j-hui/fidget.nvim",
-    opts = {},
-  },
-  {
-    {
-      "ChuufMaster/buffer-vacuum",
-      opts = {},
-    },
-  },
-  { "nvzone/timerly", dependencies = { "nvzone/volt" } },
-  -- { "tadaa/vimade" },
 }

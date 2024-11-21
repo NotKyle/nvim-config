@@ -43,7 +43,6 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    { import = "plugins.must-use" },
     { import = "plugins.lsp" },
     { import = "plugins.editor" },
     { import = "plugins.appearance" },
@@ -271,22 +270,7 @@ vim.cmd("set background=dark")
 -- Disable formatting for specific file types
 local disable_format_on_save_for_filetypes = { "php" }
 
-local function should_disable_formatting()
-  local current_filetype = vim.bo.filetype
-  return vim.tbl_contains(disable_format_on_save_for_filetypes, current_filetype)
-end
-
--- Common on_attach function for both LSPs
-local function common_on_attach(client, bufnr)
-  -- Disable formatting if it's in the disabled list
-  if should_disable_formatting() then
-    client.server_capabilities.documentFormattingProvider = false
-  end
-  -- Other on_attach logic (keybindings, etc.) can go here
-end
-
 local lspconfig = require("lspconfig")
-
 lspconfig.phpactor.setup({
   on_attach = function(client, bufnr)
     -- You may want to attach specific autocommands here, but setting a buffer option for autocommands is not valid.
@@ -323,8 +307,17 @@ vim.diagnostic.config({
   },
   signs = true,
   float = {
-    source = "always", -- Show the source of the diagnostic (e.g., PHPActor, PHPCS)
+    source = "always",
   },
+})
+
+lspconfig.prettier.setup({
+  on_attach = function(client, bufnr)
+    -- Disable formatting on save for specific file types
+    if vim.tbl_contains(disable_format_on_save_for_filetypes, vim.bo.filetype) then
+      vim.api.nvim_command("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+    end
+  end,
 })
 
 local signs = { Error = "✘", Warn = "", Hint = "", Info = "" }

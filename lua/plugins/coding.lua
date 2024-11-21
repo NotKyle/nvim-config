@@ -1,5 +1,63 @@
 -- lua/plugins/coding.lua
 return {
+  ---@type LazySpec
+  {
+    "folke/noice.nvim",
+    config = function()
+      require("noice").setup({
+        notify = {
+          enabled = false,
+        },
+        lsp = {
+          progress = {
+            enabled = true,
+            -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
+            -- See the section on formatting for more details on how to customize.
+            --- @type NoiceFormat|string
+            format = "lsp_progress",
+            --- @type NoiceFormat|string
+            format_done = "lsp_progress_done",
+            throttle = 1000 / 30, -- frequency to update lsp progress message
+            view = "mini",
+          },
+        },
+      })
+    end,
+  },
+  {
+    "mikavilpas/yazi.nvim",
+    event = "VeryLazy",
+    keys = {
+      -- 👇 in this section, choose your own keymappings!
+      {
+        "<leader>-",
+        "<cmd>Yazi<cr>",
+        desc = "Open yazi at the current file",
+      },
+      {
+        -- Open in the current working directory
+        "<leader>e",
+        "<cmd>Yazi cwd<cr>",
+        desc = "Open the file manager in nvim's working directory",
+      },
+      {
+        -- NOTE: this requires a version of yazi that includes
+        -- https://github.com/sxyazi/yazi/pull/1305 from 2024-07-18
+        "<c-up>",
+        "<cmd>Yazi toggle<cr>",
+        desc = "Resume the last yazi session",
+      },
+    },
+    ---@type YaziConfig
+    opts = {
+      -- if you want to open yazi instead of netrw, see below for more info
+      open_for_directories = false,
+      keymaps = {
+        show_help = "<f1>",
+      },
+    },
+  },
+
   {
     "rmagatti/auto-session",
     lazy = false,
@@ -47,11 +105,6 @@ return {
         highlight = "OffScreenPopup",
       }
     end,
-  },
-  {
-    "stevearc/conform.nvim",
-    lazy = true,
-    event = { "BufReadPre", "BufNewFile" },
   },
   {
     "Rics-Dev/project-explorer.nvim",
@@ -190,34 +243,9 @@ return {
   },
 
   {
-    "metakirby5/codi.vim",
-  },
-
-  {
     "tpope/vim-abolish",
     config = function()
       vim.g.abolish_case = "smart"
-    end,
-  },
-
-  { -- lazy
-    "ccaglak/phptools.nvim",
-    keys = {
-      { "<leader>lm", "<cmd>PhpMethod<cr>" },
-      { "<leader>lc", "<cmd>PhpClass<cr>" },
-      { "<leader>ls", "<cmd>PhpScripts<cr>" },
-      { "<leader>ln", "<cmd>PhpNamespace<cr>" },
-      { "<leader>lg", "<cmd>PhpGetSet<cr>" },
-      { "<leader>lf", "<cmd>PhpCreate<cr>" },
-    },
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    config = function()
-      require("phptools").setup({
-        ui = false, -- if you have stevearc/dressing.nvim or something similar keep it false or else true
-      })
-      vim.keymap.set("v", "<leader>lr", ":PhpRefactor<cr>")
     end,
   },
 }

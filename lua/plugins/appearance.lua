@@ -48,65 +48,8 @@ return {
     "mg979/vim-visual-multi",
   },
   {
-    "s1n7ax/nvim-window-picker",
-    name = "window-picker",
-    event = "VeryLazy",
-    version = "2.*",
-    config = function()
-      require("window-picker").setup()
-    end,
-  },
-  {
     "folke/twilight.nvim",
     opts = {},
-  },
-  {
-    "folke/noice.nvim",
-    event = "VeryLazy",
-    opts = {
-      -- add any options here
-    },
-    dependencies = {
-      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-      "MunifTanjim/nui.nvim",
-      -- OPTIONAL:
-      --   `nvim-notify` is only needed, if you want to use the notification view.
-      --   If not available, we use `mini` as the fallback
-      "rcarriga/nvim-notify",
-    },
-
-    config = function()
-      require("noice").setup({
-        routes = {
-          -- Hide 'written' messages
-          {
-            filter = {
-              event = "msg_show",
-              kind = "",
-              find = "written",
-            },
-            opts = { skip = true },
-          },
-
-          -- Disable PHPCS missing messages
-          {
-            filter = {
-              event = "msg_show",
-              kind = "",
-              find = "phpcs",
-            },
-            opts = { skip = true },
-          },
-        },
-        lsp = {
-          -- Disable Noice's LSP progress handler
-          progress = { enabled = false },
-        },
-      })
-    end,
-  },
-  {
-    "ramojus/mellifluous.nvim",
   },
   {
     "folke/zen-mode.nvim",
@@ -116,14 +59,4 @@ return {
     "tzachar/highlight-undo.nvim",
     opts = {},
   },
-  -- {
-  --   "OXY2DEV/bars-N-lines.nvim",
-  --   -- No point in lazy loading this
-  --   lazy = false,
-  -- },
-
-  -- NvChad stuff
-  { "nvchad/minty", lazy = true },
-  { "nvchad/volt", lazy = true },
-  { "nvchad/menu", lazy = true },
 }

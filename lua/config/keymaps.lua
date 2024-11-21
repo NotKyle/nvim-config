@@ -39,33 +39,38 @@ vim.api.nvim_set_keymap("n", "<leader><leader>", "<cmd>Pick files<cr>", { norema
 vim.api.nvim_set_keymap("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", { noremap = true, silent = true })
 
 -- Mini Files
-vim.keymap.set("n", "<leader>e", function()
-  local MiniFiles = require("mini.files")
-
-  -- Function to find the root directory (based on .git or fallback to cwd)
-  local function find_git_root()
-    local git_root = vim.fn.finddir(".git", vim.fn.getcwd() .. ";")
-    if git_root == "" then
-      return vim.fn.getcwd()
-    else
-      return vim.fn.fnamemodify(git_root, ":h")
-    end
-  end
-
-  -- Get the root directory
-  local root_dir = find_git_root()
-
-  -- Toggle Mini Files
-  if MiniFiles.close() then
-    return
-  end
-  MiniFiles.open(root_dir, false)
-
-  -- Reveal the cwd within the opened Mini Files
-  vim.defer_fn(function()
-    MiniFiles.reveal_cwd()
-  end, 30)
-end)
+-- vim.keymap.set("n", "<leader>e", function()
+--   local MiniFiles = require("mini.files")
+--   -- Open mini.files in current file working directory
+--   MiniFiles.open(vim.fn.getcwd())
+-- end)
+-- vim.keymap.set("n", "<leader>e", function()
+--   local MiniFiles = require("mini.files")
+--
+--   -- Function to find the root directory (based on .git or fallback to cwd)
+--   local function find_git_root()
+--     local git_root = vim.fn.finddir(".git", vim.fn.getcwd() .. ";")
+--     if git_root == "" then
+--       return vim.fn.getcwd()
+--     else
+--       return vim.fn.fnamemodify(git_root, ":h")
+--     end
+--   end
+--
+--   -- Get the root directory
+--   local root_dir = find_git_root()
+--
+--   -- Toggle Mini Files
+--   if MiniFiles.close() then
+--     return
+--   end
+--   MiniFiles.open(vim.fn.getcwd())
+--
+--   -- Reveal the cwd within the opened Mini Files
+--   vim.defer_fn(function()
+--     MiniFiles.reveal_cwd()
+--   end, 30)
+-- end)
 
 -- LSP
 vim.api.nvim_set_keymap("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { noremap = true, silent = true })

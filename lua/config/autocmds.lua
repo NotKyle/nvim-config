@@ -133,21 +133,26 @@ vim.api.nvim_create_autocmd("BufEnter", {
     vim.diagnostic.config({ virtual_text = false })
   end,
 })
--- Function to run PHP CS Fixer
-local function php_cs_fixer_format()
-  local file = vim.fn.expand("%:p") -- Get the full file path of the current buffer
-  -- print("Running PHP CS Fixer on " .. file)
-  -- vim.cmd("silent! !vendor/bin/php-cs-fixer fix " .. file)
-  vim.cmd("silent! !vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php " .. file)
-end
 
--- Create an autocommand for PHP files
-vim.api.nvim_create_autocmd("BufWritePost", {
-  pattern = "*.php",
-  callback = function()
-    php_cs_fixer_format()
-  end,
-})
+local phpcs_enabled = false
+
+if phpcs_enabled then
+  -- Function to run PHP CS Fixer
+  local function php_cs_fixer_format()
+    local file = vim.fn.expand("%:p") -- Get the full file path of the current buffer
+    -- print("Running PHP CS Fixer on " .. file)
+    -- vim.cmd("silent! !vendor/bin/php-cs-fixer fix " .. file)
+    vim.cmd("silent! !vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php " .. file)
+  end
+
+  -- Create an autocommand for PHP files
+  vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*.php",
+    callback = function()
+      php_cs_fixer_format()
+    end,
+  })
+end
 
 -- Create a command to start the project
 -- We need to:
