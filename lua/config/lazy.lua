@@ -144,13 +144,6 @@ local function setup_mini_files(custom_filters)
   end, { nargs = 0 })
 end
 
--- Ensure `mini.files` does not open on startup
-vim.api.nvim_create_autocmd("VimEnter", {
-  callback = function()
-    -- Do not open `mini.files` automatically
-  end,
-})
-
 -- Mini.nvim Pick Setup
 local function setup_mini_pick(custom_filters)
   local filters = create_filter_array(custom_filters or {
@@ -193,6 +186,8 @@ local function setup_mini_starter()
 end
 
 local function setup_mini_statusline()
+  local MiniStatusline = require("mini.statusline")
+
   require("mini.statusline").setup({
     use_icons = vim.g.have_nerd_font,
     content = {
@@ -254,21 +249,11 @@ end
 -- Register the command to run InitLSP manually
 vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 
--- Load additional LSP configurations
--- require("config.lsp")
-
--- Set colorscheme to catppuccin-latte
--- vim.cmd("colorscheme catppuccin-latte")
-
--- Set background to light
 vim.cmd("set background=dark")
 
 -- Set cursor colour to contrast the theme
 -- vim.cmd("highlight Cursor guifg=black guibg=black")
 -- vim.cmd("highlight CursorLine guibg=#f1f1f1 guifg=black")
-
--- Disable formatting for specific file types
-local disable_format_on_save_for_filetypes = { "php" }
 
 local lspconfig = require("lspconfig")
 lspconfig.phpactor.setup({
@@ -309,15 +294,6 @@ vim.diagnostic.config({
   float = {
     source = "always",
   },
-})
-
-lspconfig.prettier.setup({
-  on_attach = function(client, bufnr)
-    -- Disable formatting on save for specific file types
-    if vim.tbl_contains(disable_format_on_save_for_filetypes, vim.bo.filetype) then
-      vim.api.nvim_command("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
-    end
-  end,
 })
 
 local signs = { Error = "✘", Warn = "", Hint = "", Info = "" }

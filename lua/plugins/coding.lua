@@ -8,6 +8,18 @@ return {
         notify = {
           enabled = false,
         },
+        error = {
+          enabled = true,
+          -- Error messages are formatted using the builtins for error. See config.format.builtin
+          -- See the section on formatting for more details on how to customize.
+          --- @type NoiceFormat|string
+          format = "error",
+          --- @type NoiceFormat|string
+          format_done = "error_done",
+          view = "mini",
+          -- Limit maximum number of errors to show to 3
+          limit = 3,
+        },
         lsp = {
           progress = {
             enabled = true,

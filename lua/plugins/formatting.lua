@@ -68,6 +68,17 @@ return {
           -- Format php
           php = {
             -- prettier,
+            {
+              exe = "php-cs-fixer",
+              args = {
+                "fix",
+                "--using-cache=no",
+                "--config=.php-cs-fixer.dist.php",
+                "--path",
+                vim.api.nvim_buf_get_name(0),
+              },
+              stdin = false,
+            },
           },
 
           -- Use the special "*" filetype for defining formatter configurations on
