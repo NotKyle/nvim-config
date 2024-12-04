@@ -2,6 +2,263 @@
 return {
   ---@type LazySpec
   {
+    "rafamadriz/friendly-snippets",
+  },
+  {
+    "atiladefreitas/dooing",
+    config = function()
+      require("dooing").setup({
+        -- Core settings
+        save_path = vim.fn.stdpath("data") .. "/dooing_todos.json",
+
+        -- Window settings
+        window = {
+          width = 55,
+          height = 20,
+          border = "rounded",
+          padding = {
+            top = 1,
+            bottom = 1,
+            left = 2,
+            right = 2,
+          },
+        },
+
+        -- To-do formatting
+        formatting = {
+          pending = {
+            icon = "○",
+            format = { "icon", "text", "due_date" },
+          },
+          done = {
+            icon = "✓",
+            format = { "icon", "text", "due_date" },
+          },
+        },
+
+        -- Priorization options
+        prioritization = false,
+        priorities = {
+          {
+            name = "important",
+            weight = 4,
+          },
+          {
+            name = "urgent",
+            weight = 2,
+          },
+        },
+        priority_thresholds = {
+          {
+            min = 5, -- Corresponds to `urgent` and `important` tasks
+            max = 999,
+            color = nil,
+            hl_group = "DiagnosticError",
+          },
+          {
+            min = 3, -- Corresponds to `important` tasks
+            max = 4,
+            color = nil,
+            hl_group = "DiagnosticWarn",
+          },
+          {
+            min = 1, -- Corresponds to `urgent tasks`
+            max = 2,
+            color = nil,
+            hl_group = "DiagnosticInfo",
+          },
+        },
+
+        -- Default keymaps
+        keymaps = {
+          toggle_window = "<leader>td",
+          new_todo = "i",
+          toggle_todo = "x",
+          delete_todo = "d",
+          delete_completed = "D",
+          close_window = "q",
+          add_due_date = "H",
+          remove_due_date = "r",
+          toggle_help = "?",
+          toggle_tags = "t",
+          clear_filter = "c",
+          edit_todo = "e",
+          edit_tag = "e",
+          delete_tag = "d",
+          search_todos = "/",
+          import_todos = "I",
+          export_todos = "E",
+          remove_duplicates = "<leader>D",
+        },
+
+        -- Calendar options
+        calendar = {
+          language = "en",
+          icon = "",
+          keymaps = {
+            previous_day = "h",
+            next_day = "l",
+            previous_week = "k",
+            next_week = "j",
+            previous_month = "H",
+            next_month = "L",
+            select_day = "<CR>",
+            close_calendar = "q",
+          },
+        },
+      })
+    end,
+  },
+  {
+    "aileot/emission.nvim",
+    event = "VeryLazy",
+    opts = {},
+    config = function()
+      require("emission").setup({
+        attach = {
+          -- Useful to avoid extra attaching attempts in simultaneous buffer editing
+          -- such as `:bufdo` or `:cdo`.
+          delay = 150,
+          excluded_buftypes = {
+            "help",
+            "nofile",
+            "terminal",
+            "prompt",
+          },
+          -- NOTE: Nothing is excluded by default. Add any as you need, but check
+          -- the 'buftype' at first.
+          excluded_filetypes = {
+            -- "oil",
+          },
+        },
+        highlight = {
+          duration = 300, -- milliseconds
+          min_byte = 2, -- minimum bytes to highlight texts
+          filter = function(buf) -- See below for examples.
+            return true
+          end,
+          -- NOTE: Buffer texts watched by emission.nvim are cached for the removed
+          -- text highlight feature when the buffer is attached and after each
+          -- set of highlight emissions.
+          -- However, `min_byte` and `filter` options are likely to prevent
+          -- necessary recaches. The default value "InsertLeave" forces texts to
+          -- be re-cached regardless of the option values.
+          -- Please add |autocmd-events| properly if emitted highlight texts are
+          -- outdated with your filter settings.
+          additional_recache_events = { "InsertLeave" },
+        },
+        added = {
+          priority = 102,
+          -- The options for `vim.api.nvim_set_hl(0, "EmissionAdded", {hl_map})`.
+          -- NOTE: If you keep "default" key set to `true`, you can arrange the
+          -- highlight groups hl-EmissionAdded by nvim_set_hl(), based on your
+          -- colorscheme.
+          -- NOTE: You can use "link" key to link the highlight settings to an
+          -- existing highlight group like hl-DiffAdd.
+          hl_map = {
+            default = true,
+            bold = true,
+            fg = "#dcd7ba",
+            bg = "#2d4f67",
+          },
+        },
+        -- The same options as `added` are available.
+        -- Note that the default values might be different from `added` ones.
+        removed = {
+          priority = 101,
+          -- The options for `vim.api.nvim_set_hl(0, "EmissionRemoved", {hl_map})`.
+          hl_map = {
+            default = true,
+            bold = true,
+            fg = "#dcd7ba",
+            bg = "#672d2d",
+          },
+        },
+      })
+    end,
+  },
+  {
+    "rachartier/tiny-inline-diagnostic.nvim",
+    event = "VeryLazy", -- Or `LspAttach`
+    priority = 1000, -- needs to be loaded in first
+    config = function()
+      -- Default configuration
+      require("tiny-inline-diagnostic").setup({
+        preset = "modern", -- Can be: "modern", "classic", "minimal", "ghost", "simple", "nonerdfont", "amongus"
+        hi = {
+          error = "DiagnosticError",
+          warn = "DiagnosticWarn",
+          info = "DiagnosticInfo",
+          hint = "DiagnosticHint",
+          arrow = "NonText",
+          background = "CursorLine", -- Can be a highlight or a hexadecimal color (#RRGGBB)
+          mixing_color = "None", -- Can be None or a hexadecimal color (#RRGGBB). Used to blend the background color with the diagnostic background color with another color.
+        },
+        options = {
+          -- Show the source of the diagnostic.
+          show_source = false,
+
+          -- Throttle the update of the diagnostic when moving cursor, in milliseconds.
+          -- You can increase it if you have performance issues.
+          -- Or set it to 0 to have better visuals.
+          throttle = 20,
+
+          -- The minimum length of the message, otherwise it will be on a new line.
+          softwrap = 30,
+
+          -- If multiple diagnostics are under the cursor, display all of them.
+          multiple_diag_under_cursor = false,
+
+          -- Enable diagnostic message on all lines.
+          multilines = false,
+
+          -- Show all diagnostics on the cursor line.
+          show_all_diags_on_cursorline = false,
+
+          -- Enable diagnostics on Insert mode. You should also se the `throttle` option to 0, as some artefacts may appear.
+          enable_on_insert = false,
+
+          overflow = {
+            -- Manage the overflow of the message.
+            --    - wrap: when the message is too long, it is then displayed on multiple lines.
+            --    - none: the message will not be truncated.
+            --    - oneline: message will be displayed entirely on one line.
+            mode = "wrap",
+          },
+
+          -- Format the diagnostic message.
+          -- Example:
+          -- format = function(diagnostic)
+          --     return diagnostic.message .. " [" .. diagnostic.source .. "]"
+          -- end,
+          format = nil,
+
+          --- Enable it if you want to always have message with `after` characters length.
+          break_line = {
+            enabled = false,
+            after = 30,
+          },
+
+          virt_texts = {
+            priority = 9999,
+          },
+
+          -- Filter by severity.
+          severity = {
+            vim.diagnostic.severity.ERROR,
+            vim.diagnostic.severity.WARN,
+            vim.diagnostic.severity.INFO,
+            vim.diagnostic.severity.HINT,
+          },
+
+          -- Overwrite events to attach to a buffer. You should not change it, but if the plugin
+          -- does not works in your configuration, you may try to tweak it.
+          overwrite_events = nil,
+        },
+      })
+    end,
+  },
+  {
     "Hashino/doing.nvim",
     config = function()
       require("doing").setup({

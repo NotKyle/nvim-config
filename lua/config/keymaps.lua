@@ -223,7 +223,13 @@ end)
 -- LSP Saga
 vim.api.nvim_set_keymap(
   "n",
-  "<C-j>",
+  "<C-i>",
+  "<cmd>Lspsaga finder<cr>",
+  { noremap = true, silent = true, desc = "LSP Saga finder" }
+)
+vim.api.nvim_set_keymap(
+  "n",
+  "<C-n>",
   "<cmd>Lspsaga show_cursor_diagnostics<cr>",
   { noremap = true, silent = true, desc = "LSP Saga show_cursor_diagnostics" }
 )
