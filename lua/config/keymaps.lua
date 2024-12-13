@@ -351,3 +351,17 @@ vim.api.nvim_set_keymap(
   ':source $MYVIMRC<CR>:lua print("Config reloaded!")<CR>',
   { noremap = true, silent = true }
 )
+
+-- Timber
+-- insert_log_below	glj	Insert a log statement below the cursor
+-- insert_log_above	glk	Insert a log statement above the cursor
+-- insert_plain_log_below	glo	Insert a plain log statement below the cursor
+-- insert_plain_log_above	gl	Insert a plain log statement above the cursor
+-- add_log_targets_to_batch	gla	Add a log target to the batch
+-- insert_batch_log	glb	Insert a batch log statement
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>glj",
+  "<cmd>lua require('timber').insert_log_below()<cr>",
+  { noremap = true, silent = true }
+)
