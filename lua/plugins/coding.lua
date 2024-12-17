@@ -1,6 +1,29 @@
 -- lua/plugins/coding.lua
 return {
-  ---@type LazySpec
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "Jezda1337/nvim-html-css", -- add it as dependencies of `nvim-cmp` or standalone plugin
+    },
+    opts = {
+      sources = {
+        {
+          name = "html-css",
+          option = {
+            enable_on = { "html", "php" }, -- html is enabled by default
+            notify = true,
+            documentation = {
+              auto_show = true, -- show documentation on select
+            },
+            -- add any external scss like one below
+            style_sheets = {
+              "https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css",
+            },
+          },
+        },
+      },
+    },
+  }, ---@type LazySpec
   {
     "Goose97/timber.nvim",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
