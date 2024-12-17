@@ -51,6 +51,7 @@ require("lazy").setup({
     { import = "plugins.git" },
     { import = "plugins.coding" },
     { import = "plugins.misc" },
+    { import = "plugins.ai" },
     { import = "plugins.disabled" },
   },
   defaults = {
@@ -301,3 +302,7 @@ for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
+
+-- Set colorscheme after it's loaded
+vim.cmd("colorscheme nordfox")
+-- vim.cmd("colorscheme nightfox")

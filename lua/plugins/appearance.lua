@@ -34,15 +34,10 @@ end
 
 return {
   {
-    "xiyaowong/transparent.nvim",
+    "EdenEast/nightfox.nvim",
   },
   {
-    "catppuccin/nvim",
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd("colorscheme catppuccin-frappe")
-    end,
+    "xiyaowong/transparent.nvim",
   },
   {
     "mg979/vim-visual-multi",
