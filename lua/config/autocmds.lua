@@ -2,94 +2,81 @@
 -- Default autocmds are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 -- Add any additional autocmds here
 
--- MiniFiles Window Open Autocmd
-vim.api.nvim_create_autocmd("User", {
-  pattern = "MiniFilesWindowOpen",
-  callback = function(args)
-    local win_id = args.data.win_id
-
-    -- Customize window-local settings
-    vim.wo[win_id].winblend = 30
-    local config = vim.api.nvim_win_get_config(win_id)
-    config.border, config.title_pos = "double", "left"
-    vim.api.nvim_win_set_config(win_id, config)
-  end,
-})
-
--- Toggle Dotfiles Visibility in MiniFiles
-local show_dotfiles = true
-local filter_show = function(fs_entry)
-  return true
-end
-local filter_hide = function(fs_entry)
-  return not vim.startswith(fs_entry.name, ".")
-end
-
-local toggle_dotfiles = function()
-  show_dotfiles = not show_dotfiles
-  MiniFiles.refresh({ content = { filter = show_dotfiles and filter_show or filter_hide } })
-end
-
--- Map 'g.' to toggle dotfiles visibility in MiniFiles
-vim.api.nvim_create_autocmd("User", {
-  pattern = "MiniFilesBufferCreate",
-  callback = function(args)
-    vim.keymap.set("n", "g.", toggle_dotfiles, { buffer = args.data.buf_id })
-  end,
-})
-
--- Split Window Mapping in MiniFiles
-local map_split = function(buf_id, lhs, direction)
-  local rhs = function()
-    local new_target_window
-    vim.api.nvim_win_call(MiniFiles.get_target_window(), function()
-      vim.cmd(direction .. " split")
-      new_target_window = vim.api.nvim_get_current_win()
-    end)
-    MiniFiles.set_target_window(new_target_window)
+-- Setup for MiniFiles
+local function setup_minifiles()
+  local show_dotfiles = true
+  local filter_hide = function(fs_entry)
+    return not vim.startswith(fs_entry.name, ".")
   end
-  vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = "Split " .. direction })
+
+  local toggle_dotfiles = function()
+    show_dotfiles = not show_dotfiles
+    MiniFiles.refresh({ content = { filter = show_dotfiles and nil or filter_hide } })
+  end
+
+  local map_split = function(buf_id, direction)
+    local rhs = function()
+      local new_target_window
+      vim.api.nvim_win_call(MiniFiles.get_target_window(), function()
+        vim.cmd(direction .. " split")
+        new_target_window = vim.api.nvim_get_current_win()
+      end)
+      MiniFiles.set_target_window(new_target_window)
+    end
+    vim.keymap.set("n", direction == "belowright horizontal" and "gs" or "gv", rhs, {
+      buffer = buf_id,
+      desc = "Split " .. direction,
+    })
+  end
+
+  local files_set_cwd = function()
+    local cur_directory = vim.fs.dirname(MiniFiles.get_fs_entry().path)
+    vim.fn.chdir(cur_directory)
+    print("Changed working directory to " .. cur_directory)
+  end
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniFilesBufferCreate",
+    callback = function(args)
+      local buf_id = args.data.buf_id
+      vim.keymap.set("n", "g.", toggle_dotfiles, { buffer = buf_id, desc = "Toggle dotfiles visibility" })
+      map_split(buf_id, "belowright horizontal")
+      map_split(buf_id, "belowright vertical")
+      vim.keymap.set("n", "g~", files_set_cwd, { buffer = buf_id, desc = "Set CWD to MiniFiles directory" })
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniFilesWindowOpen",
+    callback = function(args)
+      local win_id = args.data.win_id
+      vim.wo[win_id].winblend = 30
+      local config = vim.api.nvim_win_get_config(win_id)
+      config.border, config.title_pos = "double", "left"
+      vim.api.nvim_win_set_config(win_id, config)
+    end,
+  })
 end
+setup_minifiles()
 
-vim.api.nvim_create_autocmd("User", {
-  pattern = "MiniFilesBufferCreate",
-  callback = function(args)
-    map_split(args.data.buf_id, "gs", "belowright horizontal")
-    map_split(args.data.buf_id, "gv", "belowright vertical")
-  end,
-})
-
--- Set Current Working Directory to the Directory of the Current File in MiniFiles
-local files_set_cwd = function()
-  local cur_directory = vim.fs.dirname(MiniFiles.get_fs_entry().path)
-  vim.fn.chdir(cur_directory)
-end
-
-vim.api.nvim_create_autocmd("User", {
-  pattern = "MiniFilesBufferCreate",
-  callback = function(args)
-    vim.keymap.set("n", "g~", files_set_cwd, { buffer = args.data.buf_id })
-  end,
-})
-
--- Create a Group for Miscellaneous Autocommands
+-- Group for Miscellaneous Autocommands
 local group_name = "Random"
 vim.api.nvim_create_augroup(group_name, { clear = true })
 
--- Auto-resize Windows Equally on Vim Resize
+-- Auto-resize windows equally on Vim resize
 vim.api.nvim_create_autocmd("VimResized", {
   group = group_name,
   desc = "Keep windows equally resized",
-  command = "tabdo wincmd =",
+  command = "wincmd =",
 })
 
--- Set Terminal Windows to No Number, No Relative Number, and No Sign Column
+-- Set terminal windows to no number, no relative number, and no sign column
 vim.api.nvim_create_autocmd("TermOpen", {
   group = group_name,
   command = "setlocal nonumber norelativenumber signcolumn=no",
 })
 
--- Prevent Auto-continuation of Comments
+-- Prevent auto-continuation of comments
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "*",
   callback = function()
@@ -97,12 +84,12 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
--- Automatically Check for File Changes When Focus is Gained
+-- Automatically check for file changes when focus is gained
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
   command = "checktime",
 })
 
--- Show LSP Diagnostics in Floating Window on Cursor Hold
+-- Show LSP diagnostics in floating window on cursor hold
 vim.api.nvim_create_autocmd("CursorHold", {
   callback = function()
     local opts = {
@@ -117,7 +104,7 @@ vim.api.nvim_create_autocmd("CursorHold", {
   end,
 })
 
--- LSP Diagnostic Configuration
+-- LSP diagnostic configuration
 vim.diagnostic.config({
   virtual_text = false,
   signs = true,
@@ -126,26 +113,19 @@ vim.diagnostic.config({
   severity_sort = true,
 })
 
--- Disable Virtual Text for Diagnostics on Buffer Enter
-vim.api.nvim_create_autocmd("BufEnter", {
-  pattern = "*",
-  callback = function()
-    vim.diagnostic.config({ virtual_text = false })
-  end,
-})
-
+-- Function to run PHP CS Fixer
 local phpcs_enabled = false
 
 if phpcs_enabled then
-  -- Function to run PHP CS Fixer
   local function php_cs_fixer_format()
-    local file = vim.fn.expand("%:p") -- Get the full file path of the current buffer
-    -- print("Running PHP CS Fixer on " .. file)
-    -- vim.cmd("silent! !vendor/bin/php-cs-fixer fix " .. file)
-    vim.cmd("silent! !vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php " .. file)
+    local file = vim.fn.expand("%:p")
+    if vim.fn.executable("vendor/bin/php-cs-fixer") == 1 then
+      vim.cmd("silent! !vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php " .. file)
+    else
+      vim.notify("PHP CS Fixer not found in vendor/bin", vim.log.levels.ERROR)
+    end
   end
 
-  -- Create an autocommand for PHP files
   vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*.php",
     callback = function()
@@ -154,58 +134,48 @@ if phpcs_enabled then
   })
 end
 
--- Create a command to start the project
--- We need to:
--- docker down anny running containers (docker container stop $(docker container ls -aq))
--- docker-compose up -d
--- yarn watch
--- Store job IDs
+-- Start and stop project commands
 local jobs = {}
+
+local function run_command(cmd, on_exit)
+  return vim.fn.jobstart(cmd, { on_exit = on_exit })
+end
 
 function StartProject()
   local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":t")
-
-  -- Stop any previous jobs if they are still running
   StopProject()
 
-  -- Start each process and save job IDs
-  jobs.stop_containers = vim.fn.jobstart("docker container stop $(docker container ls -aq)", {
-    on_exit = function()
-      jobs.compose_up = vim.fn.jobstart("docker-compose up -d", {
-        on_exit = function()
-          jobs.yarn_watch = vim.fn.jobstart("yarn watch", {
-            on_stdout = function(_, data)
-              print(table.concat(data, "\n"))
-            end,
-            on_exit = function()
-              print("Project " .. project_name .. " started")
-            end,
-          })
-        end,
-      })
-    end,
-  })
+  run_command("docker container stop $(docker container ls -aq)", function()
+    run_command("docker-compose up -d", function()
+      run_command("yarn watch", function(_, code)
+        if code == 0 then
+          print("Project " .. project_name .. " started successfully")
+        else
+          print("Error starting project " .. project_name)
+        end
+      end)
+    end)
+  end)
 end
 
 function StopProject()
-  -- Terminate each job if it is running
   for _, job_id in pairs(jobs) do
     if job_id and vim.fn.jobwait({ job_id }, 0)[1] == -1 then
       vim.fn.jobstop(job_id)
     end
   end
-  jobs = {} -- Clear the jobs table
+  jobs = {}
   print("Project processes stopped")
 end
 
 vim.cmd("command! StartProject lua StartProject()")
 vim.cmd("command! StopProject lua StopProject()")
 
--- Optionally stop project processes on Neovim exit
 vim.api.nvim_create_autocmd("VimLeavePre", {
   callback = StopProject,
 })
 
+-- SCSS-specific settings
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "scss",
   callback = function()
