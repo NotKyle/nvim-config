@@ -43,16 +43,9 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = {
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    { import = "plugins.lsp" },
-    { import = "plugins.editor" },
-    { import = "plugins.appearance" },
-    { import = "plugins.formatting" },
-    -- { import = 'plugins.ui' },
-    { import = "plugins.git" },
-    { import = "plugins.coding" },
-    { import = "plugins.misc" },
-    { import = "plugins.ai" },
-    { import = "plugins.disabled" },
+    { import = "plugins.high" },
+    { import = "plugins.normal" },
+    { import = "plugins.low" },
   },
   defaults = {
     lazy = false, -- Set true if you want lazy-loading for custom plugins
