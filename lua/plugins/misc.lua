@@ -18,12 +18,13 @@ return {
   {
     "ptdewey/pendulum-nvim",
     config = function()
+      local current_month = os.date("%Y-%m")
       require("pendulum").setup({
-        log_file = vim.fn.expand("$HOME/Documents/pendulum.csv"),
-        timeout_len = 300,
-        timer_len = 60,
-        gen_reports = true,
-        top_n = 100,
+        log_file = vim.fn.expand("$HOME/Documents/pendulum/" .. current_month .. ".csv"),
+        timeout_len = 300, -- 5 minutes
+        timer_len = 60, -- 1 minute
+        gen_reports = true, -- Enable report generation (requires Go)
+        top_n = 10, -- Include top 10 entries in the report
       })
     end,
   },
