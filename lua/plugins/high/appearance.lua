@@ -32,26 +32,4 @@ vim.lsp.handlers["$/progress"] = function(_, result, ctx)
   })
 end
 
-return {
-  {
-    "EdenEast/nightfox.nvim",
-  },
-  {
-    "xiyaowong/transparent.nvim",
-  },
-  {
-    "mg979/vim-visual-multi",
-  },
-  {
-    "folke/twilight.nvim",
-    opts = {},
-  },
-  {
-    "folke/zen-mode.nvim",
-    opts = {},
-  },
-  {
-    "tzachar/highlight-undo.nvim",
-    opts = {},
-  },
-}
+return {}
