@@ -367,3 +367,39 @@ vim.api.nvim_set_keymap(
   "<cmd>lua require('timber').insert_log_below()<cr>",
   { noremap = true, silent = true }
 )
+
+vim.keymap.set("v", "J", ":m '>+1<cr>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<cr>gv=gv")
+
+-- Codedocs
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>k",
+  "<cmd>lua require('codedocs').insert_docs()<cr>",
+  { noremap = true, silent = true, desc = "Insert code documentation" }
+)
+
+-- Windows
+local function cmd(command)
+  return table.concat({ "<Cmd>", command, "<CR>" })
+end
+
+vim.keymap.set("n", "<C-w>z", cmd("WindowsMaximize"))
+vim.keymap.set("n", "<C-w>_", cmd("WindowsMaximizeVertically"))
+vim.keymap.set("n", "<C-w>|", cmd("WindowsMaximizeHorizontally"))
+vim.keymap.set("n", "<C-w>=", cmd("WindowsEqualize"))
+
+vim.keymap.set("n", "<leader>lld", function()
+  require("lazydo").toggle()
+end, { desc = "Toggle LazyDo" })
+
+-- Bind pane splitting keys
+-- Split horizontally
+vim.keymap.set("n", "<C-h>", function()
+  vim.cmd("split")
+end)
+
+-- Split vertically
+vim.keymap.set("n", "<C-v>", function()
+  vim.cmd("vsplit")
+end)

@@ -1,6 +1,12 @@
 -- lua/plugins/coding.lua
 return {
   {
+    "echasnovski/mini.nvim",
+  },
+  {
+    "rafamadriz/friendly-snippets",
+  },
+  {
     "hrsh7th/nvim-cmp",
     dependencies = {
       "Jezda1337/nvim-html-css", -- add it as dependencies of `nvim-cmp` or standalone plugin
@@ -33,9 +39,6 @@ return {
         -- Configuration here, or leave empty to use defaults
       })
     end,
-  },
-  {
-    "rafamadriz/friendly-snippets",
   },
   {
     "atiladefreitas/dooing",
@@ -313,7 +316,7 @@ return {
       -- example on how to change the winbar highlight
       vim.api.nvim_set_hl(0, "WinBar", { link = "Search" })
 
-      local api = require("doing.api")
+      local api = require("doing")
 
       vim.keymap.set("n", "<leader>de", api.edit, { desc = "[E]dit what tasks you`re [D]oing" })
       vim.keymap.set("n", "<leader>dn", api.done, { desc = "[D]o[n]e with current task" })

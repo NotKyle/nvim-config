@@ -50,3 +50,5 @@ vim.opt.listchars = {
 -- space = "·",
 
 vim.cmd([[filetype plugin indent on]])
+
+vim.cmd([[ set foldmethod=manual ]])

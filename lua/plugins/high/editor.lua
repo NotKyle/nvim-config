@@ -1,6 +1,9 @@
 -- lua/plugins/editor.lua
 return {
   {
+    "jeangiraldoo/codedocs.nvim",
+  },
+  {
     "nvim-telescope/telescope.nvim",
     keys = {
       -- add a keymap to browse plugin files

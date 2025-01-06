@@ -1,8 +1,17 @@
 -- lua/plugins/misc.lua
 return {
   {
-    "echasnovski/mini.nvim",
-    version = "*",
+    "anuvyklack/windows.nvim",
+    dependencies = {
+      "anuvyklack/middleclass",
+      "anuvyklack/animation.nvim",
+    },
+    config = function()
+      vim.o.winwidth = 10
+      vim.o.winminwidth = 10
+      vim.o.equalalways = false
+      require("windows").setup()
+    end,
   },
   {
     "tpope/vim-repeat",
@@ -19,8 +28,9 @@ return {
     "ptdewey/pendulum-nvim",
     config = function()
       local current_month = os.date("%Y-%m")
+      local log_path = vim.fn.expand("/Users/kylerussell/Documents/pendulum")
       require("pendulum").setup({
-        log_file = vim.fn.expand("$HOME/Documents/pendulum/" .. current_month .. ".csv"),
+        log_file = log_path .. "/" .. current_month .. ".log",
         timeout_len = 300, -- 5 minutes
         timer_len = 60, -- 1 minute
         gen_reports = true, -- Enable report generation (requires Go)
@@ -32,6 +42,46 @@ return {
     "kylechui/nvim-surround", -- surround objects
     config = function()
       require("nvim-surround").setup({})
+    end,
+  },
+  {
+    "Dan7h3x/LazyDo",
+    branch = "main",
+    event = "VeryLazy",
+    opts = {},
+  },
+  {
+    "xzbdmw/colorful-menu.nvim",
+    config = function()
+      require("colorful-menu").setup({})
+    end,
+  },
+  {
+    "miversen33/sunglasses.nvim",
+    -- event = "UIEnter",
+    config = function()
+      require("sunglasses").setup({})
+    end,
+    enabled = false, -- Causes nvim to hang on startup for some reason
+  },
+  {
+    "levouh/tint.nvim",
+    config = function()
+      require("tint").setup({
+        tint = -25, -- Darken colors, use a positive value to brighten
+        saturation = 0.2, -- Saturation to preserve
+        transforms = require("tint").transforms.SATURATE_TINT, -- Showing default behavior, but value here can be predefined set of transforms
+        tint_background_colors = true, -- Tint background portions of highlight groups
+        highlight_ignore_patterns = { "WinSeparator", "Status.*" }, -- Highlight group patterns to ignore, see `string.find`
+        window_ignore_function = function(winid)
+          local bufid = vim.api.nvim_win_get_buf(winid)
+          local buftype = vim.api.nvim_buf_get_option(bufid, "buftype")
+          local floating = vim.api.nvim_win_get_config(winid).relative ~= ""
+
+          -- Do not tint `terminal` or floating windows, tint everything else
+          return buftype == "terminal" or floating
+        end,
+      })
     end,
   },
 }

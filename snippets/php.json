@@ -1,0 +1,95 @@
+{
+  "PHPClass": {
+    "prefix": "phpclass",
+    "body": [
+      "<?php",
+      "",
+      "class ${1:ClassName} {",
+      "    public function __construct(${2:args}) {",
+      "        ${3:// Initialize properties}",
+      "    }",
+      "}",
+      ""
+    ]
+  },
+  "PHPFunction": {
+    "prefix": "phpfn",
+    "body": [
+      "public function ${1:functionName}(${2:args}) {",
+      "    ${3:// Function body}",
+      "    return ${4:null};",
+      "}"
+    ]
+  },
+  "PHPArray": {
+    "prefix": "phparr",
+    "body": [
+      "\\$${1:arrayName} = [",
+      "    '${2:key}' => ${3:value},",
+      "];"
+    ]
+  },
+  "PHPForeach": {
+    "prefix": "phpforeach",
+    "body": [
+      "foreach (${1:\\$array} as ${2:\\$key} => ${3:\\$value}) {",
+      "    ${4:// Code here}",
+      "}"
+    ]
+  },
+  "PHPIfElse": {
+    "prefix": "phpif",
+    "body": [
+      "if (${1:condition}) {",
+      "    ${2:// Code if true}",
+      "} else {",
+      "    ${3:// Code if false}",
+      "}"
+    ]
+  },
+  "PHPInclude": {
+    "prefix": "phpinc",
+    "body": [
+      "include_once '${1:file.php}';"
+    ]
+  },
+  "PHPSwitch": {
+    "prefix": "phpswitch",
+    "body": [
+      "switch (${1:variable}) {",
+      "    case '${2:value}':",
+      "        ${3:// Code here}",
+      "        break;",
+      "    default:",
+      "        ${4:// Default code here}",
+      "}"
+    ]
+  },
+  "PHPTryCatch": {
+    "prefix": "phptry",
+    "body": [
+      "try {",
+      "    ${1:// Code to try}",
+      "} catch (${2:Exception} ${3:\\$e}) {",
+      "    ${4:// Handle exception}",
+      "}"
+    ]
+  },
+  "PHPDocBlock": {
+    "prefix": "phpdoc",
+    "body": [
+      "/**",
+      " * ${1:Description}",
+      " *",
+      " * @param ${2:type} \\${3:name} ${4:Description}",
+      " * @return ${5:type} ${6:Description}",
+      " */"
+    ]
+  },
+  "PHPEcho": {
+    "prefix": "phpecho",
+    "body": [
+      "echo '${1:message}';"
+    ]
+  }
+}

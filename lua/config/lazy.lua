@@ -138,8 +138,8 @@ local function setup_mini_files(custom_filters)
   end, { nargs = 0 })
 end
 
--- Mini.nvim Pick Setup
 local function setup_mini_pick(custom_filters)
+  -- Mini.nvim Pick Setup
   local filters = create_filter_array(custom_filters or {
     { "endswith", { "~" } },
     { "regex", { "%.tmp$", "%.bak$" } }, -- Example: different filters for file pick
@@ -299,3 +299,22 @@ end
 -- Set colorscheme after it's loaded
 vim.cmd("colorscheme nordfox")
 -- vim.cmd("colorscheme nightfox")
+
+-- Disable virtual text for diagnostics
+vim.diagnostic.config({
+  virtual_text = false,
+})
+
+-- Mini.snippets
+local gen_loader = require("mini.snippets").gen_loader
+require("mini.snippets").setup({
+  snippets = {
+    -- Load custom file with global snippets first (adjust for Windows)
+    gen_loader.from_file("~/.config/nvim/snippets/global.json"),
+    gen_loader.from_file("~/.config/nvim/snippets/php.json"),
+
+    -- Load snippets based on current language by reading files from
+    -- "snippets/" subdirectories from 'runtimepath' directories.
+    gen_loader.from_lang(),
+  },
+})
