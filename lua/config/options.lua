@@ -1,3 +1,5 @@
+vim.env.PHP_CS_FIXER_IGNORE_ENV = "1"
+
 vim.opt.showtabline = 0
 vim.opt.laststatus = 0
 vim.opt.clipboard = "unnamedplus"

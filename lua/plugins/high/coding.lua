@@ -251,7 +251,7 @@ return {
           -- Show all diagnostics on the cursor line.
           show_all_diags_on_cursorline = false,
 
-          -- Enable diagnostics on Insert mode. You should also se the `throttle` option to 0, as some artefacts may appear.
+          -- Enable diagnostics on Insert mode. You should also see the `throttle` option to 0, as some artifacts may appear.
           enable_on_insert = false,
 
           overflow = {
@@ -406,6 +406,7 @@ return {
   },
   {
     "luckasRanarison/nvim-devdocs",
+    event = "VeryLazy",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope.nvim",
@@ -431,6 +432,7 @@ return {
   },
   {
     "andymass/vim-matchup",
+    event = "VeryLazy",
     config = function()
       vim.api.nvim_set_hl(0, "OffScreenPopup", { fg = "#fe8019", bg = "#3c3836", italic = true })
       vim.g.matchup_matchparen_offscreen = {
@@ -532,18 +534,22 @@ return {
       })
     end,
   },
-
-  -- helper keymaps to move forward and backward using [key ]key
+  -- Helper keymaps to move forward and backward using [key ]key
   {
     "echasnovski/mini.bracketed",
     version = false,
     opts = {},
   },
-
   {
     "tpope/vim-abolish",
     config = function()
       vim.g.abolish_case = "smart"
     end,
+  },
+  {
+    "mxsdev/nvim-dap-vscode-js",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+    },
   },
 }

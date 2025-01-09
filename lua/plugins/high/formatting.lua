@@ -67,18 +67,36 @@ return {
 
           -- Format php
           php = {
-            -- prettier,
-            {
-              exe = "php-cs-fixer",
-              args = {
-                "fix",
-                "--using-cache=no",
-                "--config=.php-cs-fixer.dist.php",
-                "--path",
-                vim.api.nvim_buf_get_name(0),
-              },
-              stdin = false,
-            },
+            function()
+              -- Path to the root directory (you can adjust this if needed)
+              local root_dir = vim.fn.getcwd()
+              local config_file = root_dir .. "/.php-cs-fixer.dist.php"
+
+              -- Check if the configuration file exists
+              if vim.fn.filereadable(config_file) == 1 then
+                return {
+                  exe = "php-cs-fixer",
+                  args = {
+                    "fix",
+                    "--using-cache=no",
+                    "--config=" .. config_file,
+                    vim.api.nvim_buf_get_name(0),
+                  },
+                  stdin = false,
+                }
+              else
+                return {
+                  exe = "php-cs-fixer",
+                  args = {
+                    "fix",
+                    "--using-cache=no",
+                    "--rules=@PSR12",
+                    vim.api.nvim_buf_get_name(0),
+                  },
+                  stdin = false,
+                }
+              end
+            end,
           },
 
           -- Use the special "*" filetype for defining formatter configurations on

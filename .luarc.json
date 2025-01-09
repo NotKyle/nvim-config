@@ -1,6 +1,7 @@
 {
     "diagnostics.globals": [
         "vim",
-        "toggle_layout"
+        "toggle_layout",
+        "MiniFiles"
     ]
 }

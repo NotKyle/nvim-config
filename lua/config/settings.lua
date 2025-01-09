@@ -19,7 +19,7 @@ opt.writebackup = false
 opt.swapfile = false
 opt.undofile = true
 opt.undodir = vim.fn.stdpath("cache") .. "/undo"
-opt.updatetime = 300
+opt.updatetime = 1000
 opt.timeoutlen = 500
 
 vim.g.mapleader = " "

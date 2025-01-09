@@ -297,8 +297,22 @@ for type, icon in pairs(signs) do
 end
 
 -- Set colorscheme after it's loaded
-vim.cmd("colorscheme nordfox")
+-- vim.cmd("colorscheme nordfox")
 -- vim.cmd("colorscheme nightfox")
+
+-- vim.cmd("colorscheme everforest")
+
+local everforest = require("everforest")
+everforest.setup({
+  background = "soft",
+  -- transparent_background_level = 0.8,
+  -- italics = true,
+  -- disable_italic_comments = false,
+  -- on_highlights = function(hl, _)
+  -- hl["@string.special.symbol.ruby"] = { link = "@field" }
+  -- end,
+  everforest.load(),
+})
 
 -- Disable virtual text for diagnostics
 vim.diagnostic.config({
@@ -318,3 +332,40 @@ require("mini.snippets").setup({
     gen_loader.from_lang(),
   },
 })
+
+require("nvim-treesitter.configs").setup({
+  highlight = {
+    enable = true,
+    disable = { "largefile" },
+  },
+  indent = { enable = true },
+  incremental_selection = { enable = false },
+})
+
+require("conform").setup({
+  formatters_by_ft = {
+    php = {
+      "php_cs_fixer",
+    },
+  },
+
+  format_on_save = false,
+  format_after_save = false,
+})
+
+local dap = require("dap")
+dap.configurations.javascript = {
+  {
+    type = "chrome",
+    request = "launch",
+    name = "Launch Chrome",
+    url = "http://localhost/",
+    webRoot = "${workspaceFolder}",
+  },
+}
+
+local sign = vim.fn.sign_define
+sign("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
+sign("DapBreakpointCondition", { text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" })
+sign("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
+sign("DapStopped", { text = "", texthl = "DapStopped", linehl = "DapStopped", numhl = "DapStopped" })

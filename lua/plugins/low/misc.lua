@@ -101,4 +101,31 @@ return {
     "nvzone/menu",
     lazy = true,
   },
+  {
+    "atiladefreitas/tinyunit",
+    config = function()
+      require("tinyunit").setup()
+    end,
+  },
+  {
+    "atiladefreitas/lazyclip",
+    config = function()
+      require("lazyclip").setup()
+    end,
+    keys = {
+      { "Cw", "Open Clipboard Manager" },
+    },
+    event = { "TextYankPost" },
+  },
+  {
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    opts = {},
+  },
+  {
+    "mxsdev/nvim-dap-vscode-js",
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+  },
 }

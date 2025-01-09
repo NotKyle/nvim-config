@@ -73,7 +73,9 @@ vim.api.nvim_create_autocmd("VimResized", {
 -- Set terminal windows to no number, no relative number, and no sign column
 vim.api.nvim_create_autocmd("TermOpen", {
   group = group_name,
-  command = "setlocal nonumber norelativenumber signcolumn=no",
+  callback = function()
+    vim.fn.jobstart({ "zsh" }, { detach = true })
+  end,
 })
 
 -- Prevent auto-continuation of comments
@@ -86,7 +88,10 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Automatically check for file changes when focus is gained
 vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
-  command = "checktime",
+  callback = function()
+    vim.cmd("checktime") -- Runs the command
+    -- vim.notify("File changes checked", vim.log.levels.INFO)
+  end,
 })
 
 -- Show LSP diagnostics in floating window on cursor hold
@@ -171,16 +176,43 @@ end
 vim.cmd("command! StartProject lua StartProject()")
 vim.cmd("command! StopProject lua StopProject()")
 
-vim.api.nvim_create_autocmd("VimLeavePre", {
-  callback = StopProject,
-})
+-- vim.api.nvim_create_autocmd("VimLeavePre", {
+--   callback = StopProject,
+-- })
 
 -- SCSS-specific settings
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "scss",
+  pattern = { "json", "yaml", "toml", "scss" },
   callback = function()
     vim.opt_local.shiftwidth = 2
     vim.opt_local.tabstop = 2
     vim.opt_local.expandtab = true
+  end,
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "json", "yaml", "toml" },
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+    vim.opt_local.expandtab = true
+  end,
+})
+
+vim.api.nvim_create_autocmd("CursorHold", {
+  callback = function()
+    if vim.bo.filetype == "php" or vim.bo.filetype == "lua" then
+      local opts = { focusable = false, border = "rounded", source = "always", scope = "cursor" }
+      vim.diagnostic.open_float(nil, opts)
+    end
+  end,
+})
+
+-- Auto source .env
+vim.api.nvim_create_autocmd("BufReadPre", {
+  pattern = ".env",
+  callback = function()
+    vim.fn.system("source .env")
+    vim.notify("Environment variables loaded", vim.log.levels.INFO)
   end,
 })
