@@ -1,12 +1,15 @@
 -- lua/plugins/coding.lua
 return {
   {
+    -- Mini plugins
     "echasnovski/mini.nvim",
   },
   {
+    -- Snippets
     "rafamadriz/friendly-snippets",
   },
   {
+    -- CMP
     "hrsh7th/nvim-cmp",
     dependencies = {
       "Jezda1337/nvim-html-css", -- add it as dependencies of `nvim-cmp` or standalone plugin
@@ -31,16 +34,7 @@ return {
     },
   }, ---@type LazySpec
   {
-    "Goose97/timber.nvim",
-    version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
-    config = function()
-      require("timber").setup({
-        -- Configuration here, or leave empty to use defaults
-      })
-    end,
-  },
-  {
+    -- Doing actions manager
     "atiladefreitas/dooing",
     config = function()
       require("dooing").setup({
@@ -146,6 +140,7 @@ return {
     end,
   },
   {
+    -- Highlight add/remove actions
     "aileot/emission.nvim",
     event = "VeryLazy",
     opts = {},
@@ -214,7 +209,9 @@ return {
     end,
   },
   {
+    -- Inline diagnostics
     "rachartier/tiny-inline-diagnostic.nvim",
+    enabled = false,
     event = "VeryLazy", -- Or `LspAttach`
     priority = 1000, -- needs to be loaded in first
     config = function()
@@ -295,7 +292,9 @@ return {
     end,
   },
   {
+    -- Another actions manager?
     "Hashino/doing.nvim",
+    enabled = false,
     config = function()
       require("doing").setup({
         -- default options
@@ -324,6 +323,7 @@ return {
   },
   {
     "folke/noice.nvim",
+    enabled = true,
     config = function()
       require("noice").setup({
         notify = {
@@ -343,7 +343,7 @@ return {
         },
         lsp = {
           progress = {
-            enabled = true,
+            enabled = false,
             -- Lsp Progress is formatted using the builtins for lsp_progress. See config.format.builtin
             -- See the section on formatting for more details on how to customize.
             --- @type NoiceFormat|string
@@ -358,6 +358,7 @@ return {
     end,
   },
   {
+    -- File grep
     "mikavilpas/yazi.nvim",
     event = "VeryLazy",
     keys = {
@@ -390,11 +391,10 @@ return {
       },
     },
   },
-
   {
+    -- Session manager
     "rmagatti/auto-session",
     lazy = false,
-
     ---enables autocomplete for opts
     ---@module "auto-session"
     ---@type AutoSession.Config
@@ -405,6 +405,7 @@ return {
     },
   },
   {
+    -- Developer documentation
     "luckasRanarison/nvim-devdocs",
     event = "VeryLazy",
     dependencies = {
@@ -415,7 +416,9 @@ return {
     opts = {},
   },
   {
+    -- LSP
     "nvimdev/lspsaga.nvim",
+    enabled = false, -- INFO: default true
     config = function()
       require("lspsaga").setup({})
     end,
@@ -424,13 +427,15 @@ return {
       "nvim-tree/nvim-web-devicons",
     },
   },
-
   {
+    -- Auto close tags
     "windwp/nvim-autopairs",
     event = "InsertEnter",
     config = true,
+    lazy = true,
   },
   {
+    -- Highlight matching pairs
     "andymass/vim-matchup",
     event = "VeryLazy",
     config = function()
@@ -442,6 +447,7 @@ return {
     end,
   },
   {
+    -- Project management
     "Rics-Dev/project-explorer.nvim",
     dependencies = { "nvim-telescope/telescope.nvim" },
     opts = {
@@ -461,16 +467,20 @@ return {
     keys = {
       { "<leader>pp", "<cmd>ProjectExplorer<CR>", desc = "Open Project Explorer" },
     },
-    lazy = false,
+    event = "VeryLazy",
+    lazy = true,
   },
   {
     "coffebar/neovim-project",
+    enabled = true,
     dependencies = {
       { "Shatur/neovim-session-manager" },
     },
   },
   {
+    -- Code actions
     "rachartier/tiny-code-action.nvim",
+    enabled = false,
     event = "LspAttach",
     config = function()
       require("tiny-code-action").setup()
@@ -504,6 +514,7 @@ return {
   {
     "echasnovski/mini.indentscope",
     version = false,
+    enabled = false,
     config = function()
       require("mini.indentscope").setup({
         draw = {
@@ -539,9 +550,11 @@ return {
     "echasnovski/mini.bracketed",
     version = false,
     opts = {},
+    enabled = false,
   },
   {
     "tpope/vim-abolish",
+    enabled = false,
     config = function()
       vim.g.abolish_case = "smart"
     end,
