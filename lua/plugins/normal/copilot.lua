@@ -21,7 +21,7 @@ return {
     vim.g.copilot_no_tab_map = true
     vim.keymap.set("i", "<Tab>", "<Tab>")
 
-    vim.g.disable_copilot = false
+    -- vim.g.disable_copilot = false
 
     vim.api.nvim_create_user_command("ToggleCopilot", function()
       vim.g.disable_copilot = not vim.g.disable_copilot

@@ -413,3 +413,11 @@ end)
 vim.keymap.set("n", "<C-v>", function()
   vim.cmd("vsplit")
 end)
+
+-- Package info
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>pi",
+  "<cmd>lua require('package-info').show()<cr>",
+  { noremap = true, silent = true, desc = "Show package info" }
+)

@@ -179,17 +179,19 @@ vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 -- vim.cmd("highlight CursorLine guibg=#f1f1f1 guifg=black")
 
 local lspconfig = require("lspconfig")
+
+lspconfig.intelephense.setup({
+  settings = {
+    intelephens = {
+      format = {
+        tabSize = 4,
+        insertSpaces = true,
+      },
+    },
+  },
+})
+
 lspconfig.phpactor.setup({
-  on_attach = function(client, bufnr)
-    -- You may want to attach specific autocommands here, but setting a buffer option for autocommands is not valid.
-    -- Example of a custom command to show diagnostics only on certain events
-    -- vim.api.nvim_create_autocmd({"BufWritePost"}, {
-    --   buffer = bufnr,
-    --   callback = function()
-    --     vim.lsp.buf.formatting()
-    --   end,
-    -- })
-  end,
   handlers = {
     -- Only show diagnostics after a debounce or on specific conditions
     ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -204,6 +206,14 @@ lspconfig.phpactor.setup({
   },
   flags = {
     debounce_text_changes = 150, -- Debounce LSP requests
+  },
+  settings = {
+    phpactor = {
+      format = {
+        tabSize = 4,
+        insertSpaces = true,
+      },
+    },
   },
 })
 

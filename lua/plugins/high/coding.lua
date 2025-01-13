@@ -418,7 +418,7 @@ return {
   {
     -- LSP
     "nvimdev/lspsaga.nvim",
-    enabled = false, -- INFO: default true
+    enabled = true,
     config = function()
       require("lspsaga").setup({})
     end,

@@ -128,4 +128,7 @@ return {
   {
     "rcarriga/nvim-dap-ui",
   },
+  {
+    "vuki656/package-info.nvim",
+  },
 }
