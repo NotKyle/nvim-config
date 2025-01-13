@@ -1,114 +1,8 @@
--- Function to create the filter array dynamically
-local function create_filter_array(filter_array)
-  local filter = {}
-  for _, filter_item in ipairs(filter_array) do
-    local filter_function = filter_item[1] -- e.g., "startswith", "endswith", "regex"
-    local filter_values = filter_item[2] -- e.g., {".env"}, {"~"}, {"%.log$"}
-    filter[filter_function] = filter_values
-  end
-  return filter
-end
-
--- General function to apply filters (hides results if they match any filter)
-local function apply_filters(fs_entry, filters)
-  -- Check if the entry matches any of the 'startswith' filters
-  for _, value in ipairs(filters.startswith or {}) do
-    if vim.startswith(fs_entry.name, value) then
-      return false -- Hide result if it matches the 'startswith' filter
-    end
-  end
-
-  -- Check if the entry matches any of the 'endswith' filters
-  for _, value in ipairs(filters.endswith or {}) do
-    if vim.endswith(fs_entry.name, value) then
-      return false -- Hide result if it matches the 'endswith' filter
-    end
-  end
-
-  -- Check if the entry matches any of the 'regex' filters
-  for _, pattern in ipairs(filters.regex or {}) do
-    if string.match(fs_entry.name, pattern) then
-      return false -- Hide result if it matches the 'regex' filter
-    end
-  end
-
-  -- If none of the filters matched, show the result
-  return true
-end
-
--- Mini.nvim Files Setup
-local function setup_mini_files(custom_filters)
-  local filters = create_filter_array(custom_filters or {
-    { "startswith", { ".env" } },
-    { "endswith", { "~" } },
-    { "regex", { "%.log$", "^config.*%.json$" } },
-  })
-
-  require("mini.files").setup({
-    options = {
-      use_as_default_explorer = false,
-      permanent_delete = false,
-    },
-    windows = {
-      preview = true,
-      width_preview = 50,
-      width_focus = 50,
-      width_nofocus = 25,
-      max_number = 2,
-    },
-    content = {
-      filter = function(fs_entry)
-        return apply_filters(fs_entry, filters)
-      end,
-    },
-  })
-
-  -- Open `mini.files` always at the root directory
-  vim.api.nvim_create_user_command("FilesRoot", function()
-    require("mini.files").open(vim.fn.getcwd())
-  end, { nargs = 0 })
-end
-
-local function setup_mini_pick(custom_filters)
-  -- Mini.nvim Pick Setup
-  local filters = create_filter_array(custom_filters or {
-    { "endswith", { "~" } },
-    { "regex", { "%.tmp$", "%.bak$" } }, -- Example: different filters for file pick
-  })
-
-  require("mini.pick").setup({
-    autoread = true,
-    options = { default = "files" },
-    content = {
-      filter = function(fs_entry)
-        return apply_filters(fs_entry, filters)
-      end,
-    },
-  })
-end
-
--- Usage Example:
-
--- Setup for Mini Files with default filters (hiding files matching any filter)
-setup_mini_files({
-  { "startswith", { ".env" } },
-  { "endswith", { "~" } },
-  { "regex", { "%.md$", "*.min.js", "*.min.css", "*.css" } }, -- Example: Hide all markdown files
-})
-
--- Setup for Mini Pick with custom filters, allowing more specific results
-setup_mini_pick({
-  { "startswith", { ".env" } },
-  { "endswith", { "~" } },
-  { "startswith", { "README" } }, -- Example: Hide files starting with 'README'
-  { "regex", { "%.md$", "*.min.*", "*.css" } }, -- Example: Hide all markdown files
-})
-
-local function setup_mini_starter()
-  require("mini.starter").setup({
-    options = { default = "files" },
-  })
-end
+-- local function setup_mini_starter()
+--   require("mini.starter").setup({
+--     options = { default = "files" },
+--   })
+-- end
 
 local function setup_mini_statusline()
   local MiniStatusline = require("mini.statusline")
@@ -142,37 +36,34 @@ local function setup_mini_statusline()
 end
 
 local function InitMini()
-  setup_mini_pick()
-  setup_mini_files()
-  setup_mini_starter()
   setup_mini_statusline()
 end
 
 InitMini()
 
 -- LSP Initialization
-local function InitLSP()
-  local lsp_file = vim.fn.stdpath("config") .. "/lsps.txt"
-  local file = io.open(lsp_file, "r")
-
-  if not file then
-    vim.notify(
-      "No lsps.txt file found in your config directory. Please create one and add your LSP servers.",
-      vim.log.levels.ERROR
-    )
-    return
-  end
-
-  for line in file:lines() do
-    vim.cmd("LspInstall " .. line)
-  end
-
-  file:close()
-  vim.notify("LSP servers installed successfully.", vim.log.levels.INFO)
-end
+-- local function InitLSP()
+--   local lsp_file = vim.fn.stdpath("config") .. "/lsps.txt"
+--   local file = io.open(lsp_file, "r")
+--
+--   if not file then
+--     vim.notify(
+--       "No lsps.txt file found in your config directory. Please create one and add your LSP servers.",
+--       vim.log.levels.ERROR
+--     )
+--     return
+--   end
+--
+--   for line in file:lines() do
+--     vim.cmd("LspInstall " .. line)
+--   end
+--
+--   file:close()
+--   vim.notify("LSP servers installed successfully.", vim.log.levels.INFO)
+-- end
 
 -- Register the command to run InitLSP manually
-vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
+-- vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 
 -- Set cursor colour to contrast the theme
 -- vim.cmd("highlight Cursor guifg=black guibg=black")
@@ -180,42 +71,42 @@ vim.api.nvim_create_user_command("ReinstallLSP", InitLSP, {})
 
 local lspconfig = require("lspconfig")
 
-lspconfig.intelephense.setup({
-  settings = {
-    intelephens = {
-      format = {
-        tabSize = 4,
-        insertSpaces = true,
-      },
-    },
-  },
-})
-
-lspconfig.phpactor.setup({
-  handlers = {
-    -- Only show diagnostics after a debounce or on specific conditions
-    ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-      -- Delay updating diagnostics by 200ms for better performance
-      update_in_insert = false,
-      underline = true,
-      virtual_text = true,
-      signs = true,
-      severity_sort = true,
-      delay = 200, -- Delay in ms for updates
-    }),
-  },
-  flags = {
-    debounce_text_changes = 150, -- Debounce LSP requests
-  },
-  settings = {
-    phpactor = {
-      format = {
-        tabSize = 4,
-        insertSpaces = true,
-      },
-    },
-  },
-})
+-- lspconfig.intelephense.setup({
+--   settings = {
+--     intelephens = {
+--       format = {
+--         tabSize = 4,
+--         insertSpaces = true,
+--       },
+--     },
+--   },
+-- })
+--
+-- lspconfig.phpactor.setup({
+--   handlers = {
+--     -- Only show diagnostics after a debounce or on specific conditions
+--     ["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+--       -- Delay updating diagnostics by 200ms for better performance
+--       update_in_insert = false,
+--       underline = true,
+--       virtual_text = true,
+--       signs = true,
+--       severity_sort = true,
+--       delay = 200, -- Delay in ms for updates
+--     }),
+--   },
+--   flags = {
+--     debounce_text_changes = 150, -- Debounce LSP requests
+--   },
+--   settings = {
+--     phpactor = {
+--       format = {
+--         tabSize = 4,
+--         insertSpaces = true,
+--       },
+--     },
+--   },
+-- })
 
 vim.diagnostic.config({
   update_in_insert = false, -- Don't show diagnostics while typing
