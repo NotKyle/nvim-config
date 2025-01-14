@@ -5,6 +5,7 @@ return {
       require('lspconfig').ts_ls.setup {}
       require('lspconfig').jsonls.setup {}
       require('lspconfig').phpactor.setup {}
+      require('lspconfig').gopls.setup {}
     end,
   },
   {
