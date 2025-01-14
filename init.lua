@@ -143,7 +143,6 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-
   specs = {
     { import = 'lazyvim.plugins.extras.lang.typescript' },
     -- Additional plugins if required
@@ -418,6 +417,23 @@ require('lazy').setup({
       -- and elegantly composed help section, `:help lsp-vs-treesitter`
 
       --  This function gets run when an LSP attaches to a particular buffer.
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+        callback = function(event)
+          -- Enable document highlights
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities.documentHighlightProvider then
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.document_highlight,
+            })
+            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+              buffer = event.buf,
+              callback = vim.lsp.buf.clear_references,
+            })
+          end
+        end,
+      })
       --    That is to say, every time a new file is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
@@ -540,6 +556,31 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
+        phpactor = {
+          settings = {
+            phpactor = {
+              completion = {
+                enabled = true,
+              },
+              diagnostics = {
+                enabled = true,
+              },
+            },
+          },
+        },
+        html = {},
+        tsserver = {},
+        gopls = {
+          settings = {
+            gopls = {
+              analyses = {
+                unusedparams = true,
+              },
+              staticcheck = true,
+            },
+          },
+        },
+        cssls = {},
         gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -569,6 +610,11 @@ require('lazy').setup({
       }
 
       -- Ensure the servers and tools above are installed
+      require('mason').setup()
+      require('mason-lspconfig').setup {
+        ensure_installed = { 'phpactor', 'html', 'tsserver', 'gopls', 'cssls' },
+        ensure_installed = vim.tbl_keys(servers),
+      }
       --
       -- To check the current status of installed tools and/or manually install
       -- other tools, you can run
@@ -595,6 +641,19 @@ require('lazy').setup({
             -- by the server configuration above. Useful when disabling
             -- certain features of an LSP (for example, turning off formatting for ts_ls)
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+            if server_name == 'phpactor' then
+              server.settings = {
+                phpactor = {
+                  completion = {
+                    enabled = true,
+                  },
+                  diagnostics = {
+                    enabled = true,
+                  },
+                },
+              }
+            end
+            print('Setting up LSP server: ' .. server_name)
             require('lspconfig')[server_name].setup(server)
           end,
         },
@@ -723,7 +782,7 @@ require('lazy').setup({
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
-          ['<C-Space>'] = cmp.mapping.complete {},
+          ['<C-Space>'] = cmp.mapping.complete(),
 
           -- Think of <c-l> as moving to the right of your snippet expansion.
           --  So if you have a snippet that's like:
@@ -753,7 +812,7 @@ require('lazy').setup({
             -- set group index to 0 to skip loading LuaLS completions as lazydev recommends it
             group_index = 0,
           },
-          { name = 'nvim_lsp' },
+          { name = 'nvim_lsp', group_index = 1 },
           { name = 'luasnip' },
           { name = 'path' },
         },
@@ -826,6 +885,16 @@ require('lazy').setup({
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    -- require('nvim-treesitter.configs').setup {
+    --   ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+    --   highlight = {
+    --     enable = true,
+    --     additional_vim_regex_highlighting = false,
+    --   },
+    --   indent = {
+    --     enable = true,
+    --   },
+    -- },
     opts = {
       ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
@@ -878,7 +947,9 @@ require('lazy').setup({
       import = 'custom.plugins.high',
     },
   },
+
   { import = 'custom.plugins' },
+
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
@@ -906,9 +977,63 @@ require('lazy').setup({
   },
 })
 
+local ft = require 'guard.filetype'
+
+-- Assuming you have guard-collection
+-- Put this in your ftplugin/lang.lua to lazy load guard
+-- ft('lang'):fmt('format-tool-1'):append('format-tool-2'):env(env_table):lint('lint-tool-1'):extra(extra_args)
+-- ft('lua'):fmt('lsp'):append('stylua'):lint 'selene'
+
+-- change this anywhere in your config (or not), these are the defaults
+vim.g.guard_config = {
+  -- format on write to buffer
+  fmt_on_save = true,
+  -- use lsp if no formatter was defined for this filetype
+  lsp_as_default_formatter = false,
+  -- whether or not to save the buffer after formatting
+  save_on_fmt = true,
+  -- automatic linting
+  auto_lint = true,
+  -- how frequently can linters be called
+  lint_interval = 500,
+}
+
 require 'custom.plugins.keymaps'
 
 require 'custom.plugins.options'
+
+-- run lualine after all plugins are loaded
+function lualine()
+  require('lualine').setup {
+    options = {
+      theme = 'everforest',
+    },
+    sections = {
+      lualine_c = {
+        function()
+          local current_session = require('auto-session.lib').current_session_name(true)
+
+          local get_buf_parent_dir_name = function()
+            local buf_wd = vim.api.nvim_buf_get_name(0)
+            if buf_wd == '' then
+              return 'No Name'
+            end
+            local buf_wd_trimmed = string.match(buf_wd, '([^/]+)$')
+            return buf_wd_trimmed or 'No Name'
+          end
+
+          if current_session then
+            return '[s][' .. current_session .. '] | ' .. '[buf][' .. get_buf_parent_dir_name() .. ']'
+          else
+            return '[buf]' .. get_buf_parent_dir_name()
+          end
+        end,
+      },
+    },
+  }
+end
+
+lualine()
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

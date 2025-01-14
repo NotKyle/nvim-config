@@ -107,18 +107,6 @@ return {
     { 'onsails/lspkind-nvim' },
     -- (rest of your configuration remains)
   },
-
-  -- LSP Saga
-  {
-    'nvimdev/lspsaga.nvim',
-    config = function()
-      require('lspsaga').setup {}
-    end,
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
-  },
-
   {
     'neovim/nvim-lspconfig',
     dependencies = {
