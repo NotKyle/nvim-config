@@ -357,4 +357,7 @@ vim.api.nvim_set_keymap('n', '<leader>pi', "<cmd>lua require('package-info').sho
 vim.api.nvim_set_keymap('n', 'H', '<cmd>BufferPrevious<CR>', { noremap = true, silent = true, desc = 'Previous buffer' })
 vim.api.nvim_set_keymap('n', 'L', '<cmd>BufferNext<CR>', { noremap = true, silent = true, desc = 'Next buffer' })
 
+-- Lazygit
+vim.api.nvim_set_keymap('n', 'gg', '<cmd>LazyGit<CR>', { desc = 'Lazy Git' })
+
 return {}

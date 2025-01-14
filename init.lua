@@ -117,6 +117,23 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Change cursor or line color when recording a macro
+vim.api.nvim_create_augroup('MacroRecording', { clear = true })
+vim.api.nvim_create_autocmd('RecordingEnter', {
+  group = 'MacroRecording',
+  callback = function()
+    vim.cmd 'highlight CursorLine guibg=#ff0000' -- Change to desired color
+    vim.opt.cursorline = true
+  end,
+})
+vim.api.nvim_create_autocmd('RecordingLeave', {
+  group = 'MacroRecording',
+  callback = function()
+    vim.cmd 'highlight CursorLine guibg=NONE' -- Reset to default color
+    vim.opt.cursorline = false
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -1032,11 +1049,36 @@ function lualine()
           end
         end,
       },
+      lualine_x = {
+        function()
+          local get_recording_macro = function()
+            local recording = vim.fn.reg_recording()
+            if recording ~= '' then
+              return '[recording @' .. recording .. ']'
+            end
+            return ''
+          end
+
+          return get_recording_macro()
+        end,
+      },
     },
   }
 end
 
 lualine()
+
+local everforest = require 'everforest'
+everforest.setup {
+  background = 'soft',
+  -- transparent_background_level = 0.8,
+  -- italics = true,
+  -- disable_italic_comments = false,
+  -- on_highlights = function(hl, _)
+  -- hl["@string.special.symbol.ruby"] = { link = "@field" }
+  -- end,
+  everforest.load(),
+}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
