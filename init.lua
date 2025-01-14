@@ -950,6 +950,9 @@ require('lazy').setup({
 
   { import = 'custom.plugins' },
 
+  { import = 'custom.plugins.lsp.lspconfig' },
+  { import = 'custom.plugins.lsp.lspsaga' },
+
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
