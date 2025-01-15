@@ -6,6 +6,9 @@ return {
       require('lspconfig').jsonls.setup {}
       require('lspconfig').phpactor.setup {}
       require('lspconfig').gopls.setup {}
+      require('lspconfig').cssls.setup {}
+      require('lspconfig').css_variables.setup {}
+      require('lspconfig').prettierd.setup {}
     end,
   },
   {

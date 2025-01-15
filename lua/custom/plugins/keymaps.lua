@@ -344,20 +344,20 @@ end)
 vim.api.nvim_set_keymap('n', '<leader>pi', "<cmd>lua require('package-info').show()<cr>", { noremap = true, silent = true, desc = 'Show package info' })
 
 -- LspSaga keymaps
--- vim.api.nvim_set_keymap('n', 'gh', '<cmd>Lspsaga lsp_finder<CR>', { desc = 'LspSaga [F]inder' })
--- vim.api.nvim_set_keymap('n', 'gp', '<cmd>Lspsaga preview_definition<CR>', { desc = 'LspSaga [P]review Definition' })
--- vim.api.nvim_set_keymap('n', 'gr', '<cmd>Lspsaga rename<CR>', { desc = 'LspSaga [R]ename' })
--- vim.api.nvim_set_keymap('n', 'gd', '<cmd>Lspsaga peek_definition<CR>', { desc = 'LspSaga [P]eek Definition' })
--- vim.api.nvim_set_keymap('n', 'ca', '<cmd>Lspsaga code_action<CR>', { desc = 'LspSaga [C]ode [A]ction' })
--- vim.api.nvim_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', { desc = 'LspSaga [H]over Doc' })
--- vim.api.nvim_set_keymap('n', '<C-f>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(1)<CR>', { desc = 'LspSaga Scroll Down' })
--- vim.api.nvim_set_keymap('n', '<C-b>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(-1)<CR>', { desc = 'LspSaga Scroll Up' })
+vim.api.nvim_set_keymap('n', 'gh', '<cmd>Lspsaga lsp_finder<CR>', { desc = 'LspSaga [F]inder' })
+vim.api.nvim_set_keymap('n', 'gp', '<cmd>Lspsaga preview_definition<CR>', { desc = 'LspSaga [P]review Definition' })
+vim.api.nvim_set_keymap('n', 'gr', '<cmd>Lspsaga rename<CR>', { desc = 'LspSaga [R]ename' })
+vim.api.nvim_set_keymap('n', 'gl', '<cmd>Lspsaga peek_definition<CR>', { desc = 'LspSaga [P]eek Definition' })
+vim.api.nvim_set_keymap('n', 'ca', '<cmd>Lspsaga code_action<CR>', { desc = 'LspSaga [C]ode [A]ction' })
+vim.api.nvim_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', { desc = 'LspSaga [H]over Doc' })
+vim.api.nvim_set_keymap('n', '<C-f>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(1)<CR>', { desc = 'LspSaga Scroll Down' })
+vim.api.nvim_set_keymap('n', '<C-b>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(-1)<CR>', { desc = 'LspSaga Scroll Up' })
 
 -- Next and prev buffers
 vim.api.nvim_set_keymap('n', 'H', '<cmd>BufferPrevious<CR>', { noremap = true, silent = true, desc = 'Previous buffer' })
 vim.api.nvim_set_keymap('n', 'L', '<cmd>BufferNext<CR>', { noremap = true, silent = true, desc = 'Next buffer' })
 
 -- Lazygit
-vim.api.nvim_set_keymap('n', 'gg', '<cmd>LazyGit<CR>', { desc = 'Lazy Git' })
+vim.api.nvim_set_keymap('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Lazy Git' })
 
 return {}

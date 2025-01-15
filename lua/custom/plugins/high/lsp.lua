@@ -78,6 +78,7 @@ return {
             'lua-language-server',
             'marksman',
             'prettier',
+            'prettierd',
             'python-lsp-server',
             'rust-analyzer',
             'stylua',

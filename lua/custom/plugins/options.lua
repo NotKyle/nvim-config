@@ -51,6 +51,8 @@ vim.opt.listchars = {
 }
 -- space = "·",
 
+vim.opt.iskeyword:append { '-', '@' }
+
 vim.cmd [[filetype plugin indent on]]
 
 vim.cmd [[ set foldmethod=manual ]]
