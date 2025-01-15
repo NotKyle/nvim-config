@@ -8,7 +8,10 @@ return {
       require('lspconfig').gopls.setup {}
       require('lspconfig').cssls.setup {}
       require('lspconfig').css_variables.setup {}
-      require('lspconfig').prettierd.setup {}
+      require('lspconfig').html.setup {}
+      require('lspconfig').somesass_ls.setup {}
+      require('lspconfig').lua_ls.setup {}
+      require('lspconfig').lua_lsp.setup {}
     end,
   },
   {
