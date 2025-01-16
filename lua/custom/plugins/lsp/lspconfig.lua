@@ -1,6 +1,7 @@
 return {
   {
     'neovim/nvim-lspconfig',
+    dependencies = { 'saghen/blink.cmp' },
     config = function()
       require('lspconfig').ts_ls.setup {}
       require('lspconfig').jsonls.setup {}
@@ -11,7 +12,7 @@ return {
       require('lspconfig').html.setup {}
       require('lspconfig').somesass_ls.setup {}
       require('lspconfig').lua_ls.setup {}
-      require('lspconfig').lua_lsp.setup {}
+      require('lspconfig').sqls.setup {}
     end,
   },
   {

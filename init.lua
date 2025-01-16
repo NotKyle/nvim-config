@@ -896,6 +896,9 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      -- MiniDeps
+      require('mini.deps').setup()
+
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
@@ -985,8 +988,11 @@ require('lazy').setup({
 
   { import = 'custom.plugins' },
 
+  -- LSP
+  { import = 'custom.plugins.lsp.blink' },
   { import = 'custom.plugins.lsp.lspconfig' },
   { import = 'custom.plugins.lsp.lspsaga' },
+  -- END LSP
 
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
@@ -1089,12 +1095,14 @@ lualine()
 local everforest = require 'everforest'
 everforest.setup {
   background = 'soft',
-  -- transparent_background_level = 0.8,
-  -- italics = true,
-  -- disable_italic_comments = false,
-  -- on_highlights = function(hl, _)
-  -- hl["@string.special.symbol.ruby"] = { link = "@field" }
-  -- end,
+  transparent_background_level = 0.8,
+  italics = true,
+  disable_italic_comments = false,
+  on_highlights = function(hl, _)
+    hl['@string.special.symbol.ruby'] = { link = '@field' }
+  end,
+  --`sign_column_background`, `ui_contrast`, `dim_inactive_windows`, `diagnostic_text_highlight`, `diagnostic_virtual_text`, `diagnostic_line_highlight`, `spell_foreground`, `show_eob`, `float_style`, `inlay_hints_background`, `colours_override`, `sign_column_background`, `ui_contrast`, `dim_inactive_windows`, `diagnostic_text_highlight`, `diagnostic_virtual_text`, `diagnostic_line_highlight`, `spell_foreground`, `show_eob`, `float_style`, `inlay_hints_background`, `colours_override`
+
   everforest.load(),
 }
 
