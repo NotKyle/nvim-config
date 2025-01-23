@@ -32,6 +32,13 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+-- Add your custom plugin directory to runtimepath
+local custom_plugin_dir = vim.fn.expand '~/Projects/Neovim'
+
+if vim.fn.isdirectory(custom_plugin_dir) == 1 then
+  vim.opt.runtimepath:append(custom_plugin_dir)
+end
+
 -- Enable break indent
 vim.opt.breakindent = true
 
@@ -160,11 +167,15 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
-  specs = {
-    { import = 'lazyvim.plugins.extras.lang.typescript' },
+  {
+    -- { import = 'lazyvim.plugins.extras.lang.typescript' },
     -- Additional plugins if required
     { 'neovim/nvim-lspconfig' },
     { 'jose-elias-alvarez/typescript.nvim' },
+
+    -- Custom plugins
+    { dir = vim.fn.expand '~/Projects/Neovim/office-ipsum/' },
+    -- { import = '~/Projects/Neovim/office-ipsum/' },
   },
 
   -- NOTE: Plugins can also be added by using a table,
@@ -560,7 +571,11 @@ require('lazy').setup({
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      capabilities = vim.tbl_deep_extend(
+        'force',
+        capabilities,
+        require('blink.cmp').get_capabilities() -- Adjust this for `blink.cmp`
+      )
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -860,6 +875,10 @@ require('lazy').setup({
   { import = 'custom.plugins.lsp.lspsaga' },
   -- END LSP
 
+  -- AUTOCMDS
+  { import = 'custom.plugins.autocmds' },
+  -- END AUTOCMDS
+
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
@@ -971,6 +990,15 @@ everforest.setup {
 
   everforest.load(),
 }
+
+vim.cmd 'highlight CustomColor--gap guifg=#f1c40f'
+vim.cmd 'highlight CustomColor--colors--primary guifg=#e74c3c'
+vim.cmd 'highlight CustomColor--colors--secondary guifg=#3498db'
+require('colors').setup {}
+
+-- require('auto-session').setup {
+--   auto_restore_last_session = vim.loop.cwd() == vim.loop.os_homedir(),
+-- }
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

@@ -5,14 +5,17 @@ return {
     config = function()
       require('lspconfig').ts_ls.setup {}
       require('lspconfig').jsonls.setup {}
-      require('lspconfig').phpactor.setup {}
       require('lspconfig').gopls.setup {}
-      require('lspconfig').cssls.setup {}
-      require('lspconfig').css_variables.setup {}
-      require('lspconfig').html.setup {}
-      require('lspconfig').somesass_ls.setup {}
-      require('lspconfig').lua_ls.setup {}
       require('lspconfig').sqls.setup {}
+
+      require('lspconfig').cssls.setup {}
+      require('lspconfig').somesass_ls.setup {}
+      require('lspconfig').css_variables.setup {}
+      require('lspconfig').lua_ls.setup {}
+
+      require('lspconfig').html.setup {}
+      require('lspconfig').phpactor.setup {}
+      require('lspconfig').intelephense.setup {}
     end,
   },
   {

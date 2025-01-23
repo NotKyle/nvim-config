@@ -472,8 +472,8 @@ return {
 
     -- Keymaps
     local map = vim.keymap.set
-    map('n', '<leader>a', '', { noremap = true, silent = true, desc = '+AI' })
-    map('v', '<leader>a', '', { noremap = true, silent = true, desc = '+AI' })
+    -- map('n', '<leader>a', '', { noremap = true, silent = true, desc = '+AI' })
+    -- map('v', '<leader>a', '', { noremap = true, silent = true, desc = '+AI' })
     map('n', '<leader>i', '<cmd>CodeCompanion<cr>', { noremap = true, silent = true, desc = 'CC Inline with Buffer' })
     map('v', '<leader>i', function()
       -- Prompt user for input

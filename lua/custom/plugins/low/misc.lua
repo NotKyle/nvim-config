@@ -332,4 +332,10 @@ return {
     dependencies = 'nvzone/volt',
     opts = {},
   },
+  {
+    'catgoose/nvim-colorizer.lua',
+    event = 'BufReadPre',
+    opts = { -- set to setup table
+    },
+  },
 }

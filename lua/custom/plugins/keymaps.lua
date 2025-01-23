@@ -79,36 +79,33 @@ vim.api.nvim_set_keymap('n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<cr>', {
 vim.api.nvim_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', { noremap = true, silent = true })
 
 -- Harpoon
-if not pcall(require, 'harpoon') then
-  return
-else
-  local harpoon = require 'harpoon'
+local harpoon = require 'harpoon'
 
-  -- REQUIRED
-  harpoon:setup()
-  -- REQUIRED
+-- REQUIRED
+harpoon:setup()
+-- REQUIRED
 
-  vim.keymap.set('n', '<leader>a', function()
-    harpoon:list():add()
-    local current_file = vim.fn.expand '%:p'
-    print('Added ' .. current_file .. ' to Harpoon')
-  end)
-  vim.keymap.set('n', '<C-e>', function()
-    harpoon.ui:toggle_quick_menu(harpoon:list())
-  end)
-  vim.keymap.set('n', '<C-1>', function()
-    harpoon:list():select(1)
-  end)
-  vim.keymap.set('n', '<C-2>', function()
-    harpoon:list():select(2)
-  end)
-  vim.keymap.set('n', '<C-3>', function()
-    harpoon:list():select(3)
-  end)
-  vim.keymap.set('n', '<C-4>', function()
-    harpoon:list():select(4)
-  end)
-end
+vim.keymap.set('n', '<leader>a', function()
+  harpoon:list():add()
+  local current_file = vim.fn.expand '%:p'
+  print('Added ' .. current_file .. ' to Harpoon')
+end)
+
+vim.keymap.set('n', '<C-e>', function()
+  harpoon.ui:toggle_quick_menu(harpoon:list())
+end)
+vim.keymap.set('n', '<C-1>', function()
+  harpoon:list():select(1)
+end)
+vim.keymap.set('n', '<C-2>', function()
+  harpoon:list():select(2)
+end)
+vim.keymap.set('n', '<C-3>', function()
+  harpoon:list():select(3)
+end)
+vim.keymap.set('n', '<C-4>', function()
+  harpoon:list():select(4)
+end)
 
 -- Project Manager
 -- function initProjectManager()
@@ -359,5 +356,10 @@ vim.api.nvim_set_keymap('n', 'L', '<cmd>BufferNext<CR>', { noremap = true, silen
 
 -- Lazygit
 vim.api.nvim_set_keymap('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Lazy Git' })
+
+-- LSP
+vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true, desc = 'Go to definition' })
+vim.api.nvim_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', { noremap = true, silent = true, desc = 'Go to declaration' })
+vim.api.nvim_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', { noremap = true, silent = true, desc = 'Go to implementation' })
 
 return {}
