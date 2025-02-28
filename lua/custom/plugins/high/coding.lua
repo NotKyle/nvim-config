@@ -1,9 +1,5 @@
 -- lua/plugins/coding.lua
 return {
-  -- {
-  --   -- Snippets
-  --   'rafamadriz/friendly-snippets',
-  -- },
   {
     -- CMP
     'hrsh7th/nvim-cmp',
@@ -22,7 +18,7 @@ return {
             },
             -- add any external scss like one below
             style_sheets = {
-              'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
+              -- 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css',
             },
           },
         },
@@ -30,115 +26,9 @@ return {
     },
   }, ---@type LazySpec
   {
-    -- Doing actions manager
-    'atiladefreitas/dooing',
-    config = function()
-      require('dooing').setup {
-        -- Core settings
-        save_path = vim.fn.stdpath 'data' .. '/dooing_todos.json',
-
-        -- Window settings
-        window = {
-          width = 55,
-          height = 20,
-          border = 'rounded',
-          padding = {
-            top = 1,
-            bottom = 1,
-            left = 2,
-            right = 2,
-          },
-        },
-
-        -- To-do formatting
-        formatting = {
-          pending = {
-            icon = '○',
-            format = { 'icon', 'text', 'due_date' },
-          },
-          done = {
-            icon = '✓',
-            format = { 'icon', 'text', 'due_date' },
-          },
-        },
-
-        -- Priorization options
-        prioritization = false,
-        priorities = {
-          {
-            name = 'important',
-            weight = 4,
-          },
-          {
-            name = 'urgent',
-            weight = 2,
-          },
-        },
-        priority_thresholds = {
-          {
-            min = 5, -- Corresponds to `urgent` and `important` tasks
-            max = 999,
-            color = nil,
-            hl_group = 'DiagnosticError',
-          },
-          {
-            min = 3, -- Corresponds to `important` tasks
-            max = 4,
-            color = nil,
-            hl_group = 'DiagnosticWarn',
-          },
-          {
-            min = 1, -- Corresponds to `urgent tasks`
-            max = 2,
-            color = nil,
-            hl_group = 'DiagnosticInfo',
-          },
-        },
-
-        -- Default keymaps
-        keymaps = {
-          toggle_window = '<leader>td',
-          new_todo = 'i',
-          toggle_todo = 'x',
-          delete_todo = 'd',
-          delete_completed = 'D',
-          close_window = 'q',
-          add_due_date = 'H',
-          remove_due_date = 'r',
-          toggle_help = '?',
-          toggle_tags = 't',
-          clear_filter = 'c',
-          edit_todo = 'e',
-          edit_tag = 'e',
-          delete_tag = 'd',
-          search_todos = '/',
-          import_todos = 'I',
-          export_todos = 'E',
-          remove_duplicates = '<leader>D',
-        },
-
-        -- Calendar options
-        calendar = {
-          language = 'en',
-          icon = '',
-          keymaps = {
-            previous_day = 'h',
-            next_day = 'l',
-            previous_week = 'k',
-            next_week = 'j',
-            previous_month = 'H',
-            next_month = 'L',
-            select_day = '<CR>',
-            close_calendar = 'q',
-          },
-        },
-      }
-    end,
-  },
-  {
     -- Inline diagnostics
     'rachartier/tiny-inline-diagnostic.nvim',
-    enabled = false,
+    enabled = true,
     event = 'VeryLazy', -- Or `LspAttach`
     priority = 1000, -- needs to be loaded in first
     config = function()
@@ -219,36 +109,6 @@ return {
     end,
   },
   {
-    -- Another actions manager?
-    'Hashino/doing.nvim',
-    enabled = false,
-    config = function()
-      require('doing').setup {
-        -- default options
-        message_timeout = 2000,
-        winbar = {
-          enabled = true,
-          -- ignores buffers that match filetype
-          ignored_buffers = { 'NvimTree' },
-        },
-
-        doing_prefix = 'Current Task: ',
-        store = {
-          -- automatically create a .tasks when calling :Do
-          auto_create_file = true,
-          file_name = '.tasks',
-        },
-      }
-      -- example on how to change the winbar highlight
-      vim.api.nvim_set_hl(0, 'WinBar', { link = 'Search' })
-
-      local api = require 'doing'
-
-      vim.keymap.set('n', '<leader>de', api.edit, { desc = '[E]dit what tasks you`re [D]oing' })
-      vim.keymap.set('n', '<leader>dn', api.done, { desc = '[D]o[n]e with current task' })
-    end,
-  },
-  {
     'folke/noice.nvim',
     enabled = true,
     config = function()
@@ -284,63 +144,92 @@ return {
       }
     end,
   },
+  -- {
+  --   -- File grep
+  --   'mikavilpas/yazi.nvim',
+  --   event = 'VeryLazy',
+  --   keys = {
+  --     -- 👇 in this section, choose your own keymappings!
+  --     {
+  --       '<leader>e',
+  --       '<cmd>Yazi<cr>',
+  --       desc = 'Open yazi at the current file',
+  --     },
+  --     {
+  --       -- Open in the current working directory
+  --       '<leader>-',
+  --       '<cmd>Yazi cwd<cr>',
+  --       desc = "Open the file manager in nvim's working directory",
+  --     },
+  --     {
+  --       -- NOTE: this requires a version of yazi that includes
+  --       -- https://github.com/sxyazi/yazi/pull/1305 from 2024-07-18
+  --       '<c-up>',
+  --       '<cmd>Yazi toggle<cr>',
+  --       desc = 'Resume the last yazi session',
+  --     },
+  --   },
+  --   ---@type YaziConfig
+  --   opts = {
+  --     -- if you want to open yazi instead of netrw, see below for more info
+  --     open_for_directories = false,
+  --     keymaps = {
+  --       show_help = '<f1>',
+  --     },
+  --   },
+  -- },
+  -- {
+  --   -- Session manager
+  --   'rmagatti/auto-session',
+  --   lazy = false,
+  --   ---enables autocomplete for opts
+  --   ---@module "auto-session"
+  --   ---@type AutoSession.Config
+  --   opts = {
+  --     suppressed_dirs = { '~/Downloads', '/' },
+  --     -- log_level = 'debug',
+  --     bypass_session_save_cmds = { 'tabnew', 'foldmethod' },
+  --   },
+  -- },
   {
-    -- File grep
-    'mikavilpas/yazi.nvim',
-    event = 'VeryLazy',
-    keys = {
-      -- 👇 in this section, choose your own keymappings!
-      {
-        '<leader>e',
-        '<cmd>Yazi<cr>',
-        desc = 'Open yazi at the current file',
-      },
-      {
-        -- Open in the current working directory
-        '<leader>-',
-        '<cmd>Yazi cwd<cr>',
-        desc = "Open the file manager in nvim's working directory",
-      },
-      {
-        -- NOTE: this requires a version of yazi that includes
-        -- https://github.com/sxyazi/yazi/pull/1305 from 2024-07-18
-        '<c-up>',
-        '<cmd>Yazi toggle<cr>',
-        desc = 'Resume the last yazi session',
-      },
-    },
-    ---@type YaziConfig
-    opts = {
-      -- if you want to open yazi instead of netrw, see below for more info
-      open_for_directories = false,
-      keymaps = {
-        show_help = '<f1>',
-      },
-    },
+    'ellisonleao/glow.nvim',
+    config = true,
+    cmd = 'Glow',
   },
   {
-    -- Session manager
-    'rmagatti/auto-session',
-    lazy = false,
-    ---enables autocomplete for opts
-    ---@module "auto-session"
-    ---@type AutoSession.Config
-    opts = {
-      suppressed_dirs = { '~/Downloads', '/' },
-      -- log_level = 'debug',
-      bypass_session_save_cmds = { 'tabnew', 'foldmethod' },
-    },
-  },
-  {
-    -- Developer documentation
     'luckasRanarison/nvim-devdocs',
-    event = 'VeryLazy',
+    cmd = { 'DevdocsFetch', 'DevdocsInstall', 'DevdocsUpdate', 'DevdocsUpdateAll', 'DevdocsUninstall', 'DevdocsOpen', 'DevdocsOpenFloat' },
+    opts = {
+      wrap = true,
+      float_win = {
+        relative = 'editor',
+        height = 75,
+        width = 170,
+        border = 'rounded',
+      },
+      ensure_installed = {
+        'php',
+        'wordpress',
+        'html',
+        'jquery',
+        'nginx',
+        'http',
+        'bash',
+        'javascript',
+        'go',
+      },
+      -- after_open = function()
+      --   vim.cmd 'Glow'
+      -- end,
+    },
+    previewer_cmd = 'glow',
+    cmd_args = { '-s', 'dark', '-w', '80' },
+    picker_cmd_args = { '-p' },
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope.nvim',
       'nvim-treesitter/nvim-treesitter',
     },
-    opts = {},
   },
   {
     -- Auto close tags
@@ -475,12 +364,6 @@ return {
     end,
   },
   {
-    'mxsdev/nvim-dap-vscode-js',
-    dependencies = {
-      'mfussenegger/nvim-dap',
-    },
-  },
-  {
     -- Inline diagnostics
     'rachartier/tiny-inline-diagnostic.nvim',
     enabled = false,
@@ -605,12 +488,162 @@ return {
     opts = { pattern = '*' },
     dependencies = { 'nvim-treesitter/nvim-treesitter' },
   },
-  -- luasnip
   {
-    'L3MON4D3/LuaSnip',
-    -- follow latest release.
-    version = 'v2.*', -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-    -- install jsregexp (optional!).
-    build = 'make install_jsregexp',
+    'OXY2DEV/patterns.nvim',
   },
+
+  -- Task management
+  {
+    'atiladefreitas/dooing',
+  },
+  {
+    'Hashino/doing.nvim',
+    config = function()
+      -- default options
+      require('doing').setup {
+        message_timeout = 2000,
+        doing_prefix = 'Doing: ',
+
+        -- doesn't display on buffers that match filetype/filename/filepath to
+        -- entries. can be either a string array or a function that returns a
+        -- string array. filepath can be relative to cwd or absolute
+        ignored_buffers = { 'NvimTree' },
+
+        -- if should append "+n more" to the status when there's tasks remaining
+        show_remaining = true,
+
+        -- if should show messages on the status string
+        show_messages = true,
+
+        -- window configs of the floating tasks editor
+        -- see :h nvim_open_win() for available options
+        edit_win_config = {
+          width = 50,
+          height = 15,
+          border = 'rounded',
+        },
+
+        -- if plugin should manage the winbar
+        winbar = { enabled = true },
+
+        store = {
+          -- name of tasks file
+          file_name = '.tasks',
+        },
+      }
+      -- example on how to change the winbar highlight
+      vim.api.nvim_set_hl(0, 'WinBar', { link = 'Search' })
+
+      local doing = require 'doing'
+
+      vim.keymap.set('n', '<leader>da', doing.add, { desc = '[D]oing: [A]dd' })
+      vim.keymap.set('n', '<leader>de', doing.edit, { desc = '[D]oing: [E]dit' })
+      vim.keymap.set('n', '<leader>dn', doing.done, { desc = '[D]oing: Do[n]e' })
+      vim.keymap.set('n', '<leader>dt', doing.toggle, { desc = '[D]oing: [T]oggle' })
+
+      vim.keymap.set('n', '<leader>ds', function()
+        vim.notify(doing.status(true), vim.log.levels.INFO, { title = 'Doing:', icon = '' })
+      end, { desc = '[D]oing: [S]tatus' })
+    end,
+  },
+  -- TS Context
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    opts = {
+      enable = true,
+      max_lines = 3,
+      trim_scope = 'outer',
+    },
+  },
+  {
+    'xzbdmw/clasp.nvim',
+    config = function()
+      require('clasp').setup {
+        pairs = { ['{'] = '}', ['"'] = '"', ["'"] = "'", ['('] = ')', ['['] = ']', ['<'] = '>' },
+        -- If called from insert mode, do not return to normal mode.
+        keep_insert_mode = true,
+      }
+
+      -- jumping from smallest region to largest region
+      vim.keymap.set({ 'n', 'i' }, '<c-l>', function()
+        require('clasp').wrap 'next'
+      end)
+
+      -- jumping from largest region to smallest region
+      vim.keymap.set({ 'n', 'i' }, '<c-l>', function()
+        require('clasp').wrap 'prev'
+      end)
+
+      -- If you want to exclude nodes whose end row is not current row
+      vim.keymap.set({ 'n', 'i' }, '<c-l>', function()
+        require('clasp').wrap('next', function(nodes)
+          local n = {}
+          for _, node in ipairs(nodes) do
+            if node.end_row == vim.api.nvim_win_get_cursor(0)[1] - 1 then
+              table.insert(n, node)
+            end
+          end
+          return n
+        end)
+      end)
+    end,
+  },
+
+  {
+    'nvim-tree/nvim-web-devicons',
+    enabled = true,
+  },
+
+  {
+    'lewis6991/gitsigns.nvim',
+    requires = { 'nvim-lua/plenary.nvim' },
+  },
+
+  -- TS textobjects
+  -- {
+  --   'nvim-treesitter/nvim-treesitter-textobjects',
+  --   opts = {
+  --     enable = true,
+  --     textobjects = {
+  --       select = {
+  --         enable = true,
+  --         keymaps = {
+  --           ['af'] = '@function.outer',
+  --           ['if'] = '@function.inner',
+  --           ['ac'] = '@class.outer',
+  --           ['ic'] = '@class.inner',
+  --         },
+  --       },
+  --       swap = {
+  --         enable = true,
+  --         swap_next = {
+  --           ['<leader>a'] = '@parameter.inner',
+  --         },
+  --         swap_previous = {
+  --           ['<leader>A'] = '@parameter.inner',
+  --         },
+  --       },
+  --       move = {
+  --         enable = true,
+  --         set_jumps = true,
+  --         goto_next_start = {
+  --           [']m'] = '@function.outer',
+  --           [']]'] = '@class.outer',
+  --         },
+  --         goto_next_end = {
+  --           [']M'] = '@function.outer',
+  --           [']['] = '@class.outer',
+  --         },
+  --         goto_previous_start = {
+  --           ['[m'] = '@function.outer',
+  --           ['[['] = '@class.outer',
+  --         },
+  --         goto_previous_end = {
+  --           ['[M'] = '@function.outer',
+  --           ['[]'] = '@class.outer',
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
 }

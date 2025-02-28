@@ -34,6 +34,29 @@ vim.api.nvim_set_keymap('n', '<leader>fc', '<cmd>Pick resume<cr>', { noremap = t
 
 vim.api.nvim_set_keymap('n', '<leader><leader>', '<cmd>Pick files<cr>', { noremap = true, silent = true })
 
+-- Mini.Files
+function openMiniFiles()
+  local MiniFiles = require 'mini.files'
+  local _ = MiniFiles.close() or MiniFiles.open(vim.api.nvim_buf_get_name(0), false)
+
+  local config = {
+    windows = {
+      preview = true,
+      width = 0.5,
+      height = 0.5,
+      width_focus = 45,
+      width_preview = 45,
+    },
+  }
+
+  MiniFiles.open(vim.fn.getcwd(), true, config)
+
+  -- vim.defer_fn(function()
+  --   MiniFiles.reveal_cwd()
+  -- end, 30)
+end
+vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua openMiniFiles()<cr>', { noremap = true, silent = true })
+
 -- Code Actions
 -- <LEADER>cr - Rename variable
 vim.api.nvim_set_keymap('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { noremap = true, silent = true })
@@ -78,34 +101,37 @@ vim.api.nvim_set_keymap('n', '<leader>lf', '<cmd>lua vim.lsp.buf.formatting()<cr
 vim.api.nvim_set_keymap('n', '<leader>lh', '<cmd>lua vim.lsp.buf.hover()<cr>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>', { noremap = true, silent = true })
 
--- Harpoon
-local harpoon = require 'harpoon'
+-- If harpoon is installed, add keymaps
+if pcall(require, 'harpoon') then
+  -- Harpoon
+  local harpoon = require 'harpoon'
 
--- REQUIRED
-harpoon:setup()
--- REQUIRED
+  -- REQUIRED
+  harpoon:setup()
+  -- REQUIRED
 
-vim.keymap.set('n', '<leader>a', function()
-  harpoon:list():add()
-  local current_file = vim.fn.expand '%:p'
-  print('Added ' .. current_file .. ' to Harpoon')
-end)
+  vim.keymap.set('n', '<leader>a', function()
+    harpoon:list():add()
+    local current_file = vim.fn.expand '%:p'
+    print('Added ' .. current_file .. ' to Harpoon')
+  end)
 
-vim.keymap.set('n', '<C-e>', function()
-  harpoon.ui:toggle_quick_menu(harpoon:list())
-end)
-vim.keymap.set('n', '<C-1>', function()
-  harpoon:list():select(1)
-end)
-vim.keymap.set('n', '<C-2>', function()
-  harpoon:list():select(2)
-end)
-vim.keymap.set('n', '<C-3>', function()
-  harpoon:list():select(3)
-end)
-vim.keymap.set('n', '<C-4>', function()
-  harpoon:list():select(4)
-end)
+  vim.keymap.set('n', '<C-e>', function()
+    harpoon.ui:toggle_quick_menu(harpoon:list())
+  end)
+  vim.keymap.set('n', '<C-1>', function()
+    harpoon:list():select(1)
+  end)
+  vim.keymap.set('n', '<C-2>', function()
+    harpoon:list():select(2)
+  end)
+  vim.keymap.set('n', '<C-3>', function()
+    harpoon:list():select(3)
+  end)
+  vim.keymap.set('n', '<C-4>', function()
+    harpoon:list():select(4)
+  end)
+end
 
 -- Project Manager
 -- function initProjectManager()
@@ -216,7 +242,7 @@ end)
 -- LSP Saga
 vim.api.nvim_set_keymap('n', '<C-i>', '<cmd>Lspsaga finder<cr>', { noremap = true, silent = true, desc = 'LSP Saga finder' })
 vim.api.nvim_set_keymap('n', '<C-n>', '<cmd>Lspsaga show_cursor_diagnostics<cr>', { noremap = true, silent = true, desc = 'LSP Saga show_cursor_diagnostics' })
-vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>Lspsaga peek_definition<cr>', { noremap = true, silent = true, desc = 'LSP Saga peek_definition' })
+-- vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>Lspsaga peek_definition<cr>', { noremap = true, silent = true, desc = 'LSP Saga peek_definition' })
 vim.api.nvim_set_keymap('n', '<C-j>', '<cmd>Lspsaga code_action<cr>', { noremap = true, silent = true, desc = 'LSP Saga code_action' })
 
 -- DevDocs
@@ -346,7 +372,7 @@ vim.api.nvim_set_keymap('n', 'gp', '<cmd>Lspsaga preview_definition<CR>', { desc
 vim.api.nvim_set_keymap('n', 'gr', '<cmd>Lspsaga rename<CR>', { desc = 'LspSaga [R]ename' })
 vim.api.nvim_set_keymap('n', 'gl', '<cmd>Lspsaga peek_definition<CR>', { desc = 'LspSaga [P]eek Definition' })
 vim.api.nvim_set_keymap('n', 'ca', '<cmd>Lspsaga code_action<CR>', { desc = 'LspSaga [C]ode [A]ction' })
-vim.api.nvim_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', { desc = 'LspSaga [H]over Doc' })
+
 vim.api.nvim_set_keymap('n', '<C-f>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(1)<CR>', { desc = 'LspSaga Scroll Down' })
 vim.api.nvim_set_keymap('n', '<C-b>', '<cmd>lua require("lspsaga.action").smart_scroll_with_saga(-1)<CR>', { desc = 'LspSaga Scroll Up' })
 
@@ -361,5 +387,27 @@ vim.api.nvim_set_keymap('n', '<leader>gg', '<cmd>LazyGit<CR>', { desc = 'Lazy Gi
 vim.api.nvim_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', { noremap = true, silent = true, desc = 'Go to definition' })
 vim.api.nvim_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', { noremap = true, silent = true, desc = 'Go to declaration' })
 vim.api.nvim_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', { noremap = true, silent = true, desc = 'Go to implementation' })
+
+vim.api.nvim_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { silent = false, noremap = true, desc = 'Show signature help' })
+vim.api.nvim_set_keymap('i', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { silent = false, noremap = true, desc = 'Show signature help' })
+
+-- VGit
+
+-- Jump to next chunk
+
+vim.keymap.set('n', '<C-g>', function()
+  require('gitsigns').next_hunk()
+end, { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap('n', '<C-f>', [[:lua ToggleBoolean()<CR>]], { noremap = true, silent = true })
+
+function ToggleBoolean()
+  local word = vim.fn.expand '<cword>' -- Get the word under cursor
+  if word == 'true' then
+    vim.cmd 'normal! ciwfalse'
+  elseif word == 'false' then
+    vim.cmd 'normal! ciwtrue'
+  end
+end
 
 return {}

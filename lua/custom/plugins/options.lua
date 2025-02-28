@@ -19,8 +19,9 @@ vim.opt.expandtab = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = 4
--- vim.opt.autoindent = true
--- vim.opt.smarttab = true
+vim.opt.smartindent = true
+vim.opt.autoindent = true
+vim.opt.smarttab = true
 -- End Indentation
 
 vim.opt.scrolloff = 8
@@ -51,10 +52,24 @@ vim.opt.listchars = {
 }
 -- space = "·",
 
+vim.diagnostic.config {
+  virtual_lines = true,
+}
+
 vim.opt.iskeyword:append { '-', '@' }
 
 vim.cmd [[filetype plugin indent on]]
 
 vim.cmd [[ set foldmethod=manual ]]
+
+vim.cmd [[ set nohidden ]]
+
+vim.o.foldcolumn = '1' -- '0' is not bad
+-- vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+-- vim.o.foldmevelstart = 99
+vim.o.foldenable = false
+
+vim.opt.sessionoptions = { 'blank', 'buffers', 'curdir', 'folds', 'help', 'tabpages', 'winsize', 'winpos', 'terminal', 'localoptions' }
+vim.opt.termguicolors = true
 
 return {}

@@ -9,8 +9,7 @@ vim.g.have_nerd_font = false
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
+-- NOTE: You can change these options as you wish! For more options, you can see `:help option-list`
 
 -- Make line numbers default
 vim.opt.number = true
@@ -164,7 +163,7 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
-require('lazy').setup({
+require('lazy').setup {
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   {
@@ -174,7 +173,7 @@ require('lazy').setup({
     { 'jose-elias-alvarez/typescript.nvim' },
 
     -- Custom plugins
-    { dir = vim.fn.expand '~/Projects/Neovim/office-ipsum/' },
+    -- { dir = vim.fn.expand '~/Projects/Neovim/office-ipsum/' },
     -- { import = '~/Projects/Neovim/office-ipsum/' },
   },
 
@@ -187,7 +186,7 @@ require('lazy').setup({
 
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`. This is equivalent to the following Lua:
-  --    require('gitsigns').setup({ ... })
+  -- require('gitsigns').setup({ ... })
   --
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
@@ -736,26 +735,32 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'neanias/everforest-nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'everforest'
-
-      -- You can configure highlights by doing something like:
-      vim.cmd.hi 'Comment gui=none'
-    end,
-  },
+  -- { -- You can easily change to a different colorscheme.
+  --   -- Change the name of the colorscheme plugin below, and then
+  --   -- change the command in the config to whatever the name of that colorscheme is.
+  --   --
+  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --   'neanias/everforest-nvim',
+  --   priority = 1000, -- Make sure to load this before all the other start plugins.
+  --   init = function()
+  --     -- Load the colorscheme here.
+  --     -- Like many other themes, this one has different styles, and you could load
+  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --     vim.cmd.colorscheme 'tokyonight'
+  --     -- You can configure highlights by doing something like:
+  --     -- vim.cmd.hi 'Comment gui=none'
+  --   end,
+  -- },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = {
+      signs = true,
+    },
+  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -799,47 +804,42 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- Highlight, edit, and navigate code
+
+  {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    -- require('nvim-treesitter.configs').setup {
-    --   ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-    --   highlight = {
-    --     enable = true,
-    --     additional_vim_regex_highlighting = false,
-    --   },
-    --   indent = {
-    --     enable = true,
-    --   },
-    -- },
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-      -- Autoinstall languages that are not installed
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'php',
+        'phpdoc',
+      },
       auto_install = true,
       highlight = {
         enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = {},
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = {
+        enable = true,
+        disable = { 'ruby' },
+      },
     },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
 
-  -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
   --
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
@@ -848,16 +848,20 @@ require('lazy').setup({
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
-  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+
+  --require 'kickstart.plugins.neo-tree',
+  --require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   {
+    --{
+    --   import = 'custom.plugins.low',
+    --},
     {
-      import = 'custom.plugins.low',
+      import = 'custom.plugins.low.git',
     },
     {
       import = 'custom.plugins.normal',
@@ -867,7 +871,7 @@ require('lazy').setup({
     },
   },
 
-  { import = 'custom.plugins' },
+  -- { import = 'custom.plugins' },
 
   -- LSP
   { import = 'custom.plugins.lsp.blink' },
@@ -878,35 +882,9 @@ require('lazy').setup({
   -- AUTOCMDS
   { import = 'custom.plugins.autocmds' },
   -- END AUTOCMDS
+}
 
-  --
-  -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
-  -- Or use telescope!
-  -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
-  -- you can continue same window with `<space>sr` which resumes last telescope search
-}, {
-  ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
-    },
-  },
-})
-
-local ft = require 'guard.filetype'
+-- local ft = require 'guard.filetype'
 
 -- Assuming you have guard-collection
 -- Put this in your ftplugin/lang.lua to lazy load guard
@@ -914,91 +892,77 @@ local ft = require 'guard.filetype'
 -- ft('lua'):fmt('lsp'):append('stylua'):lint 'selene'
 
 -- change this anywhere in your config (or not), these are the defaults
-vim.g.guard_config = {
-  -- format on write to buffer
-  fmt_on_save = true,
-  -- use lsp if no formatter was defined for this filetype
-  lsp_as_default_formatter = false,
-  -- whether or not to save the buffer after formatting
-  save_on_fmt = true,
-  -- automatic linting
-  auto_lint = true,
-  -- how frequently can linters be called
-  lint_interval = 500,
-}
+-- vim.g.guard_config = {
+--   -- format on write to buffer
+--   fmt_on_save = true,
+--   -- use lsp if no formatter was defined for this filetype
+--   lsp_as_default_formatter = false,
+--   -- whether or not to save the buffer after formatting
+--   save_on_fmt = true,
+--   -- automatic linting
+--   auto_lint = true,
+--   -- how frequently can linters be called
+--   lint_interval = 500,
+-- }
 
 require 'custom.plugins.keymaps'
-
 require 'custom.plugins.options'
 
 -- run lualine after all plugins are loaded
 function lualine()
   require('lualine').setup {
     options = {
-      theme = 'everforest',
+      theme = 'tokyonight-moon',
     },
     sections = {
-      lualine_c = {
-        function()
-          local current_session = require('auto-session.lib').current_session_name(true)
-
-          local get_buf_parent_dir_name = function()
-            local buf_wd = vim.api.nvim_buf_get_name(0)
-            if buf_wd == '' then
-              return 'No Name'
-            end
-            local buf_wd_trimmed = string.match(buf_wd, '([^/]+)$')
-            return buf_wd_trimmed or 'No Name'
-          end
-
-          if current_session then
-            return '[s][' .. current_session .. '] | ' .. '[buf][' .. get_buf_parent_dir_name() .. ']'
-          else
-            return '[buf]' .. get_buf_parent_dir_name()
-          end
-        end,
-      },
-      lualine_x = {
-        function()
-          local get_recording_macro = function()
-            local recording = vim.fn.reg_recording()
-            if recording ~= '' then
-              return '[recording @' .. recording .. ']'
-            end
-            return ''
-          end
-
-          return get_recording_macro()
-        end,
-      },
+      -- lualine_c = {
+      --   function()
+      --     local current_session = require('auto-session.lib').current_session_name(true)
+      --
+      --     local get_buf_parent_dir_name = function()
+      --       local buf_wd = vim.api.nvim_buf_get_name(0)
+      --       if buf_wd == '' then
+      --         return 'No Name'
+      --       end
+      --       local buf_wd_trimmed = string.match(buf_wd, '([^/]+)$')
+      --       return buf_wd_trimmed or 'No Name'
+      --     end
+      --
+      --     if current_session then
+      --       return '[s][' .. current_session .. '] | [buf][' .. get_buf_parent_dir_name() .. ']'
+      --     else
+      --       return '[buf][' .. get_buf_parent_dir_name() .. ']'
+      --     end
+      --   end,
+      -- },
+      -- lualine_x = {
+      --   function()
+      --     local get_recording_macro = function()
+      --       local recording = vim.fn.reg_recording()
+      --       if recording ~= '' then
+      --         return '[recording @' .. recording .. ']'
+      --       end
+      --       return ''
+      --     end
+      --
+      --     return get_recording_macro()
+      --   end,
+      -- },
+      -- lualine_y = {
+      --   function()
+      --     local rtn = last_motion ~= '' and '[motion: ' .. last_motion .. ']' or ''
+      --     return rtn
+      --   end,
+      -- },
     },
   }
 end
+-- lualine()
 
-lualine()
-
-local everforest = require 'everforest'
-everforest.setup {
-  background = 'soft',
-  transparent_background_level = 0.8,
-  italics = true,
-  disable_italic_comments = false,
-  on_highlights = function(hl, _)
-    hl['@string.special.symbol.ruby'] = { link = '@field' }
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    -- Run Themery Night
+    local themery = require 'themery'
+    themery.setThemeByName 'Night'
   end,
-  --`sign_column_background`, `ui_contrast`, `dim_inactive_windows`, `diagnostic_text_highlight`, `diagnostic_virtual_text`, `diagnostic_line_highlight`, `spell_foreground`, `show_eob`, `float_style`, `inlay_hints_background`, `colours_override`, `sign_column_background`, `ui_contrast`, `dim_inactive_windows`, `diagnostic_text_highlight`, `diagnostic_virtual_text`, `diagnostic_line_highlight`, `spell_foreground`, `show_eob`, `float_style`, `inlay_hints_background`, `colours_override`
-
-  everforest.load(),
-}
-
-vim.cmd 'highlight CustomColor--gap guifg=#f1c40f'
-vim.cmd 'highlight CustomColor--colors--primary guifg=#e74c3c'
-vim.cmd 'highlight CustomColor--colors--secondary guifg=#3498db'
-require('colors').setup {}
-
--- require('auto-session').setup {
---   auto_restore_last_session = vim.loop.cwd() == vim.loop.os_homedir(),
--- }
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+})
