@@ -36,8 +36,8 @@ if enabled then
   end
 end
 
--- local toReturn = {
---   'nvim-tree/nvim-web-devicons',
--- }
+local toReturn = {
+  '3rd/image.nvim',
+}
 
-return {}
+return toReturn

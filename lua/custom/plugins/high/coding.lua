@@ -599,51 +599,100 @@ return {
     requires = { 'nvim-lua/plenary.nvim' },
   },
 
-  -- TS textobjects
   -- {
-  --   'nvim-treesitter/nvim-treesitter-textobjects',
-  --   opts = {
-  --     enable = true,
-  --     textobjects = {
-  --       select = {
-  --         enable = true,
-  --         keymaps = {
-  --           ['af'] = '@function.outer',
-  --           ['if'] = '@function.inner',
-  --           ['ac'] = '@class.outer',
-  --           ['ic'] = '@class.inner',
-  --         },
-  --       },
-  --       swap = {
-  --         enable = true,
-  --         swap_next = {
-  --           ['<leader>a'] = '@parameter.inner',
-  --         },
-  --         swap_previous = {
-  --           ['<leader>A'] = '@parameter.inner',
-  --         },
-  --       },
-  --       move = {
-  --         enable = true,
-  --         set_jumps = true,
-  --         goto_next_start = {
-  --           [']m'] = '@function.outer',
-  --           [']]'] = '@class.outer',
-  --         },
-  --         goto_next_end = {
-  --           [']M'] = '@function.outer',
-  --           [']['] = '@class.outer',
-  --         },
-  --         goto_previous_start = {
-  --           ['[m'] = '@function.outer',
-  --           ['[['] = '@class.outer',
-  --         },
-  --         goto_previous_end = {
-  --           ['[M'] = '@function.outer',
-  --           ['[]'] = '@class.outer',
-  --         },
-  --       },
-  --     },
+  --   'gelguy/wilder.nvim',
+  --   event = 'CmdlineEnter',
+  --   build = ':UpdateRemotePlugins',
+  --   dependencies = {
+  --     'nvim-tree/nvim-web-devicons',
   --   },
+  --   config = function()
+  --     local wilder = require 'wilder'
+  --     wilder.setup { modes = { ':', '/', '?' } }
+  --     wilder.set_option('pipeline', {
+  --       wilder.branch(
+  --         wilder.python_file_finder_pipeline {
+  --           file_command = function(_, arg)
+  --             if string.find(arg, '.') ~= nil then
+  --               return { 'fd', '-tf', '-H' }
+  --             else
+  --               return { 'fd', '-tf' }
+  --             end
+  --           end,
+  --           dir_command = { 'fd', '-td' },
+  --           filters = { 'fuzzy_filter', 'difflib_sorter' },
+  --         },
+  --         wilder.cmdline_pipeline(),
+  --         wilder.python_search_pipeline()
+  --       ),
+  --     })
+  --
+  --     wilder.set_option(
+  --       'renderer',
+  --       wilder.popupmenu_renderer {
+  --         highlighter = wilder.basic_highlighter(),
+  --         left = { ' ', wilder.popupmenu_devicons() },
+  --         right = { ' ', wilder.popupmenu_scrollbar { thumb_char = ' ' } },
+  --         highlights = {
+  --           default = 'WilderMenu',
+  --           accent = wilder.make_hl('WilderAccent', 'Pmenu', {
+  --             { a = 1 },
+  --             { a = 1 },
+  --             { foreground = '#f4468f' },
+  --           }),
+  --         },
+  --       }
+  --     )
+  --   end,
   -- },
+
+  -- TS textobjects
+  {
+    'nvim-treesitter/nvim-treesitter',
+    dependencies = { 'nvim-treesitter/nvim-treesitter-textobjects' },
+    config = function()
+      require('nvim-treesitter.configs').setup {
+        textobjects = {
+          select = {
+            enable = true,
+            keymaps = {
+              ['af'] = '@function.outer',
+              ['if'] = '@function.inner',
+              ['ac'] = '@class.outer',
+              ['ic'] = '@class.inner',
+            },
+          },
+          swap = {
+            enable = true,
+            swap_next = {
+              ['<leader>a'] = '@parameter.inner',
+            },
+            swap_previous = {
+              ['<leader>A'] = '@parameter.inner',
+            },
+          },
+          move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+              [']m'] = '@function.outer',
+              [']]'] = '@class.outer',
+            },
+            goto_next_end = {
+              [']M'] = '@function.outer',
+              [']['] = '@class.outer',
+            },
+            goto_previous_start = {
+              ['[m'] = '@function.outer',
+              ['[['] = '@class.outer',
+            },
+            goto_previous_end = {
+              ['[M'] = '@function.outer',
+              ['[]'] = '@class.outer',
+            },
+          },
+        },
+      }
+    end,
+  },
 }

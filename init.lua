@@ -128,7 +128,7 @@ vim.api.nvim_create_augroup('MacroRecording', { clear = true })
 vim.api.nvim_create_autocmd('RecordingEnter', {
   group = 'MacroRecording',
   callback = function()
-    vim.cmd 'highlight CursorLine guibg=#ff0000' -- Change to desired color
+    vim.cmd 'highlight CursorLine guibg=#209fb5' -- Change to desired color
     vim.opt.cursorline = true
   end,
 })

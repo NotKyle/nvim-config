@@ -37,6 +37,7 @@ return {
       require('lspconfig').lua_ls.setup {}
 
       require('lspconfig').html.setup {}
+      -- require('lspconfig').htmx.setup {}
 
       -- require('lspconfig').phpactor.setup {}
 
