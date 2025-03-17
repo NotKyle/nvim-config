@@ -915,49 +915,31 @@ function lualine()
       theme = 'tokyonight-moon',
     },
     sections = {
-      -- lualine_c = {
-      --   function()
-      --     local current_session = require('auto-session.lib').current_session_name(true)
-      --
-      --     local get_buf_parent_dir_name = function()
-      --       local buf_wd = vim.api.nvim_buf_get_name(0)
-      --       if buf_wd == '' then
-      --         return 'No Name'
-      --       end
-      --       local buf_wd_trimmed = string.match(buf_wd, '([^/]+)$')
-      --       return buf_wd_trimmed or 'No Name'
-      --     end
-      --
-      --     if current_session then
-      --       return '[s][' .. current_session .. '] | [buf][' .. get_buf_parent_dir_name() .. ']'
-      --     else
-      --       return '[buf][' .. get_buf_parent_dir_name() .. ']'
-      --     end
-      --   end,
-      -- },
-      -- lualine_x = {
-      --   function()
-      --     local get_recording_macro = function()
-      --       local recording = vim.fn.reg_recording()
-      --       if recording ~= '' then
-      --         return '[recording @' .. recording .. ']'
-      --       end
-      --       return ''
-      --     end
-      --
-      --     return get_recording_macro()
-      --   end,
-      -- },
-      -- lualine_y = {
-      --   function()
-      --     local rtn = last_motion ~= '' and '[motion: ' .. last_motion .. ']' or ''
-      --     return rtn
-      --   end,
-      -- },
+      lualine_x = {
+        function()
+          local ok, doing = pcall(require, 'doing')
+          if not ok then
+            -- print '[doing module not found]' -- Debug output
+            return '[doing module not found]'
+          end
+
+          local doing_status = type(doing.status) == 'function' and doing.status() or doing.status
+          -- print('doing.status:', doing_status) -- Debug output
+
+          if not doing_status or doing_status == '' then
+            return '[No Status]'
+          end
+
+          -- Replace Doing:
+          doing_status = doing_status:gsub('Doing: ', '')
+
+          return '[' .. doing_status .. ']'
+        end,
+      },
     },
   }
 end
--- lualine()
+lualine()
 
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()

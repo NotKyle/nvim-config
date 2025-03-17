@@ -214,6 +214,7 @@ return {
       require('lspconfig').intelephense.setup {
         settings = {
           intelephense = {
+            -- format = { enable = false },
             licenseKey = read_license_key(), -- Dynamically load the key
             files = {
               maxSize = 1000000, -- Reduce max file size for indexing

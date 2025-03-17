@@ -55,7 +55,6 @@ function openMiniFiles()
   --   MiniFiles.reveal_cwd()
   -- end, 30)
 end
-vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua openMiniFiles()<cr>', { noremap = true, silent = true })
 
 -- Code Actions
 -- <LEADER>cr - Rename variable
@@ -409,5 +408,38 @@ function ToggleBoolean()
     vim.cmd 'normal! ciwtrue'
   end
 end
+
+-- Snacks
+-- function OpenExplorer()
+--   local explorerOptions = {
+--     finder = 'files',
+--     focus = 'input',
+--     supports_live = true,
+--     auto_close = true,
+--     follow_file = true,
+--     hidden = true,
+--     layout = {
+--       cycle = true,
+--       preview = true,
+--       --- Use the default layout or vertical if the window is too narrow
+--       preset = function()
+--         return vim.o.columns >= 120 and 'default' or 'vertical'
+--       end,
+--     },
+--   }
+--
+--   Snacks.picker.files(explorerOptions)
+-- end
+
+-- vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>lua OpenExplorer()<cr>', { noremap = true, silent = true })
+-- vim.api.nvim_set_keymap('n', '<leader>e', '<cmd>Oil<cr>', { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>dv', function()
+  if next(require('diffview.lib').views) == nil then
+    vim.cmd 'DiffviewOpen'
+  else
+    vim.cmd 'DiffviewClose'
+  end
+end, { desc = 'Diff Viewer' })
 
 return {}

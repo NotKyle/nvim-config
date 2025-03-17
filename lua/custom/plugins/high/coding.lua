@@ -316,6 +316,9 @@ return {
     end,
   },
   {
+    'echasnovski/mini.hipatterns',
+  },
+  {
     'echasnovski/mini.indentscope',
     version = false,
     enabled = false,
@@ -691,6 +694,75 @@ return {
               ['[]'] = '@class.outer',
             },
           },
+        },
+      }
+    end,
+  },
+  {
+    'jiaoshijie/undotree',
+    dependencies = 'nvim-lua/plenary.nvim',
+    config = true,
+    keys = { -- load the plugin only when using it's keybinding:
+      { '<leader>u', "<cmd>lua require('undotree').toggle()<cr>" },
+    },
+  },
+  {
+    'folke/twilight.nvim',
+  },
+  {
+    'folke/zen-mode.nvim',
+  },
+  ---@type LazySpec
+  {
+    'mikavilpas/yazi.nvim',
+    event = 'VeryLazy',
+    dependencies = { 'folke/snacks.nvim', lazy = true },
+    keys = {
+      -- 👇 in this section, choose your own keymappings!
+      {
+        '<leader>e',
+        mode = { 'n', 'v' },
+        '<cmd>Yazi<cr>',
+        desc = 'Open yazi at the current file',
+      },
+      {
+        -- Open in the current working directory
+        '<leader>w',
+        '<cmd>Yazi cwd<cr>',
+        desc = "Open the file manager in nvim's working directory",
+      },
+      {
+        '<c-up>',
+        '<cmd>Yazi toggle<cr>',
+        desc = 'Resume the last yazi session',
+      },
+    },
+    ---@type YaziConfig | {}
+    opts = {
+      -- if you want to open yazi instead of netrw, see below for more info
+      open_for_directories = false,
+      keymaps = {
+        show_help = '<f1>',
+      },
+    },
+    -- 👇 if you use `open_for_directories=true`, this is recommended
+    init = function()
+      -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
+      -- vim.g.loaded_netrw = 1
+      vim.g.loaded_netrwPlugin = 1
+    end,
+  },
+  {
+    'sindrets/diffview.nvim',
+  },
+  {
+    'zeioth/garbage-day.nvim',
+    dependencies = 'neovim/nvim-lspconfig',
+    event = 'VeryLazy',
+    config = function()
+      require('diffview').setup {
+        merge_tool = {
+          layout = 'diff4_mixed',
         },
       }
     end,
