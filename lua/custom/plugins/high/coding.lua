@@ -1,6 +1,17 @@
 -- lua/plugins/coding.lua
 return {
   {
+    'luckasRanarison/tailwind-tools.nvim',
+    name = 'tailwind-tools',
+    build = ':UpdateRemotePlugins',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-telescope/telescope.nvim', -- optional
+      'neovim/nvim-lspconfig', -- optional
+    },
+    opts = {}, -- your configuration
+  },
+  {
     -- CMP
     'hrsh7th/nvim-cmp',
     dependencies = {
