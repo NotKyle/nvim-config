@@ -5,6 +5,27 @@ local o = vim.o
 local lite = true
 
 if lite then
+  vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+      for _, client in pairs((vim.lsp.get_clients {})) do
+        if client.name == 'tailwindcss' then
+          client.server_capabilities.completionProvider.triggerCharacters = {
+            '"',
+            "'",
+            '`',
+            '.',
+            '(',
+            '[',
+            '!',
+            '/',
+            ':',
+          }
+        end
+      end
+    end,
+  })
+
   -- Restore cursor to file position in previous editing session
   api.nvim_create_autocmd('BufReadPost', {
     callback = function(args)

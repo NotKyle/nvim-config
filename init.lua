@@ -912,7 +912,7 @@ require 'custom.plugins.options'
 function lualine()
   require('lualine').setup {
     options = {
-      theme = 'tokyonight-moon',
+      theme = 'auto',
     },
     sections = {
       lualine_x = {
