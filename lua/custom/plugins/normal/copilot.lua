@@ -5,7 +5,7 @@ return {
     -- Set copilot to disabled by default
 
     vim.cmd 'Copilot disable'
-    vim.notify 'Copilot: Disabled (default)'
+    -- vim.notify 'Copilot: Disabled (default)'
 
     -- Disable copilot suggestions
     vim.g.copilot_filetypes = {

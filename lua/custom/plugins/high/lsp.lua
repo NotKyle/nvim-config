@@ -1,4 +1,4 @@
-local use_lsp = true
+local use_lsp = false
 
 if not use_lsp then
   return {}
