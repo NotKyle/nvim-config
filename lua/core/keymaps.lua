@@ -23,19 +23,22 @@ map('n', '<leader>fg', function()
 end, opts)
 
 -- Buffer Picker with mini.pick
-vim.keymap.set('n', '<leader><leader>', function()
-  local pick = require 'mini.pick'
+vim.keymap.set("n", "<leader><leader>", function()
+  local pick = require("mini.pick")
   local fs = vim.fs
 
-  local root = fs.dirname(fs.find({ 'composer.json', '.git' }, { upward = true })[1] or vim.loop.cwd())
+  local root = fs.dirname(
+    fs.find({ "composer.json", ".git" }, { upward = true })[1]
+    or vim.loop.cwd()
+  )
 
-  pick.builtin.files { cwd = root }
-end, { desc = 'Find file (project root)' })
+  pick.builtin.files({ cwd = root })
+end, { desc = "Find file (project root)" })
 
 -- Additional useful mappings
-map('n', '<leader>q', ':q<CR>', opts) -- Quit
-map('n', '<leader>w', ':w<CR>', opts) -- Save file
-map('n', '<leader>x', ':x<CR>', opts) -- Save and exit
+map('n', '<leader>q', ':q<CR>', opts)          -- Quit
+map('n', '<leader>w', ':w<CR>', opts)          -- Save file
+map('n', '<leader>x', ':x<CR>', opts)          -- Save and exit
 map('n', '<leader>h', ':nohlsearch<CR>', opts) -- Clear search highlight
 
 -- Window Navigation
@@ -60,5 +63,3 @@ map('n', '<A-k>', ':m .-2<CR>==', opts)
 -- -- Stay in indent mode
 -- map('v', '<', '<gv', opts)
 -- map('v', '>', '>gv', opts)
-
-vim.keymap.set('n', '<leader>e', '<cmd>Yazi<CR>', { desc = 'Open Yazi file manager' })

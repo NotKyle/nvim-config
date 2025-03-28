@@ -10,5 +10,11 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup("plugins")
+local ok, lazy = pcall(require, "lazy")
+if not ok then
+  vim.api.nvim_err_writeln("Failed to load Lazy.nvim: " .. tostring(lazy))
+  return
+end
+
+lazy.setup("plugins") -- or pass in a table of plugins directly
 

@@ -8,6 +8,7 @@ return {
         "lua", "php", "html", "css", "javascript", "json"
       },
       highlight = { enable = true },
+      indent = { enable = true },
       auto_install = true,
     })
   end,

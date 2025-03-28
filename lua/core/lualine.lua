@@ -1,21 +1,33 @@
-require('lualine').setup {
-  sections = {
-    lualine_c = {
-      'filename',
-      {
+-- run lualine after all plugins are loaded
+function lualine()
+  require('lualine').setup {
+    options = {
+      theme = 'auto',
+    },
+    sections = {
+      lualine_x = {
         function()
-          local clients = vim.lsp.get_active_clients { bufnr = 0 }
-          if #clients == 0 then
-            return 'No LSP'
+          local ok, doing = pcall(require, 'doing')
+          if not ok then
+            -- print '[doing module not found]' -- Debug output
+            return '[doing module not found]'
           end
-          local names = {}
-          for _, client in ipairs(clients) do
-            table.insert(names, client.name)
+
+          local doing_status = type(doing.status) == 'function' and doing.status() or doing.status
+          -- print('doing.status:', doing_status) -- Debug output
+
+          if not doing_status or doing_status == '' then
+            return '[No Status]'
           end
-          return 'LSP: ' .. table.concat(names, ', ')
+
+          -- Replace Doing:
+          doing_status = doing_status:gsub('Doing: ', '')
+
+          return '[' .. doing_status .. ']'
         end,
-        color = { fg = '#a6e3a1' },
       },
     },
-  },
-}
+  }
+end
+
+lualine()
