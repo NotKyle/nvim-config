@@ -59,3 +59,19 @@ map('n', '<A-k>', ':m .-2<CR>==', opts)
 -- Use H for previous buffer, L for next buffer
 vim.keymap.set('n', 'H', '<cmd>bprevious<cr>', { desc = 'Previous buffer' })
 vim.keymap.set('n', 'L', '<cmd>bnext<cr>', { desc = 'Next buffer' })
+
+-- Open LazyGit
+vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
+
+-- Open Yazi with <leader>e
+vim.keymap.set('n', '<leader>e', '<cmd>Yazi<cr>', { desc = 'Open Yazi' })
+
+-- LSP Mappings
+vim.keymap.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { desc = 'Rename symbol' })
+vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', { desc = 'Go to definition' })
+vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', { desc = 'Go to references' })
+vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { desc = 'Show hover documentation' })
+vim.keymap.set('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', { desc = 'Code action' })
+vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', { desc = 'Format code' })
+vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { desc = 'Go to declaration' })
+vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { desc = 'Go to implementation' })

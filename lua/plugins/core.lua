@@ -107,4 +107,24 @@ return {
     cmd = { 'Yazi', 'YaziHere' },
     config = true,
   },
+  {
+    'sindrets/diffview.nvim',
+    cmd = {
+      'DiffviewOpen',
+      'DiffviewFileHistory',
+      'DiffviewClose',
+      'DiffviewToggleFiles',
+      'DiffviewFocusFiles',
+    },
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = true,
+  },
+  {
+    'kdheepak/lazygit.nvim',
+    cmd = 'LazyGit',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
+    end,
+  },
 }
