@@ -23,22 +23,19 @@ map('n', '<leader>fg', function()
 end, opts)
 
 -- Buffer Picker with mini.pick
-vim.keymap.set("n", "<leader><leader>", function()
-  local pick = require("mini.pick")
+vim.keymap.set('n', '<leader><leader>', function()
+  local pick = require 'mini.pick'
   local fs = vim.fs
 
-  local root = fs.dirname(
-    fs.find({ "composer.json", ".git" }, { upward = true })[1]
-    or vim.loop.cwd()
-  )
+  local root = fs.dirname(fs.find({ 'composer.json', '.git' }, { upward = true })[1] or vim.loop.cwd())
 
-  pick.builtin.files({ cwd = root })
-end, { desc = "Find file (project root)" })
+  pick.builtin.files { cwd = root }
+end, { desc = 'Find file (project root)' })
 
 -- Additional useful mappings
-map('n', '<leader>q', ':q<CR>', opts)          -- Quit
-map('n', '<leader>w', ':w<CR>', opts)          -- Save file
-map('n', '<leader>x', ':x<CR>', opts)          -- Save and exit
+map('n', '<leader>q', ':q<CR>', opts) -- Quit
+map('n', '<leader>w', ':w<CR>', opts) -- Save file
+map('n', '<leader>x', ':x<CR>', opts) -- Save and exit
 map('n', '<leader>h', ':nohlsearch<CR>', opts) -- Clear search highlight
 
 -- Window Navigation
@@ -58,8 +55,7 @@ map('n', '<leader>sh', ':split<CR>', opts)
 -- Move Lines
 map('n', '<A-j>', ':m .+1<CR>==', opts)
 map('n', '<A-k>', ':m .-2<CR>==', opts)
--- map('v', '<A-j>', ':m '>+1<CR>gv=gv', opts)
--- map('v', '<A-k>', ':m '<-2<CR>gv=gv', opts)
--- -- Stay in indent mode
--- map('v', '<', '<gv', opts)
--- map('v', '>', '>gv', opts)
+
+-- Use H for previous buffer, L for next buffer
+vim.keymap.set('n', 'H', '<cmd>bprevious<cr>', { desc = 'Previous buffer' })
+vim.keymap.set('n', 'L', '<cmd>bnext<cr>', { desc = 'Next buffer' })

@@ -20,7 +20,7 @@ end
 local function remove_trailing_whitespace()
   api.nvim_create_autocmd('BufWritePre', {
     callback = function()
-      local save_cursor = fn.getpos('.')
+      local save_cursor = fn.getpos '.'
       vim.cmd [[%s/\s\+$//e]]
       fn.setpos('.', save_cursor)
     end,
@@ -48,8 +48,7 @@ local function setup_lsp_autocmds()
       callback = function()
         for _, client in pairs(vim.lsp.get_clients {}) do
           if client.name == 'tailwindcss' then
-            client.server_capabilities.completionProvider.triggerCharacters = { '"', "'", '`', '.', '(', '[', '!', '/',
-              ':' }
+            client.server_capabilities.completionProvider.triggerCharacters = { '"', "'", '`', '.', '(', '[', '!', '/', ':' }
           end
         end
       end,
@@ -78,7 +77,9 @@ local function setup_project_root()
 
       local root = vim.fs.root(args.buf, function(name, path)
         local patterns = { '.git', 'Cargo.toml', 'go.mod', 'build/compile_commands.json' }
-        return vim.iter(patterns):any(function(filepat) return filepat == name end)
+        return vim.iter(patterns):any(function(filepat)
+          return filepat == name
+        end)
       end)
 
       if root then
@@ -98,4 +99,4 @@ local function setup_autocmds()
   setup_project_root()
 end
 
--- setup_autocmds()
+setup_autocmds()
