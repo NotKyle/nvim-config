@@ -75,3 +75,11 @@ vim.keymap.set('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', { de
 vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', { desc = 'Format code' })
 vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { desc = 'Go to declaration' })
 vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { desc = 'Go to implementation' })
+
+vim.keymap.set('n', '<Esc>', function()
+  if vim.v.hlsearch == 1 then
+    vim.cmd 'nohlsearch'
+  else
+    vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', false)
+  end
+end, { noremap = true, silent = true })

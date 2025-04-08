@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-doc-name
 return {
   {
     'neovim/nvim-lspconfig',
@@ -125,6 +126,131 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = function()
       vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
+    end,
+  },
+  {
+    'luckasRanarison/tailwind-tools.nvim',
+    name = 'tailwind-tools',
+    build = ':UpdateRemotePlugins',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-telescope/telescope.nvim', -- optional
+      'neovim/nvim-lspconfig', -- optional
+    },
+    ---@type TailwindTools.Option
+    opts = {
+      server = {
+        override = true, -- setup the server from the plugin if true
+        settings = {}, -- shortcut for `settings.tailwindCSS`
+        on_attach = function(client, bufnr) end, -- callback triggered when the server attaches to a buffer
+      },
+      document_color = {
+        enabled = true, -- can be toggled by commands
+        kind = 'inline', -- "inline" | "foreground" | "background"
+        inline_symbol = '󰝤 ', -- only used in inline mode
+        debounce = 200, -- in milliseconds, only applied in insert mode
+      },
+      conceal = {
+        enabled = false, -- can be toggled by commands
+        min_length = nil, -- only conceal classes exceeding the provided length
+        symbol = '󱏿', -- only a single character is allowed
+        highlight = { -- extmark highlight options, see :h 'highlight'
+          fg = '#38BDF8',
+        },
+      },
+      cmp = {
+        highlight = 'foreground', -- color preview style, "foreground" | "background"
+      },
+      telescope = {
+        utilities = {
+          callback = function(name, class) end, -- callback used when selecting an utility class in telescope
+        },
+      },
+      -- see the extension section to learn more
+      extension = {
+        queries = {}, -- a list of filetypes having custom `class` queries
+        patterns = { -- a map of filetypes to Lua pattern lists
+          -- example:
+          -- rust = { "class=[\"']([^\"']+)[\"']" },
+          -- javascript = { "clsx%(([^)]+)%)" },
+        },
+      },
+    },
+  },
+  {
+    'zimeg/newsflash.nvim',
+    event = 'VeryLazy',
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+  },
+  {
+    'shellRaining/hlchunk.nvim',
+    event = { 'BufReadPre', 'BufNewFile' },
+    config = function()
+      require('hlchunk').setup {
+        chunk = {
+          enable = true,
+          priority = 15,
+          style = {
+            { fg = '#ca9ee6' },
+            { fg = '#e78284' },
+          },
+          use_treesitter = true,
+          chars = {
+            horizontal_line = '─',
+            vertical_line = '│',
+            left_top = '╭',
+            left_bottom = '╰',
+            right_arrow = '>',
+          },
+          textobject = '',
+          max_file_size = 1024 * 1024,
+          error_sign = true,
+          -- animation related
+          duration = 20,
+          delay = 1,
+        },
+        indent = {
+          enable = true,
+          priority = 10,
+          style = { vim.api.nvim_get_hl(0, { name = 'Whitespace' }) },
+          use_treesitter = false,
+          chars = { '│' },
+          ahead_lines = 5,
+          delay = 1,
+        },
+      }
+    end,
+  },
+  {
+    'jinh0/eyeliner.nvim',
+    config = function()
+      require('eyeliner').setup {
+        -- show highlights only after keypress
+        highlight_on_key = false,
+
+        -- dim all other characters if set to true (recommended!)
+        dim = true,
+
+        -- set the maximum number of characters eyeliner.nvim will check from
+        -- your current cursor position; this is useful if you are dealing with
+        -- large files: see https://github.com/jinh0/eyeliner.nvim/issues/41
+        max_length = 9999,
+
+        -- filetypes for which eyeliner should be disabled;
+        -- e.g., to disable on help files:
+        -- disabled_filetypes = {"help"}
+        disabled_filetypes = {},
+
+        -- buftypes for which eyeliner should be disabled
+        -- e.g., disabled_buftypes = {"nofile"}
+        disabled_buftypes = {},
+
+        -- add eyeliner to f/F/t/T keymaps;
+        -- see section on advanced configuration for more information
+        default_keymaps = true,
+      }
     end,
   },
 }

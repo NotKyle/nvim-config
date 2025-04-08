@@ -54,6 +54,93 @@ local function setup_lsp_autocmds()
       end,
     })
   end
+
+  vim.api.nvim_create_autocmd('CompleteChanged', {
+    callback = function()
+      local completed_item = vim.v.completed_item
+      if completed_item and completed_item.user_data then
+        vim.defer_fn(function()
+          vim.lsp.buf.hover()
+        end, 100) -- Delay to allow menu redraw
+      end
+    end,
+  })
+
+  --https://www.reddit.com/r/neovim/comments/1jpbc7s/disable_virtual_text_if_there_is_diagnostic_in/
+  local virtual_lines_change = true
+
+  if virtual_lines_change then
+    vim.diagnostic.config {
+      virtual_text = true,
+      virtual_lines = { current_line = true },
+      underline = true,
+      update_in_insert = false,
+    }
+
+    local og_virt_text
+    local og_virt_line
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'DiagnosticChanged' }, {
+      group = vim.api.nvim_create_augroup('diagnostic_only_virtlines', {}),
+      callback = function()
+        if og_virt_line == nil then
+          og_virt_line = vim.diagnostic.config().virtual_lines
+        end
+
+        -- ignore if virtual_lines.current_line is disabled
+        if not (og_virt_line and og_virt_line.current_line) then
+          if og_virt_text then
+            vim.diagnostic.config { virtual_text = og_virt_text }
+            og_virt_text = nil
+          end
+          return
+        end
+
+        if og_virt_text == nil then
+          og_virt_text = vim.diagnostic.config().virtual_text
+        end
+
+        local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+
+        if vim.tbl_isempty(vim.diagnostic.get(0, { lnum = lnum })) then
+          vim.diagnostic.config { virtual_text = og_virt_text }
+        else
+          vim.diagnostic.config { virtual_text = false }
+        end
+      end,
+    })
+
+    local og_virt_text
+    local og_virt_line
+    vim.api.nvim_create_autocmd({ 'CursorMoved', 'DiagnosticChanged' }, {
+      group = vim.api.nvim_create_augroup('diagnostic_only_virtlines', {}),
+      callback = function()
+        if og_virt_line == nil then
+          og_virt_line = vim.diagnostic.config().virtual_lines
+        end
+
+        -- ignore if virtual_lines.current_line is disabled
+        if not (og_virt_line and og_virt_line.current_line) then
+          if og_virt_text then
+            vim.diagnostic.config { virtual_text = og_virt_text }
+            og_virt_text = nil
+          end
+          return
+        end
+
+        if og_virt_text == nil then
+          og_virt_text = vim.diagnostic.config().virtual_text
+        end
+
+        local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+
+        if vim.tbl_isempty(vim.diagnostic.get(0, { lnum = lnum })) then
+          vim.diagnostic.config { virtual_text = og_virt_text }
+        else
+          vim.diagnostic.config { virtual_text = false }
+        end
+      end,
+    })
+  end
 end
 
 local function setup_terminal_autocmds()
@@ -89,6 +176,15 @@ local function setup_project_root()
   })
 end
 
+-- Lua function for statusline
+function setupMacroMode()
+  local reg = vim.fn.reg_recording()
+  if reg ~= '' then
+    return 'Recording @' .. reg
+  end
+  return ''
+end
+
 local function setup_autocmds()
   restore_cursor_position()
   remove_trailing_whitespace()
@@ -97,6 +193,7 @@ local function setup_autocmds()
   setup_lsp_autocmds()
   setup_terminal_autocmds()
   setup_project_root()
+  setupMacroMode()
 end
 
 setup_autocmds()

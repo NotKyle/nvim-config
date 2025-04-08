@@ -45,17 +45,17 @@ vim.opt.history = 10000
 vim.opt.background = 'dark'
 vim.opt.list = true
 vim.opt.listchars = {
-    tab = '› ',
-    trail = '·',
-    extends = '⟩',
-    precedes = '⟨',
+  tab = '› ',
+  trail = '·',
+  extends = '⟩',
+  precedes = '⟨',
 }
 -- space = "·",
 
 vim.diagnostic.config {
-    virtual_lines = true,
+  virtual_text = true,
+  virtual_lines = { only_current_line = true },
 }
-
 vim.opt.iskeyword:append { '-', '@' }
 
 vim.cmd [[filetype plugin indent on]]
@@ -69,8 +69,7 @@ vim.o.foldcolumn = '1' -- '0' is not bad
 -- vim.o.foldmevelstart = 99
 vim.o.foldenable = false
 
-vim.opt.sessionoptions = { 'blank', 'buffers', 'curdir', 'folds', 'help', 'tabpages', 'winsize', 'winpos', 'terminal',
-    'localoptions' }
+vim.opt.sessionoptions = { 'blank', 'buffers', 'curdir', 'folds', 'help', 'tabpages', 'winsize', 'winpos', 'terminal', 'localoptions' }
 vim.opt.termguicolors = true
 
 -- Set <space> as the leader key
@@ -103,14 +102,14 @@ vim.opt.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-    vim.opt.clipboard = 'unnamedplus'
+  vim.opt.clipboard = 'unnamedplus'
 end)
 
 -- Add your custom plugin directory to runtimepath
 local custom_plugin_dir = vim.fn.expand '~/Projects/Neovim'
 
 if vim.fn.isdirectory(custom_plugin_dir) == 1 then
-    vim.opt.runtimepath:append(custom_plugin_dir)
+  vim.opt.runtimepath:append(custom_plugin_dir)
 end
 
 -- Enable break indent
@@ -150,5 +149,7 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
+
+vim.opt.completeopt = 'menu,menuone,noinsert,popup,fuzzy'
 
 return {}
