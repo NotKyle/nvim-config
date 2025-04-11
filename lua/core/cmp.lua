@@ -36,3 +36,9 @@ blink.setup {
     ['<C-k>'] = { 'show_signature', 'hide_signature', 'fallback' },
   },
 }
+
+-- ✅ Register sources
+-- require('blink.sources.lsp').register()
+
+-- ✅ Optional: Uncomment if using LuaSnip or other snippet engine
+-- require('blink.sources.snippet').register()
