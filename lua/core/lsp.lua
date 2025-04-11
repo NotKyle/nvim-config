@@ -4,13 +4,13 @@ require('mason').setup()
 -- Setup Mason LSP extension
 require('mason-lspconfig').setup {
   ensure_installed = {
+    -- 'tsserver', -- ✅ yes, still correct for mason-lspconfig
     'intelephense',
     'html',
-    'cssls',
     'lua_ls',
     'tailwindcss',
   },
-  automatic_installation = true,
+  automatic_installation = false,
 }
 
 -- Setup tools (like stylua)
@@ -18,7 +18,6 @@ require('mason-tool-installer').setup {
   ensure_installed = {
     'intelephense',
     'html-lsp',
-    'css-lsp',
     'lua-language-server',
     'stylua',
   },
@@ -54,9 +53,12 @@ local lsp_dir = vim.fn.stdpath 'config' .. '/lua/lsp'
 for _, file in ipairs(vim.fn.readdir(lsp_dir)) do
   local name = file:gsub('%.lua$', '')
   local ok, mod = pcall(require, 'lsp.' .. name)
-  if ok and type(mod) == 'function' then
-    mod(lspconfig)
-  elseif not ok then
+
+  if ok then
+    if type(mod) == 'function' then
+      mod(require 'lspconfig')
+    end
+  else
     vim.notify('LSP load error in ' .. name .. ': ' .. mod, vim.log.levels.ERROR)
   end
 end

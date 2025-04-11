@@ -12,10 +12,26 @@ map('n', '<leader>ff', function()
   require('mini.pick').builtin.files()
 end, opts)
 
--- Word Search with mini.pick
-map('n', '<leader>fw', function()
+-- Filtered grep: exclude common noisy files/folders
+vim.keymap.set('n', '<leader>fw', function()
+  require('mini.pick').builtin.grep_live {
+    globs = {
+      '!**/node_modules/**',
+      '!**/languages/**',
+      '!**/vendor/**',
+      '!**/yarn.lock',
+      '!**/package-lock.json',
+      '!**/composer.lock',
+      '!**/*.lock',
+      '!**/*.po',
+    },
+  }
+end, { desc = 'Live Grep (filtered)' })
+
+-- Full live grep (no exclusions)
+vim.keymap.set('n', '<leader>fW', function()
   require('mini.pick').builtin.grep_live()
-end, opts)
+end, { desc = 'Live Grep (ALL files)' })
 
 -- Git Files Search with mini.pick
 map('n', '<leader>fg', function()
