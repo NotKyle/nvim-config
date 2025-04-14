@@ -16,6 +16,9 @@ function lualine()
   end
 
   require('lualine').setup {
+    options = {
+      theme = 'standard',
+    },
     sections = {
       lualine_c = {
         {

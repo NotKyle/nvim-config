@@ -79,7 +79,16 @@ return {
       }
     end,
   },
-  { 'nvim-treesitter/nvim-treesitter-context' },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    config = function()
+      require('treesitter-context').setup {
+        enable = true,
+        max_lines = 3,
+        separator = '-',
+      }
+    end,
+  },
   { 'nvim-treesitter/nvim-treesitter-textobjects' },
 
   -- UI
