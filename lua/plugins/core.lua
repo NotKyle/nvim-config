@@ -39,7 +39,56 @@ return {
       'rcarriga/nvim-notify',
     },
     config = function()
-      require('noice').setup {}
+      require('noice').setup {
+        -- Turn off UI extras like LSP popups and virtual text
+        lsp = {
+          progress = { enabled = true },
+          signature = { enabled = true },
+          hover = { enabled = true },
+          message = { enabled = true },
+        },
+
+        -- Filter noisy notify messages
+        routes = {
+          -- Suppress "No information available" and other common noise
+          {
+            filter = {
+              event = 'notify',
+              find = 'No information available',
+            },
+            opts = { skip = true },
+          },
+          {
+            filter = {
+              event = 'notify',
+              min_height = 1,
+              any = {
+                { find = 'written' },
+                { find = 'change' },
+                { find = 'successfully' },
+                { find = 'Already installed' },
+              },
+            },
+            opts = { skip = true },
+          },
+        },
+
+        -- Show only errors/warnings
+        notify = {
+          enabled = true,
+          view = 'mini', -- or "notify" if you use `nvim-notify`
+          level = vim.log.levels.WARN, -- Only WARN and ERROR
+        },
+
+        -- UI tweaks (optional)
+        presets = {
+          bottom_search = true,
+          command_palette = true,
+          long_message_to_split = true,
+          inc_rename = false,
+          lsp_doc_border = false,
+        },
+      }
     end,
   },
 
@@ -267,10 +316,9 @@ return {
     config = function()
       require('modes').setup {
         colors = {
-          bg = '', -- Optional bg param, defaults to Normal hl group
           copy = '#f5c359',
           delete = '#c75c6a',
-          insert = '#78ccc5',
+          insert = '#c6d0f5',
           visual = '#9745be',
         },
 
@@ -293,6 +341,23 @@ return {
         -- Disable modes highlights in specified filetypes
         -- Please PR commonly ignored filetypes
         ignore_filetypes = { 'NvimTree', 'TelescopePrompt' },
+      }
+    end,
+  },
+  {
+    'rmagatti/auto-session',
+    config = function()
+      require('auto-session').setup {
+        log_level = 'error',
+        auto_session_enable_last_session = false,
+        auto_session_enabled = true,
+        auto_save_enabled = true,
+        auto_restore_enabled = true,
+        session_lens = { load_on_setup = false },
+        auto_session_suppress_dirs = { '~/', '~/Downloads', '/' },
+
+        -- Save sessions based on the project directory
+        session_dir = vim.fn.stdpath 'data' .. '/sessions/',
       }
     end,
   },
