@@ -441,4 +441,10 @@ return {
       end)
     end,
   },
+  {
+    'Exafunction/windsurf.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+  },
 }
