@@ -2,8 +2,25 @@ return function(lspconfig)
   local util = require 'lspconfig.util'
 
   lspconfig.copilot = {
-    cmd = { 'copilot-language-server', '--stdio' }, -- Update if needed
-    filetypes = { 'javascript', 'typescript', 'lua', 'php', 'python', 'go', 'rust' }, -- extend as needed
+    cmd = { 'copilot-language-server', '--stdio' },
+    filetypes = {
+      'javascript',
+      'typescript',
+      'lua',
+      'php',
+      'python',
+      'go',
+      'rust',
+      'scss',
+      'css',
+      'html',
+      'markdown',
+      'json',
+      'yaml',
+      'toml',
+      'bash',
+      'dockerfile',
+    },
     root_dir = util.root_pattern('.git', '.'),
     init_options = {
       editorInfo = {
@@ -21,4 +38,11 @@ return function(lspconfig)
       },
     },
   }
+
+  -- Load NES virtual text hint (💡) after LSP is set up
+  vim.schedule(function()
+    if vim.g.copilot_nes_enabled then
+      require('core.nes').setup()
+    end
+  end)
 end
