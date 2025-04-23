@@ -153,4 +153,6 @@ vim.opt.scrolloff = 10
 
 vim.opt.completeopt = 'menu,menuone,noinsert,popup,fuzzy'
 
+vim.g.copilot_nes_debounce = 100 -- ↓ Lower = faster suggestions
+
 return {}
