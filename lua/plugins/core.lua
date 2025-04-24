@@ -419,6 +419,7 @@ return {
   {
     'nvimdev/lspsaga.nvim',
     event = 'LspAttach',
+    enabled = false,
     config = function()
       require('lspsaga').setup {}
     end,
@@ -450,6 +451,8 @@ return {
   {
     'Chaitanyabsprip/fastaction.nvim',
     ---@type FastActionConfig
-    opts = {},
+    opts = {
+      dismiss_keys = { 'j', 'k', '<c-c>', 'q', '<esc>' },
+    },
   },
 }

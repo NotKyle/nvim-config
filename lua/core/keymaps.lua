@@ -101,13 +101,15 @@ vim.keymap.set('n', '<Esc>', function()
   end
 end, { noremap = true, silent = true })
 
-local lspopts = { noremap = true, silent = true }
-vim.keymap.set('n', '<C-j>', '<Cmd>Lspsaga diagnostic_jump_next<CR>', lspopts)
-vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', lspopts)
-vim.keymap.set('n', 'gd', '<Cmd>Lspsaga lsp_finder<CR>', lspopts)
-vim.keymap.set('i', '<C-k>', '<Cmd>Lspsaga signature_help<CR>', lspopts)
-vim.keymap.set('n', 'gp', '<Cmd>Lspsaga preview_definition<CR>', lspopts)
-vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', lspopts)
+-- local lspopts = { noremap = true, silent = true }
+-- vim.keymap.set('n', '<C-j>', '<Cmd>Lspsaga diagnostic_jump_next<CR>', lspopts)
+-- vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', lspopts)
+-- vim.keymap.set('n', 'gd', '<Cmd>Lspsaga lsp_finder<CR>', lspopts)
+-- vim.keymap.set('i', '<C-k>', '<Cmd>Lspsaga signature_help<CR>', lspopts)
+-- vim.keymap.set('n', 'gp', '<Cmd>Lspsaga preview_definition<CR>', lspopts)
+-- vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', lspopts)
+
+vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { desc = 'Goto Definition' })
 
 vim.keymap.set({ 'n', 'x' }, '<leader>a', '<cmd>lua require("fastaction").code_action()<CR>', { buffer = bufnr })
 
