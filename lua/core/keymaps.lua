@@ -61,8 +61,10 @@ map('n', '<C-k>', '<C-w>k', opts)
 map('n', '<C-l>', '<C-w>l', opts)
 
 -- Buffer Navigation
-map('n', '<Tab>', ':bnext<CR>', opts)
-map('n', '<S-Tab>', ':bprevious<CR>', opts)
+-- map('n', '<Tab>', ':bnext<CR>', opts)
+-- map('n', '<S-Tab>', ':bprevious<CR>', opts)
+
+vim.keymap.del('i', '<Tab>')
 
 -- Splitting Windows
 map('n', '<leader>sv', ':vsplit<CR>', opts)
@@ -87,7 +89,6 @@ vim.keymap.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { desc = 
 vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', { desc = 'Go to definition' })
 vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', { desc = 'Go to references' })
 vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { desc = 'Show hover documentation' })
-vim.keymap.set('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<cr>', { desc = 'Code action' })
 vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', { desc = 'Format code' })
 vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { desc = 'Go to declaration' })
 vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { desc = 'Go to implementation' })
@@ -100,10 +101,15 @@ vim.keymap.set('n', '<Esc>', function()
   end
 end, { noremap = true, silent = true })
 
-local opts = { noremap = true, silent = true }
-vim.keymap.set('n', '<C-j>', '<Cmd>Lspsaga diagnostic_jump_next<CR>', opts)
-vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', opts)
-vim.keymap.set('n', 'gd', '<Cmd>Lspsaga lsp_finder<CR>', opts)
-vim.keymap.set('i', '<C-k>', '<Cmd>Lspsaga signature_help<CR>', opts)
-vim.keymap.set('n', 'gp', '<Cmd>Lspsaga preview_definition<CR>', opts)
-vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', opts)
+local lspopts = { noremap = true, silent = true }
+vim.keymap.set('n', '<C-j>', '<Cmd>Lspsaga diagnostic_jump_next<CR>', lspopts)
+vim.keymap.set('n', 'K', '<Cmd>Lspsaga hover_doc<CR>', lspopts)
+vim.keymap.set('n', 'gd', '<Cmd>Lspsaga lsp_finder<CR>', lspopts)
+vim.keymap.set('i', '<C-k>', '<Cmd>Lspsaga signature_help<CR>', lspopts)
+vim.keymap.set('n', 'gp', '<Cmd>Lspsaga preview_definition<CR>', lspopts)
+vim.keymap.set('n', 'gr', '<Cmd>Lspsaga rename<CR>', lspopts)
+
+vim.keymap.set({ 'n', 'x' }, '<leader>a', '<cmd>lua require("fastaction").code_action()<CR>', { buffer = bufnr })
+
+vim.keymap.set({ 'n', 'x' }, '<leader>a', '<cmd>lua require("fastaction").code_action()<CR>', { buffer = bufnr })
+vim.keymap.set('n', '<leader>ca', '<cmd>lua require("fastaction").code_action()<CR>', { desc = 'Code action' })

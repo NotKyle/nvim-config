@@ -1,4 +1,5 @@
 local stubs = {
+  'random',
   'apache',
   'bcmath',
   'bz2',

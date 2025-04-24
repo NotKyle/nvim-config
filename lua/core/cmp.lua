@@ -38,7 +38,6 @@ blink.setup {
 
     ['<Tab>'] = {
       function(cmp, fallback)
-        -- Protect everything in a pcall
         local ok = pcall(function()
           local nes = vim.b[vim.api.nvim_get_current_buf()].nes_state
 
@@ -58,17 +57,14 @@ blink.setup {
             return
           end
 
-          -- Use fallback if provided
           if fallback then
             fallback()
-          else
-            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
           end
         end)
 
         if not ok then
-          -- Gracefully fallback to a Tab keystroke if something fails
-          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'n', false)
+          -- Safe fallback if all else fails
+          vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, false, true), 'i', false)
         end
       end,
       'snippet_forward',
@@ -76,7 +72,6 @@ blink.setup {
     },
   },
 }
-
 -- Register optional sources if using
 -- require('blink.sources.lsp').register()
 -- require('blink.sources.snippet').register()

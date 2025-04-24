@@ -436,9 +436,9 @@ return {
     init = function()
       vim.g.copilot_nes_debounce = 25
       vim.lsp.enable 'copilot'
-      vim.keymap.set('n', '<tab>', function()
-        require('copilot-lsp.nes').apply_pending_nes()
-      end)
+      -- vim.keymap.set('n', '<tab>', function()
+      --   require('copilot-lsp.nes').apply_pending_nes()
+      -- end)
     end,
   },
   {
@@ -446,5 +446,10 @@ return {
     dependencies = {
       'nvim-lua/plenary.nvim',
     },
+  },
+  {
+    'Chaitanyabsprip/fastaction.nvim',
+    ---@type FastActionConfig
+    opts = {},
   },
 }
