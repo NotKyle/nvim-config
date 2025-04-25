@@ -437,9 +437,6 @@ return {
     init = function()
       vim.g.copilot_nes_debounce = 25
       vim.lsp.enable 'copilot'
-      -- vim.keymap.set('n', '<tab>', function()
-      --   require('copilot-lsp.nes').apply_pending_nes()
-      -- end)
     end,
   },
   {
@@ -454,5 +451,50 @@ return {
     opts = {
       dismiss_keys = { 'j', 'k', '<c-c>', 'q', '<esc>' },
     },
+  },
+  {
+    'tzachar/local-highlight.nvim',
+    config = function()
+      require('local-highlight').setup {
+        animate = {
+          enabled = false,
+          timeout = 100,
+          easing = 'linear',
+        },
+      }
+    end,
+  },
+  {
+    'kwkarlwang/bufresize.nvim',
+  },
+  {
+    'tomasky/bookmarks.nvim',
+    event = 'VimEnter',
+    config = function()
+      local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+      local bookmarks_dir = vim.fn.stdpath 'data' .. '/bookmarks'
+      vim.fn.mkdir(bookmarks_dir, 'p') -- Ensure the directory exists
+
+      require('bookmarks').setup {
+        save_file = bookmarks_dir .. '/' .. project_name .. '.json',
+        keywords = {
+          ['@t'] = '☑️ ',
+          ['@w'] = '⚠️ ',
+          ['@f'] = '⛏ ',
+          ['@n'] = ' ',
+        },
+        on_attach = function(bufnr)
+          local bm = require 'bookmarks'
+          local map = vim.keymap.set
+          map('n', 'mm', bm.bookmark_toggle)
+          map('n', 'mi', bm.bookmark_ann)
+          map('n', 'mc', bm.bookmark_clean)
+          map('n', 'mn', bm.bookmark_next)
+          map('n', 'mp', bm.bookmark_prev)
+          map('n', 'ml', bm.bookmark_list)
+          map('n', 'mx', bm.bookmark_clear_all)
+        end,
+      }
+    end,
   },
 }

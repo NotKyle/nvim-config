@@ -89,9 +89,10 @@ vim.keymap.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { desc = 
 vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', { desc = 'Go to definition' })
 vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', { desc = 'Go to references' })
 vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { desc = 'Show hover documentation' })
-vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', { desc = 'Format code' })
 vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { desc = 'Go to declaration' })
 vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { desc = 'Go to implementation' })
+
+-- vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', { desc = 'Format code' })
 
 vim.keymap.set('n', '<Esc>', function()
   if vim.v.hlsearch == 1 then
@@ -115,3 +116,27 @@ vim.keymap.set({ 'n', 'x' }, '<leader>a', '<cmd>lua require("fastaction").code_a
 
 vim.keymap.set({ 'n', 'x' }, '<leader>a', '<cmd>lua require("fastaction").code_action()<CR>', { buffer = bufnr })
 vim.keymap.set('n', '<leader>ca', '<cmd>lua require("fastaction").code_action()<CR>', { desc = 'Code action' })
+vim.keymap.set('n', '<leader>f', '*N', { desc = 'Search word under cursor (stay on current match)' })
+
+-- Diagnostics
+vim.keymap.set('n', '<leader>dl', function()
+  local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local diagnostics = vim.diagnostic.get(0, { lnum = line })
+
+  for _, d in ipairs(diagnostics) do
+    if d.col > col then
+      vim.api.nvim_win_set_cursor(0, { line + 1, d.col })
+      return
+    end
+  end
+  print 'No next diagnostic on this line'
+end, { desc = 'Next diagnostic on line' })
+
+vim.keymap.set('n', '<leader>dn', function()
+  vim.diagnostic.goto_next()
+end, {})
+
+vim.keymap.set('n', '<leader>dp', function()
+  vim.diagnostic.goto_prev()
+end, {})

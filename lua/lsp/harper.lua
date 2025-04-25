@@ -18,6 +18,7 @@ return function(lspconfig)
           Spaces = true,
           Matcher = true,
           CorrectNumberSuffix = true,
+          ToDoHyphen = false,
         },
         codeActions = {
           ForceStable = false,

@@ -36,8 +36,11 @@ local function highlight_yank()
 end
 
 local function auto_resize_splits()
-  api.nvim_create_autocmd('VimResized', {
-    command = 'wincmd =',
+  -- Resize all splits equally when the Neovim window is resized
+  vim.api.nvim_create_autocmd('VimResized', {
+    callback = function()
+      vim.cmd 'tabdo wincmd ='
+    end,
   })
 end
 
