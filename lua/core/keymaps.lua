@@ -135,7 +135,8 @@ end, { desc = 'Next diagnostic on line' })
 
 vim.keymap.set('n', '<leader>dn', function()
   vim.diagnostic.goto_next()
-end, {})
+  require('fastaction').code_action()
+end, { desc = 'Next diagnostic + code action' })
 
 vim.keymap.set('n', '<leader>dp', function()
   vim.diagnostic.goto_prev()
