@@ -28,10 +28,12 @@ require('mason-tool-installer').setup {
 local lspconfig = require 'lspconfig'
 
 -- Automatically set up all installed servers
-require('mason-lspconfig').setup_handlers {
-  function(server_name)
-    lspconfig[server_name].setup {}
-  end,
+require('mason-lspconfig').setup {
+  handlers = {
+    function(server_name)
+      lspconfig[server_name].setup {}
+    end,
+  },
 }
 
 vim.api.nvim_set_hl(0, 'LspInlayHint', {

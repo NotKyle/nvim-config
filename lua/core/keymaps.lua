@@ -141,3 +141,35 @@ end, { desc = 'Next diagnostic + code action' })
 vim.keymap.set('n', '<leader>dp', function()
   vim.diagnostic.goto_prev()
 end, {})
+
+vim.keymap.set('n', '<leader>ci', function()
+  local pairs = { ['('] = ')', ['['] = ']', ['{'] = '}', ['<'] = '>', ['"'] = '"', ["'"] = "'", ['`'] = '`' }
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line = vim.api.nvim_get_current_line()
+
+  local open_idx, open_char
+  for i = col, 1, -1 do
+    local c = line:sub(i, i)
+    if pairs[c] then
+      open_idx = i
+      open_char = c
+      break
+    end
+  end
+
+  if not open_idx then
+    vim.cmd 'normal! ciw'
+    return
+  end
+
+  local close_char = pairs[open_char]
+  local close_idx = line:find(vim.pesc(close_char), open_idx + 1)
+
+  if close_idx then
+    -- Move cursor to the opening character
+    vim.api.nvim_win_set_cursor(0, { row, open_idx - 1 })
+    vim.cmd('normal! ci' .. open_char)
+  else
+    vim.cmd 'normal! ciw'
+  end
+end, { desc = 'Change inside nearest surrounding pair' })
