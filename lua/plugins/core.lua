@@ -514,4 +514,11 @@ return {
     ---@type render.md.UserConfig
     opts = {},
   },
+  {
+    'olrtg/nvim-emmet',
+    enabled = false,
+    config = function()
+      vim.keymap.set({ 'n', 'v', 'i' }, '<C-e>', require('nvim-emmet').wrap_with_abbreviation)
+    end,
+  },
 }
