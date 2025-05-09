@@ -32,6 +32,14 @@ return {
 
   -- Noice (UI)
   {
+    'rcarriga/nvim-notify',
+    config = function()
+      require('notify').setup {
+        background_colour = '#000000', -- Solid black background for notify popups
+      }
+    end,
+  },
+  {
     'folke/noice.nvim',
     event = 'VeryLazy',
     dependencies = {
@@ -50,7 +58,7 @@ return {
 
         -- Filter noisy notify messages
         routes = {
-          -- Suppress "No information available" and other common noise
+          -- Suppress common noisy notifications
           {
             filter = {
               event = 'notify',
@@ -68,6 +76,26 @@ return {
                 { find = 'successfully' },
                 { find = 'Already installed' },
               },
+            },
+            opts = { skip = true },
+          },
+
+          -- Suppress "written" messages from :w
+          {
+            filter = {
+              event = 'msg_show',
+              kind = '',
+              find = 'written',
+            },
+            opts = { skip = true },
+          },
+
+          -- Suppress yank messages
+          {
+            filter = {
+              event = 'msg_show',
+              kind = '',
+              find = 'yanked',
             },
             opts = { skip = true },
           },
