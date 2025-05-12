@@ -180,13 +180,45 @@ local function setup_project_root()
 end
 
 -- Lua function for statusline
-function setupMacroMode()
+local function setupMacroMode()
   local reg = vim.fn.reg_recording()
   if reg ~= '' then
     return 'Recording @' .. reg
   end
   return ''
 end
+
+local function create_eslint_file()
+  local eslint_config = vim.fn.expand '~/.config/eslint.config.js'
+  local eslint_config_dest = vim.fn.getcwd() .. '/eslint.config.js'
+
+  print('Source: ' .. eslint_config)
+  print('Destination: ' .. eslint_config_dest)
+
+  if vim.fn.filereadable(eslint_config_dest) == 0 then
+    local file = io.open(eslint_config, 'r')
+    if file then
+      local content = file:read '*a'
+      file:close()
+
+      local new_file = io.open(eslint_config_dest, 'w')
+      if new_file then
+        new_file:write(content)
+        new_file:close()
+        print '✅ Created eslint.config.js in current directory.'
+      else
+        print '❌ Failed to create eslint.config.js: check permissions.'
+      end
+    else
+      print('❌ Failed to read ESLint config file: ' .. eslint_config)
+    end
+  else
+    print 'ℹ️ ESLint config already exists in project.'
+  end
+end
+
+-- Create new command to create ESLint config
+vim.api.nvim_create_user_command('CreateESLintConfig', create_eslint_file, {})
 
 local function setup_autocmds()
   restore_cursor_position()
