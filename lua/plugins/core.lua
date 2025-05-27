@@ -447,7 +447,7 @@ return {
   {
     'nvimdev/lspsaga.nvim',
     event = 'LspAttach',
-    enabled = false,
+    enabled = true,
     config = function()
       require('lspsaga').setup {}
     end,
@@ -547,6 +547,27 @@ return {
     enabled = false,
     config = function()
       vim.keymap.set({ 'n', 'v', 'i' }, '<C-e>', require('nvim-emmet').wrap_with_abbreviation)
+    end,
+  },
+  {
+    'xiyaowong/transparent.nvim',
+  },
+  {
+    'VidocqH/lsp-lens.nvim',
+    config = function()
+      require('lsp-lens').setup {
+        enable = true,
+        include_declaration = false, -- Reference include declaration
+        sections = { -- Enable / Disable specific request, formatter example looks 'Format Requests'
+          definition = false,
+          references = true,
+          implements = true,
+          git_authors = true,
+        },
+        ignore_filetype = {
+          'prisma',
+        },
+      }
     end,
   },
 }

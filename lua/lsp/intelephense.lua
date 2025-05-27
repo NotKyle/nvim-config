@@ -91,9 +91,7 @@ return function(lspconfig)
         environment = {
           includePaths = {
             'vendor',
-            'web/wp',
-            'web/wp-content/plugins',
-            'web/wp-content/themes/your-theme/inc',
+            'public/',
           },
         },
         files = {

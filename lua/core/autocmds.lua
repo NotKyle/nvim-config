@@ -69,6 +69,13 @@ local function setup_lsp_autocmds()
     end,
   })
 
+  -- Show errors and warnings in a floating window
+  -- vim.api.nvim_create_autocmd('CursorHold', {
+  --   callback = function()
+  --     vim.diagnostic.open_float(nil, { focusable = false, source = 'if_many' })
+  --   end,
+  -- })
+
   --https://www.reddit.com/r/neovim/comments/1jpbc7s/disable_virtual_text_if_there_is_diagnostic_in/
   local virtual_lines_change = true
 
@@ -220,6 +227,14 @@ end
 -- Create new command to create ESLint config
 vim.api.nvim_create_user_command('CreateESLintConfig', create_eslint_file, {})
 
+local function bufferhandling()
+  vim.api.nvim_create_autocmd('BufHidden', {
+    callback = function(args)
+      vim.api.nvim_buf_delete(args.buf, { force = true })
+    end,
+  })
+end
+
 local function setup_autocmds()
   restore_cursor_position()
   remove_trailing_whitespace()
@@ -229,6 +244,7 @@ local function setup_autocmds()
   setup_terminal_autocmds()
   setup_project_root()
   setupMacroMode()
+  -- bufferhandling()
 end
 
 setup_autocmds()
