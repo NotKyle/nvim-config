@@ -160,19 +160,19 @@ vim.keymap.set('n', '<leader>ca', '<cmd>lua require("fastaction").code_action()<
 vim.keymap.set('n', '<leader>f', '*N', { desc = 'Search word under cursor (stay on current match)' })
 
 -- Diagnostics
-vim.keymap.set('n', '<leader>dl', function()
-  local line = vim.api.nvim_win_get_cursor(0)[1] - 1
-  local col = vim.api.nvim_win_get_cursor(0)[2]
-  local diagnostics = vim.diagnostic.get(0, { lnum = line })
-
-  for _, d in ipairs(diagnostics) do
-    if d.col > col then
-      vim.api.nvim_win_set_cursor(0, { line + 1, d.col })
-      return
-    end
-  end
-  print 'No next diagnostic on this line'
-end, { desc = 'Next diagnostic on line' })
+-- vim.keymap.set('n', '<leader>dl', function()
+--   local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+--   local col = vim.api.nvim_win_get_cursor(0)[2]
+--   local diagnostics = vim.diagnostic.get(0, { lnum = line })
+--
+--   for _, d in ipairs(diagnostics) do
+--     if d.col > col then
+--       vim.api.nvim_win_set_cursor(0, { line + 1, d.col })
+--       return
+--     end
+--   end
+--   print 'No next diagnostic on this line'
+-- end, { desc = 'Next diagnostic on line' })
 
 vim.keymap.set('n', '<leader>dn', function()
   vim.diagnostic.goto_next()
@@ -214,3 +214,35 @@ vim.keymap.set('n', '<leader>ci', function()
     vim.cmd 'normal! ciw'
   end
 end, { desc = 'Change inside nearest surrounding pair' })
+
+vim.keymap.set('n', '<leader>,', 'mzA,<Esc>`z', { desc = 'add comma to end of line' })
+vim.keymap.set('n', '<leader>;', 'mzA;<Esc>`z', { desc = 'add semicolon to end of line' })
+
+-- Harpoon
+local harpoon = require 'harpoon'
+
+-- REQUIRED
+harpoon:setup()
+-- REQUIRED
+
+vim.keymap.set('n', '<leader>a', function()
+  harpoon:list():add()
+end)
+
+vim.keymap.set('n', '<C-e>', function()
+  harpoon.ui:toggle_quick_menu(harpoon:list())
+end)
+
+for i = 1, 4, 1 do
+  vim.keymap.set('n', '<leader>' .. i, function()
+    harpoon:list():select(i)
+  end)
+end
+
+-- Toggle previous & next buffers stored within Harpoon list
+vim.keymap.set('n', '<C-S-P>', function()
+  harpoon:list():prev()
+end)
+vim.keymap.set('n', '<C-S-N>', function()
+  harpoon:list():next()
+end)

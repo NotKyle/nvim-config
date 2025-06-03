@@ -48,33 +48,32 @@ return {
     },
     config = function()
       require('noice').setup {
-        -- Turn off UI extras like LSP popups and virtual text
+        -- Turn off UI extras for LSP
         lsp = {
-          progress = { enabled = true },
-          signature = { enabled = true },
-          hover = { enabled = true },
-          message = { enabled = true },
+          progress = { enabled = false }, -- Turn off LSP progress
+          signature = { enabled = false }, -- Turn off signature help
+          hover = { enabled = false }, -- Turn off hover
+          message = { enabled = false }, -- Turn off LSP messages
         },
 
-        -- Filter noisy notify messages
+        -- Filter noisy messages even more aggressively
         routes = {
-          -- Suppress common noisy notifications
+          -- Suppress generic LSP messages
           {
-            filter = {
-              event = 'notify',
-              find = 'No information available',
-            },
+            filter = { event = 'lsp' },
             opts = { skip = true },
           },
+
+          -- Suppress common notify popups
           {
             filter = {
               event = 'notify',
-              min_height = 1,
               any = {
                 { find = 'written' },
                 { find = 'change' },
                 { find = 'successfully' },
                 { find = 'Already installed' },
+                { find = 'No information available' },
               },
             },
             opts = { skip = true },
@@ -99,20 +98,30 @@ return {
             },
             opts = { skip = true },
           },
+
+          -- Suppress search hit bottom/top messages
+          {
+            filter = {
+              event = 'msg_show',
+              kind = '',
+              find = 'search hit',
+            },
+            opts = { skip = true },
+          },
         },
 
-        -- Show only errors/warnings
+        -- Only show WARN and ERROR level notifications
         notify = {
           enabled = true,
-          view = 'mini', -- or "notify" if you use `nvim-notify`
-          level = vim.log.levels.WARN, -- Only WARN and ERROR
+          view = 'mini',
+          level = vim.log.levels.WARN,
         },
 
-        -- UI tweaks (optional)
+        -- UI tweaks (feel free to tweak further!)
         presets = {
-          bottom_search = true,
-          command_palette = true,
-          long_message_to_split = true,
+          bottom_search = false,
+          command_palette = false,
+          long_message_to_split = false,
           inc_rename = false,
           lsp_doc_border = false,
         },
@@ -475,10 +484,12 @@ return {
   },
   {
     'Chaitanyabsprip/fastaction.nvim',
-    ---@type FastActionConfig
-    opts = {
-      dismiss_keys = { 'j', 'k', '<c-c>', 'q', '<esc>' },
-    },
+    config = function()
+      require('fastaction').setup {
+        keys = 'abcdefghijklmnopqrstuvwxyz1234567890', -- Expanded to avoid missing key errors
+        max_items = 20,
+      }
+    end,
   },
   {
     'tzachar/local-highlight.nvim',
@@ -562,12 +573,18 @@ return {
           definition = false,
           references = true,
           implements = true,
-          git_authors = true,
+          git_authors = false,
         },
         ignore_filetype = {
           'prisma',
         },
       }
     end,
+  },
+
+  {
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
   },
 }
