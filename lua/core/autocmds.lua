@@ -235,6 +235,15 @@ local function bufferhandling()
   })
 end
 
+local bladeGrp = vim.api.nvim_create_augroup('BladeFiltypeRelated', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+  pattern = '*.blade.php',
+  group = bladeGrp,
+  callback = function()
+    vim.bo.filetype = 'blade'
+  end,
+})
+
 local function setup_autocmds()
   restore_cursor_position()
   remove_trailing_whitespace()

@@ -10,7 +10,7 @@ return function(lspconfig)
         'javascript',
         'typescript',
         'lua',
-        -- 'php',
+        'php',
         'python',
         'go',
         'rust',

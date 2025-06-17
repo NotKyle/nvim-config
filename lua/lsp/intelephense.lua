@@ -96,7 +96,7 @@ return function(lspconfig)
         },
         files = {
           maxSize = 5000000,
-          associations = { '**/*.php' },
+          associations = { '**/*.php', '**/*.blade.php' },
           exclude = {}, -- don't exclude anything
         },
         format = {

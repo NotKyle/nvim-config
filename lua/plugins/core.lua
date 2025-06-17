@@ -150,6 +150,17 @@ return {
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     config = function()
+      local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
+      parser_config.blade = {
+        install_info = {
+          url = 'https://github.com/EmranMR/tree-sitter-blade',
+          files = { 'src/parser.c' },
+          branch = 'main',
+          -- revision = '26b5b8f7fa1ff3f3566f210f3cbe910ac3ef0edd'
+        },
+        filetype = 'blade',
+      }
+
       require('nvim-treesitter.configs').setup {
         ensure_installed = {
           'lua',
@@ -586,5 +597,28 @@ return {
     'ThePrimeagen/harpoon',
     branch = 'harpoon2',
     dependencies = { 'nvim-lua/plenary.nvim' },
+  },
+  {
+    'iamkarasik/sonarqube.nvim',
+    config = function()
+      require('sonarqube').setup {}
+    end,
+    enabled = false,
+  },
+  {
+    'SyedAsimShah1/quick-todo.nvim',
+    config = function()
+      require('quick-todo').setup {
+        keys = {
+          open = '<leader>T',
+        },
+        window = {
+          height = 0.5,
+          width = 0.5,
+          winblend = 0,
+          border = 'rounded',
+        },
+      }
+    end,
   },
 }

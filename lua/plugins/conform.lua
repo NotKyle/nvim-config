@@ -17,6 +17,7 @@ return {
         css = { 'prettier' },
         json = { 'prettier' },
         sh = { 'shfmt' },
+        blade = { 'blade-formatter' },
       },
     }
   end,
