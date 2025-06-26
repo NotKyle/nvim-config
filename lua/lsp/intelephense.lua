@@ -90,7 +90,8 @@ return function(lspconfig)
         stubs = stubs,
         environment = {
           includePaths = {
-            'vendor',
+            '~/.config/nvim/lua/vendor/php-stubs/wordpress-stubs',
+            'vendor/',
             'public/',
           },
         },
