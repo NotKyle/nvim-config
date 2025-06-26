@@ -1,5 +1,5 @@
 {
-  "dependencies": {
-    "gsap": "^3.12.7"
+  "devDependencies": {
+    "eslint": "^9.24.0"
   }
 }
