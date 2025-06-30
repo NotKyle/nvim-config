@@ -113,10 +113,10 @@ if not legacy_lsp then
   vim.keymap.set('n', 'gr', '<cmd>Lspsaga finder<CR>', { desc = 'LSP Finder', silent = true })
 
   -- Rename
-  vim.keymap.set('n', '<leader>cr', '<cmd>Lspsaga rename<CR>', { desc = 'Rename Symbol', silent = true })
+  -- vim.keymap.set('n', '<leader>cr', '<cmd>Lspsaga rename<CR>', { desc = 'Rename Symbol', silent = true })
 
   -- Code Action
-  vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<cmd>Lspsaga code_action<CR>', { desc = 'Code Action', silent = true })
+  -- vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<cmd>Lspsaga code_action<CR>', { desc = 'Code Action', silent = true })
 
   -- Diagnostic Jump
   vim.keymap.set('n', '[d', '<cmd>Lspsaga diagnostic_jump_prev<CR>', { desc = 'Previous Diagnostic', silent = true })
@@ -246,3 +246,9 @@ end)
 vim.keymap.set('n', '<C-S-N>', function()
   harpoon:list():next()
 end)
+
+-- vim.keymap.set({ 'n', 'x' }, '<leader>ca', function()
+--   require('tiny-code-action').code_action()
+-- end, { noremap = true, silent = true })
+
+vim.keymap.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { desc = 'Rename symbol' })

@@ -6,21 +6,19 @@ require('mason').setup()
 -- Setup Mason LSP extension (installs LSPs but does not configure them!)
 require('mason-lspconfig').setup {
   ensure_installed = {
-    'somesass_ls',
-    -- 'cssmodules_ls',
     'intelephense',
-    'emmet_language_server',
-    'eslint',
     'harper_ls',
-    'html',
     'htmx',
-    'lua_ls',
-    'tailwindcss',
-    'ts_ls',
-    'glsl_analyzer',
+    -- your others
   },
   automatic_installation = false,
-  -- handlers = {}, -- 🛑 disables auto-setup
+  handlers = {
+    -- no-op handler disables auto setup for these servers
+    intelephense = function() end,
+    harper_ls = function() end,
+    htmx = function() end,
+    -- add others you set up manually here
+  },
 }
 
 -- Setup tools (like stylus)

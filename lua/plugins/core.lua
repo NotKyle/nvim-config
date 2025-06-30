@@ -388,7 +388,7 @@ return {
 
         -- Disable modes highlights in specified filetypes
         -- Please PR commonly ignored filetypes
-        ignore_filetypes = { 'NvimTree', 'TelescopePrompt' },
+        ignore = { 'NvimTree', 'TelescopePrompt' },
       }
     end,
   },
@@ -586,7 +586,7 @@ return {
           implements = true,
           git_authors = false,
         },
-        ignore_filetype = {
+        ignore = {
           'prisma',
         },
       }
@@ -619,6 +619,71 @@ return {
           border = 'rounded',
         },
       }
+    end,
+  },
+
+  {
+    'rachartier/tiny-code-action.nvim',
+    dependencies = {
+      { 'nvim-lua/plenary.nvim' },
+      {
+        'folke/snacks.nvim',
+        opts = {
+          terminal = {},
+        },
+      },
+    },
+    event = 'LspAttach',
+    opts = {
+      backend = 'vim',
+
+      picker = 'buffer', -- must be 'buffer' to use auto_preview and hotkeys
+
+      opts = {
+        auto_preview = true,
+        hotkeys = true,
+        hotkeys_mode = 'text_diff_based',
+      },
+
+      -- Options specific to the buffer picker
+      backend_opts = {
+        delta = {
+          header_lines_to_remove = 4,
+          args = { '--line-numbers' },
+        },
+        difftastic = {
+          header_lines_to_remove = 1,
+          args = {
+            '--color=always',
+            '--display=inline',
+            '--syntax-highlight=on',
+          },
+        },
+        diffsofancy = {
+          header_lines_to_remove = 4,
+        },
+      },
+      signs = {
+        quickfix = { '', { link = 'DiagnosticWarning' } },
+        others = { '', { link = 'DiagnosticWarning' } },
+        refactor = { '', { link = 'DiagnosticInfo' } },
+        ['refactor.move'] = { '󰪹', { link = 'DiagnosticInfo' } },
+        ['refactor.extract'] = { '', { link = 'DiagnosticError' } },
+        ['source.organizeImports'] = { '', { link = 'DiagnosticWarning' } },
+        ['source.fixAll'] = { '󰃢', { link = 'DiagnosticError' } },
+        ['source'] = { '', { link = 'DiagnosticError' } },
+        ['rename'] = { '󰑕', { link = 'DiagnosticWarning' } },
+        ['codeAction'] = { '', { link = 'DiagnosticWarning' } },
+      },
+    },
+  },
+  {
+    'rachartier/tiny-inline-diagnostic.nvim',
+    event = 'VeryLazy', -- Or `LspAttach`
+    priority = 1000, -- needs to be loaded in first
+    config = function()
+      require('tiny-inline-diagnostic').setup()
+      vim.diagnostic.config { virtual_text = false } -- Only if needed in your configuration, if you already have native LSP diagnostics
     end,
   },
 }
