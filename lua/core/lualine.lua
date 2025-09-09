@@ -17,7 +17,7 @@ function lualine()
 
   require('lualine').setup {
     options = {
-      theme = 'catppuccin-frappe',
+      theme = 'rose-pine',
     },
     sections = {
       lualine_c = {

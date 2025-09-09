@@ -129,6 +129,13 @@ return {
     end,
   },
 
+  {
+    'tpope/vim-surround',
+    dependencies = {
+      'tpope/vim-repeat',
+    },
+  },
+
   -- CMP (completion)
   {
     'Saghen/blink.cmp',
@@ -156,7 +163,6 @@ return {
           url = 'https://github.com/EmranMR/tree-sitter-blade',
           files = { 'src/parser.c' },
           branch = 'main',
-          -- revision = '26b5b8f7fa1ff3f3566f210f3cbe910ac3ef0edd'
         },
         filetype = 'blade',
       }
@@ -226,14 +232,14 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
     config = true,
   },
-  {
-    'kdheepak/lazygit.nvim',
-    cmd = 'LazyGit',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    config = function()
-      vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
-    end,
-  },
+  -- {
+  --   'kdheepak/lazygit.nvim',
+  --   cmd = 'LazyGit',
+  --   dependencies = { 'nvim-lua/plenary.nvim' },
+  --   config = function()
+  --     vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
+  --   end,
+  -- },
   {
     'luckasRanarison/tailwind-tools.nvim',
     name = 'tailwind-tools',
@@ -283,10 +289,11 @@ return {
       },
     },
   },
-  {
-    'zimeg/newsflash.nvim',
-    event = 'VeryLazy',
-  },
+  -- Prioritise window
+  -- {
+  --   'zimeg/newsflash.nvim',
+  --   event = 'VeryLazy',
+  -- },
   {
     'nvim-lualine/lualine.nvim',
   },
@@ -329,38 +336,39 @@ return {
       }
     end,
   },
-  {
-    'jinh0/eyeliner.nvim',
-    config = function()
-      require('eyeliner').setup {
-        -- show highlights only after keypress
-        highlight_on_key = false,
-
-        -- dim all other characters if set to true (recommended!)
-        dim = true,
-
-        -- set the maximum number of characters eyeliner.nvim will check from
-        -- your current cursor position; this is useful if you are dealing with
-        -- large files: see https://github.com/jinh0/eyeliner.nvim/issues/41
-        max_length = 9999,
-
-        -- filetypes for which eyeliner should be disabled;
-        -- e.g., to disable on help files:
-        -- disabled_filetypes = {"help"}
-        disabled_filetypes = {},
-
-        -- buftypes for which eyeliner should be disabled
-        -- e.g., disabled_buftypes = {"nofile"}
-        disabled_buftypes = {},
-
-        -- add eyeliner to f/F/t/T keymaps;
-        -- see section on advanced configuration for more information
-        default_keymaps = true,
-      }
-    end,
-  },
+  -- {
+  --   'jinh0/eyeliner.nvim',
+  --   config = function()
+  --     require('eyeliner').setup {
+  --       -- show highlights only after keypress
+  --       highlight_on_key = false,
+  --
+  --       -- dim all other characters if set to true (recommended!)
+  --       dim = true,
+  --
+  --       -- set the maximum number of characters eyeliner.nvim will check from
+  --       -- your current cursor position; this is useful if you are dealing with
+  --       -- large files: see https://github.com/jinh0/eyeliner.nvim/issues/41
+  --       max_length = 9999,
+  --
+  --       -- filetypes for which eyeliner should be disabled;
+  --       -- e.g., to disable on help files:
+  --       -- disabled_filetypes = {"help"}
+  --       disabled_filetypes = {},
+  --
+  --       -- buftypes for which eyeliner should be disabled
+  --       -- e.g., disabled_buftypes = {"nofile"}
+  --       disabled_buftypes = {},
+  --
+  --       -- add eyeliner to f/F/t/T keymaps;
+  --       -- see section on advanced configuration for more information
+  --       default_keymaps = true,
+  --     }
+  --   end,
+  -- },
   {
     'mvllow/modes.nvim',
+    enabled = false,
     config = function()
       require('modes').setup {
         colors = {
@@ -487,12 +495,13 @@ return {
       vim.lsp.enable 'copilot'
     end,
   },
-  {
-    'Exafunction/windsurf.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-  },
+  -- {
+  --   'Exafunction/windsurf.nvim',
+  --   enabled = false,
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --   },
+  -- },
   {
     'Chaitanyabsprip/fastaction.nvim',
     config = function()
@@ -517,36 +526,37 @@ return {
   {
     'kwkarlwang/bufresize.nvim',
   },
-  {
-    'tomasky/bookmarks.nvim',
-    event = 'VimEnter',
-    config = function()
-      local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-      local bookmarks_dir = vim.fn.stdpath 'data' .. '/bookmarks'
-      vim.fn.mkdir(bookmarks_dir, 'p') -- Ensure the directory exists
-
-      require('bookmarks').setup {
-        save_file = bookmarks_dir .. '/' .. project_name .. '.json',
-        keywords = {
-          ['@t'] = '☑️ ',
-          ['@w'] = '⚠️ ',
-          ['@f'] = '⛏ ',
-          ['@n'] = ' ',
-        },
-        on_attach = function(bufnr)
-          local bm = require 'bookmarks'
-          local map = vim.keymap.set
-          map('n', 'mm', bm.bookmark_toggle)
-          map('n', 'mi', bm.bookmark_ann)
-          map('n', 'mc', bm.bookmark_clean)
-          map('n', 'mn', bm.bookmark_next)
-          map('n', 'mp', bm.bookmark_prev)
-          map('n', 'ml', bm.bookmark_list)
-          map('n', 'mx', bm.bookmark_clear_all)
-        end,
-      }
-    end,
-  },
+  -- {
+  --   'tomasky/bookmarks.nvim',
+  --   enabled = false,
+  --   event = 'VimEnter',
+  --   config = function()
+  --     local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
+  --     local bookmarks_dir = vim.fn.stdpath 'data' .. '/bookmarks'
+  --     vim.fn.mkdir(bookmarks_dir, 'p') -- Ensure the directory exists
+  --
+  --     require('bookmarks').setup {
+  --       save_file = bookmarks_dir .. '/' .. project_name .. '.json',
+  --       keywords = {
+  --         ['@t'] = '☑️ ',
+  --         ['@w'] = '⚠️ ',
+  --         ['@f'] = '⛏ ',
+  --         ['@n'] = ' ',
+  --       },
+  --       on_attach = function(bufnr)
+  --         local bm = require 'bookmarks'
+  --         local map = vim.keymap.set
+  --         map('n', 'mm', bm.bookmark_toggle)
+  --         map('n', 'mi', bm.bookmark_ann)
+  --         map('n', 'mc', bm.bookmark_clean)
+  --         map('n', 'mn', bm.bookmark_next)
+  --         map('n', 'mp', bm.bookmark_prev)
+  --         map('n', 'ml', bm.bookmark_list)
+  --         map('n', 'mx', bm.bookmark_clear_all)
+  --       end,
+  --     }
+  --   end,
+  -- },
   {
     'f-person/git-blame.nvim',
     opts = {
@@ -563,8 +573,8 @@ return {
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.nvim' }, -- if you use the mini.nvim suite
-    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.nvim' }, -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' }, -- if you use standalone mini plugins
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
@@ -572,9 +582,9 @@ return {
   },
   {
     'olrtg/nvim-emmet',
-    enabled = false,
+    enabled = true,
     config = function()
-      vim.keymap.set({ 'n', 'v', 'i' }, '<C-e>', require('nvim-emmet').wrap_with_abbreviation)
+      vim.keymap.set({ 'n', 'v', 'i' }, '<C-y>', require('nvim-emmet').wrap_with_abbreviation)
     end,
   },
   {
@@ -604,13 +614,13 @@ return {
     branch = 'harpoon2',
     dependencies = { 'nvim-lua/plenary.nvim' },
   },
-  {
-    'iamkarasik/sonarqube.nvim',
-    config = function()
-      require('sonarqube').setup {}
-    end,
-    enabled = false,
-  },
+  -- {
+  --   'iamkarasik/sonarqube.nvim',
+  --   config = function()
+  --     require('sonarqube').setup {}
+  --   end,
+  --   enabled = false,
+  -- },
   {
     'SyedAsimShah1/quick-todo.nvim',
     config = function()
@@ -628,61 +638,61 @@ return {
     end,
   },
 
-  {
-    'rachartier/tiny-code-action.nvim',
-    dependencies = {
-      { 'nvim-lua/plenary.nvim' },
-      {
-        'folke/snacks.nvim',
-        opts = {
-          terminal = {},
-        },
-      },
-    },
-    event = 'LspAttach',
-    opts = {
-      backend = 'vim',
-
-      picker = 'buffer', -- must be 'buffer' to use auto_preview and hotkeys
-
-      opts = {
-        auto_preview = true,
-        hotkeys = true,
-        hotkeys_mode = 'text_diff_based',
-      },
-
-      -- Options specific to the buffer picker
-      backend_opts = {
-        delta = {
-          header_lines_to_remove = 4,
-          args = { '--line-numbers' },
-        },
-        difftastic = {
-          header_lines_to_remove = 1,
-          args = {
-            '--color=always',
-            '--display=inline',
-            '--syntax-highlight=on',
-          },
-        },
-        diffsofancy = {
-          header_lines_to_remove = 4,
-        },
-      },
-      signs = {
-        quickfix = { '', { link = 'DiagnosticWarning' } },
-        others = { '', { link = 'DiagnosticWarning' } },
-        refactor = { '', { link = 'DiagnosticInfo' } },
-        ['refactor.move'] = { '󰪹', { link = 'DiagnosticInfo' } },
-        ['refactor.extract'] = { '', { link = 'DiagnosticError' } },
-        ['source.organizeImports'] = { '', { link = 'DiagnosticWarning' } },
-        ['source.fixAll'] = { '󰃢', { link = 'DiagnosticError' } },
-        ['source'] = { '', { link = 'DiagnosticError' } },
-        ['rename'] = { '󰑕', { link = 'DiagnosticWarning' } },
-        ['codeAction'] = { '', { link = 'DiagnosticWarning' } },
-      },
-    },
-  },
+  -- {
+  --   'rachartier/tiny-code-action.nvim',
+  --   dependencies = {
+  --     { 'nvim-lua/plenary.nvim' },
+  --     {
+  --       'folke/snacks.nvim',
+  --       opts = {
+  --         terminal = {},
+  --       },
+  --     },
+  --   },
+  --   event = 'LspAttach',
+  --   opts = {
+  --     backend = 'vim',
+  --
+  --     picker = 'buffer', -- must be 'buffer' to use auto_preview and hotkeys
+  --
+  --     opts = {
+  --       auto_preview = true,
+  --       hotkeys = true,
+  --       hotkeys_mode = 'text_diff_based',
+  --     },
+  --
+  --     -- Options specific to the buffer picker
+  --     backend_opts = {
+  --       delta = {
+  --         header_lines_to_remove = 4,
+  --         args = { '--line-numbers' },
+  --       },
+  --       difftastic = {
+  --         header_lines_to_remove = 1,
+  --         args = {
+  --           '--color=always',
+  --           '--display=inline',
+  --           '--syntax-highlight=on',
+  --         },
+  --       },
+  --       diffsofancy = {
+  --         header_lines_to_remove = 4,
+  --       },
+  --     },
+  --     signs = {
+  --       quickfix = { '', { link = 'DiagnosticWarning' } },
+  --       others = { '', { link = 'DiagnosticWarning' } },
+  --       refactor = { '', { link = 'DiagnosticInfo' } },
+  --       ['refactor.move'] = { '󰪹', { link = 'DiagnosticInfo' } },
+  --       ['refactor.extract'] = { '', { link = 'DiagnosticError' } },
+  --       ['source.organizeImports'] = { '', { link = 'DiagnosticWarning' } },
+  --       ['source.fixAll'] = { '󰃢', { link = 'DiagnosticError' } },
+  --       ['source'] = { '', { link = 'DiagnosticError' } },
+  --       ['rename'] = { '󰑕', { link = 'DiagnosticWarning' } },
+  --       ['codeAction'] = { '', { link = 'DiagnosticWarning' } },
+  --     },
+  --   },
+  -- },
   {
     'rachartier/tiny-inline-diagnostic.nvim',
     event = 'VeryLazy', -- Or `LspAttach`
@@ -691,5 +701,28 @@ return {
       require('tiny-inline-diagnostic').setup()
       vim.diagnostic.config { virtual_text = false } -- Only if needed in your configuration, if you already have native LSP diagnostics
     end,
+  },
+  {
+    'fei6409/log-highlight.nvim',
+    config = function()
+      require('log-highlight').setup {}
+    end,
+  },
+
+  {
+    'NeogitOrg/neogit',
+    dependencies = {
+      'nvim-lua/plenary.nvim', -- required
+      'sindrets/diffview.nvim', -- optional - Diff integration
+
+      -- Only one of these is needed.
+      'nvim-telescope/telescope.nvim', -- optional
+      'ibhagwan/fzf-lua', -- optional
+      'nvim-mini/mini.pick', -- optional
+      'folke/snacks.nvim', -- optional
+    },
+  },
+  {
+    'nvim-pack/nvim-spectre',
   },
 }

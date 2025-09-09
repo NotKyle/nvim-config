@@ -78,8 +78,11 @@ map('n', '<A-k>', ':m .-2<CR>==', opts)
 vim.keymap.set('n', 'H', '<cmd>bprevious<cr>', { desc = 'Previous buffer' })
 vim.keymap.set('n', 'L', '<cmd>bnext<cr>', { desc = 'Next buffer' })
 
--- Open LazyGit
-vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
+-- Open neogit
+local neogit = require 'neogit'
+vim.keymap.set('n', '<leader>gg', function()
+  neogit.open { kind = 'split_above' }
+end, { desc = 'Open Neogit' })
 
 -- Open Yazi with <leader>e
 vim.keymap.set('n', '<leader>e', '<cmd>Yazi<cr>', { desc = 'Open Yazi' })
@@ -252,3 +255,11 @@ end)
 -- end, { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>cr', '<cmd>lua vim.lsp.buf.rename()<cr>', { desc = 'Rename symbol' })
+
+-- local newsflash = require 'newsflash'
+-- vim.keymap.set('n', '<leader>q', newsflash.toggle)
+
+-- Spectre
+vim.keymap.set('n', '<leader>sr', '<cmd>lua require("spectre").toggle()<CR>', {
+  desc = 'Toggle Spectre',
+})
