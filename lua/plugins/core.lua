@@ -1,19 +1,19 @@
 ---@diagnostic disable: undefined-doc-name
 return {
-  {
-    'neovim/nvim-lspconfig',
-  },
+  -- {
+  --   'neovim/nvim-lspconfig',
+  -- },
   -- Mason & LSP management
   {
     'williamboman/mason.nvim',
     build = ':MasonUpdate',
     config = true,
   },
-  {
-    'williamboman/mason-lspconfig.nvim',
-    dependencies = { 'mason.nvim' },
-    config = true,
-  },
+  -- {
+  --   'williamboman/mason-lspconfig.nvim',
+  --   dependencies = { 'mason.nvim' },
+  --   config = true,
+  -- },
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     config = function()

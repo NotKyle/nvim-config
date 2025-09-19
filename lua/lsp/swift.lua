@@ -1,10 +1,9 @@
-return function(lspconfig)
-  lspconfig.sourcekit.setup {
-    cmd = { 'sourcekit-lsp' }, -- ✅ correct binary for Swift
-    filetypes = { 'swift' },
-    root_dir = require('lspconfig.util').root_pattern('Package.swift', '.git'),
-    settings = {
-      -- SourceKit-LSP has limited settings; you typically configure things via Xcode project or Package.swift
-    },
-  }
-end
+return {
+  cmd = { 'sourcekit-lsp' }, -- ✅ correct binary for Swift
+  filetypes = { 'swift' },
+  -- root_dir = lspconfig.util.root_pattern('Package.swift', 'project.xcworkspace', '.git'),
+  root_dir = vim.fn.getcwd(),
+  settings = {
+    -- SourceKit-LSP has limited settings; you typically configure things via Xcode project or Package.swift
+  },
+}

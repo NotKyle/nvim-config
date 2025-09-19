@@ -1,25 +1,9 @@
-return function(lspconfig)
-  -- Attach HTML LSP
-  lspconfig.html.setup {
-    filetypes = { 'html', 'blade' },
-    init_options = {
-      configurationSection = { 'html', 'css', 'javascript' },
-      embeddedLanguages = {
-        css = true,
-        javascript = true,
-      },
-    },
-  }
-
-  -- Attach Emmet LSP
-  lspconfig.emmet_language_server.setup {
-    filetypes = { 'html', 'blade', 'css', 'scss', 'javascript', 'typescriptreact' },
-    init_options = {
-      html = {
-        options = {
-          ['bem.enabled'] = true,
-        },
-      },
-    },
-  }
-end
+return {
+  cmd = { 'blade-language-server', '--stdio' },
+  filetypes = { 'blade' },
+  root_dir = vim.fn.getcwd(),
+  -- root_dir = function(fname)
+  --   return require('lspconfig.util').find_git_ancestor(fname) or vim.loop.os.homedir()
+  -- end,
+  settings = {},
+}

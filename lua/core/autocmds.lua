@@ -254,6 +254,8 @@ local function setup_autocmds()
   setup_project_root()
   setupMacroMode()
   -- bufferhandling()
+
+  -- Disable any autosaves
 end
 
 setup_autocmds()

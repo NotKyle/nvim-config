@@ -1,9 +1,7 @@
 -- in your LSP config (e.g. inside LazyVim's lspconfig setup)
-local lspconfig = require 'lspconfig'
-local util = require 'lspconfig.util'
-
-lspconfig.glsl_analyzer.setup {
+return {
   cmd = { 'glsl_analyzer' },
   filetypes = { 'glsl', 'vert', 'frag' },
-  root_dir = util.root_pattern('.git', '.'),
+  -- root_dir = util.root_pattern('.git', '.'),
+  root_dir = vim.fn.getcwd(),
 }

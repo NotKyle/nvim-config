@@ -1,25 +1,34 @@
-local lspconfig = require 'lspconfig'
+-- local lspconfig = vim.lsp.config('*', {
+--   capabilities = {
+--     textDocument = {
+--       semanticTokens = {
+--         multilineTokenSupport = true,
+--       },
+--     },
+--   },
+--   root_markers = { '.git' },
+-- })
 
 -- Setup Mason
 require('mason').setup()
 
 -- Setup Mason LSP extension (installs LSPs but does not configure them!)
-require('mason-lspconfig').setup {
-  ensure_installed = {
-    'intelephense',
-    'harper_ls',
-    'htmx',
-    -- your others
-  },
-  automatic_installation = false,
-  handlers = {
-    -- no-op handler disables auto setup for these servers
-    intelephense = function() end,
-    harper_ls = function() end,
-    htmx = function() end,
-    -- add others you set up manually here
-  },
-}
+-- require('mason-lspconfig').setup {
+--   ensure_installed = {
+--     'intelephense',
+--     'harper_ls',
+--     'htmx',
+--     -- your others
+--   },
+--   automatic_installation = false,
+--   handlers = {
+--     -- no-op handler disables auto setup for these servers
+--     intelephense = function() end,
+--     harper_ls = function() end,
+--     htmx = function() end,
+--     -- add others you set up manually here
+--   },
+-- }
 
 -- Setup tools (like stylus)
 require('mason-tool-installer').setup {
@@ -52,16 +61,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- Load custom LSP configurations from lsp/*.lua
-local lsp_dir = vim.fn.stdpath 'config' .. '/lua/lsp'
-for _, file in ipairs(vim.fn.readdir(lsp_dir)) do
-  local name = file:gsub('%.lua$', '')
-  local ok, mod = pcall(require, 'lsp.' .. name)
-
-  if ok then
-    if type(mod) == 'function' then
-      mod(lspconfig)
-    end
-  else
-    vim.notify('LSP load error in ' .. name .. ': ' .. mod, vim.log.levels.ERROR)
-  end
-end
+-- local lsp_dir = vim.fn.stdpath 'config' .. '/lua/lsp'
+-- for _, file in ipairs(vim.fn.readdir(lsp_dir)) do
+--   local name = file:gsub('%.lua$', '')
+--   local ok, mod = pcall(require, 'lsp.' .. name)
+--
+--   if ok then
+--     if type(mod) == 'function' then
+--       mod(lspconfig)
+--     end
+--   else
+--     vim.notify('LSP load error in ' .. name .. ': ' .. mod, vim.log.levels.ERROR)
+--   end
+-- end

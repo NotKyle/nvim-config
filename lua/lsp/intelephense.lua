@@ -81,38 +81,37 @@ local stubs = {
   'genesis',
 }
 
-return function(lspconfig)
-  lspconfig.intelephense.setup {
-    root_dir = lspconfig.util.root_pattern('.git', 'composer.json', 'index.php'), -- Or your specific project root
-    init_options = {
-      licenceKey = os.getenv 'INTELEPHENSE_LICENSE',
-    },
-    settings = {
-      intelephense = {
-        stubs = stubs,
-        environment = {
-          includePaths = {
-            vim.fn.expand '~/.config/nvim/lua/vendor/php-stubs/wordpress-stubs', -- Removed redundant entry
-            -- Add cwd vendor and public directories
-            vim.fn.getcwd() .. '/vendor/',
-            vim.fn.getcwd() .. '/public/',
-            'vendor/',
-            'public/',
-          },
-        },
-        files = {
-          maxSize = 5000000,
-          associations = {
-            '**/*.php',
-            '**/*.blade.php',
-            vim.fn.expand '~/.config/nvim/lua/vendor/php-stubs/wordpress-stubs/wordpress.php',
-          },
-          exclude = {},
-        },
-        format = {
-          braces = 'k&r',
+return {
+  -- root_dir = lspconfig.util.root_pattern('.git', 'composer.json', 'index.php'), -- Or your specific project root
+  root_dir = vim.fn.getcwd(),
+  init_options = {
+    licenceKey = os.getenv 'INTELEPHENSE_LICENSE',
+  },
+  settings = {
+    intelephense = {
+      stubs = stubs,
+      environment = {
+        includePaths = {
+          vim.fn.expand '~/.config/nvim/lua/vendor/php-stubs/wordpress-stubs', -- Removed redundant entry
+          -- Add cwd vendor and public directories
+          vim.fn.getcwd() .. '/vendor/',
+          vim.fn.getcwd() .. '/public/',
+          'vendor/',
+          'public/',
         },
       },
+      files = {
+        maxSize = 5000000,
+        associations = {
+          '**/*.php',
+          '**/*.blade.php',
+          vim.fn.expand '~/.config/nvim/lua/vendor/php-stubs/wordpress-stubs/wordpress.php',
+        },
+        exclude = {},
+      },
+      format = {
+        braces = 'k&r',
+      },
     },
-  }
-end
+  },
+}
