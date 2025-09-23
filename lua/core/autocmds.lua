@@ -77,7 +77,7 @@ local function setup_lsp_autocmds()
   -- })
 
   --https://www.reddit.com/r/neovim/comments/1jpbc7s/disable_virtual_text_if_there_is_diagnostic_in/
-  local virtual_lines_change = true
+  local virtual_lines_change = false
 
   if virtual_lines_change then
     vim.diagnostic.config {
