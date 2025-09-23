@@ -1,15 +1,15 @@
 ---@diagnostic disable: undefined-global
-vim.env.PHP_CS_FIXER_IGNORE_ENV = '1'
+vim.env.PHP_CS_FIXER_IGNORE_ENV = "1"
 
 vim.opt.showtabline = 0
 vim.opt.laststatus = 0
-vim.opt.clipboard = 'unnamedplus'
+vim.opt.clipboard = "unnamedplus"
 vim.opt.showmode = false
 vim.opt.showcmd = true
 vim.opt.termguicolors = true
 vim.opt.number = true
 vim.opt.relativenumber = true
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 vim.opt.wrap = false
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -30,12 +30,12 @@ vim.opt.swapfile = false
 
 -- Backup and Undo
 vim.opt.backup = true
-vim.opt.backupdir = os.getenv 'HOME' .. '/.vim/backup//'
-vim.opt.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.opt.backupdir = os.getenv("HOME") .. "/.vim/backup//"
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
 vim.opt.undofile = true
 vim.opt.autoread = true
 
-vim.opt.iskeyword:append { '-', '@' }
+vim.opt.iskeyword:append({ "-", "@" })
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = true
@@ -43,42 +43,43 @@ vim.opt.incsearch = true
 vim.opt.timeout = true
 vim.opt.timeoutlen = 500
 vim.opt.history = 10000
-vim.opt.background = 'dark'
+vim.opt.background = "dark"
 vim.opt.list = true
 vim.opt.listchars = {
-  tab = '› ',
-  trail = '·',
-  extends = '⟩',
-  precedes = '⟨',
+	tab = "› ",
+	trail = "·",
+	extends = "⟩",
+	precedes = "⟨",
 }
 -- space = "·",
 
-vim.diagnostic.config {
-  virtual_text = false,
-  virtual_lines = false,
-  -- virtual_lines = { only_current_line = true },
-}
-vim.opt.iskeyword:append { '-', '@' }
+vim.diagnostic.config({
+	virtual_text = false,
+	virtual_lines = false,
+	-- virtual_lines = { only_current_line = true },
+})
+vim.opt.iskeyword:append({ "-", "@" })
 
-vim.cmd [[filetype plugin indent on]]
+vim.cmd([[filetype plugin indent on]])
 
-vim.cmd [[ set foldmethod=manual ]]
+vim.cmd([[ set foldmethod=manual ]])
 
-vim.cmd [[ set nohidden ]]
+vim.cmd([[ set nohidden ]])
 
-vim.o.foldcolumn = '1' -- '0' is not bad
+vim.o.foldcolumn = "1" -- '0' is not bad
 -- vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
 -- vim.o.foldmevelstart = 99
 vim.o.foldenable = false
 
-vim.opt.sessionoptions = { 'blank', 'buffers', 'curdir', 'folds', 'help', 'tabpages', 'winsize', 'winpos', 'terminal', 'localoptions' }
+vim.opt.sessionoptions =
+	{ "blank", "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos", "terminal", "localoptions" }
 vim.opt.termguicolors = true
 
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+-- vim.g.mapleader = " "
+-- vim.g.maplocalleader = " "
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
@@ -94,7 +95,7 @@ vim.opt.number = true
 -- vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
+vim.opt.mouse = "a"
 
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
@@ -104,14 +105,14 @@ vim.opt.showmode = false
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
 vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
+	vim.opt.clipboard = "unnamedplus"
 end)
 
 -- Add your custom plugin directory to runtimepath
-local custom_plugin_dir = vim.fn.expand '~/Projects/Neovim'
+local custom_plugin_dir = vim.fn.expand("~/Projects/Neovim")
 
 if vim.fn.isdirectory(custom_plugin_dir) == 1 then
-  vim.opt.runtimepath:append(custom_plugin_dir)
+	vim.opt.runtimepath:append(custom_plugin_dir)
 end
 
 -- Enable break indent
@@ -125,7 +126,7 @@ vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
 -- Keep signcolumn on by default
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = "yes"
 
 -- Decrease update time
 vim.opt.updatetime = 250
@@ -141,10 +142,10 @@ vim.opt.splitbelow = true
 --  See `:help 'list'`
 --  and `:help 'listchars'`
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 -- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
+vim.opt.inccommand = "split"
 
 -- Show which line your cursor is on
 vim.opt.cursorline = true
@@ -152,6 +153,6 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
-vim.opt.completeopt = 'menu,menuone,noinsert,popup,fuzzy'
+vim.opt.completeopt = "menu,menuone,noinsert,popup,fuzzy"
 
 return {}
