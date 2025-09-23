@@ -725,4 +725,216 @@ return {
   {
     'nvim-pack/nvim-spectre',
   },
+  {
+    'rvaccone/wind.nvim',
+    ---@type WindConfig
+    opts = {
+      windows = {
+        excluded_filetypes = { 'help', 'neo-tree' },
+        index_help_windows = false,
+        max_windows = 9,
+        zero_based_indexing = false,
+        notify = true,
+        keymaps = {
+          focus_or_create_horizontal_window = '<leader>',
+          focus_or_create_vertical_window = '<leader>v',
+          swap_window = '<leader>x',
+          close_window = '<leader>q',
+          close_window_and_swap = '<leader>z',
+        },
+      },
+
+      clipboard = {
+        empty_filepath = '[No Name]',
+        notify = true,
+        ai = {
+          file_begin_text = '=== FILE BEGIN ===',
+          content_begin_text = '--- CONTENT ---',
+          file_end_text = '=== FILE END ===',
+          separator = '\n',
+          include_filetype = true,
+          include_line_count = true,
+          include_path = true,
+        },
+        keymaps = {
+          yank_current_window = '<leader>ya',
+          yank_current_window_ai = '<leader>y#',
+          yank_windows_ai = '<leader>y*',
+          yank_filename = '<leader>yn',
+        },
+      },
+    },
+  },
+
+  {
+    'mihaifm/megatoggler',
+    config = function()
+      require('megatoggler').setup {
+        tabs = {
+          {
+            -- global options you might want to persist
+            id = 'Globals',
+            items = {
+              {
+                id = 'Ignore Case',
+                -- all items must define a get method
+                get = function()
+                  return vim.o.ignorecase
+                end,
+                -- items with boolean value must define on_toggle
+                on_toggle = function(on)
+                  vim.o.ignorecase = on
+                end,
+              },
+              {
+                id = 'Tabstop',
+                label = 'Tab Stop', -- optional label
+                desc = 'Tab size', -- optional description
+                get = function()
+                  -- use opt_global for vim options you want to persist
+                  return vim.opt_global.tabstop:get()
+                end,
+                -- items with numeric/string value must define on_set
+                on_set = function(v)
+                  vim.opt_global.tabstop = v
+                end,
+                -- size of the textbox when editing
+                edit_size = 3,
+              },
+              {
+                id = 'Expand Tab',
+                get = function()
+                  return vim.opt_global.expandtab:get()
+                end,
+                on_toggle = function(on)
+                  vim.opt_global.expandtab = on
+                end,
+              },
+              {
+                id = 'Inc Command',
+                get = function()
+                  return vim.o.inccommand
+                end,
+                on_set = function(v)
+                  vim.o.inccommand = v
+                end,
+                edit_size = 10,
+              },
+            },
+          },
+          {
+            -- local options you might want to toggle but not persist
+            id = 'Local',
+            items = {
+              {
+                id = 'Tabstop',
+                -- disable persistence for buffer-local options
+                persist = false,
+                get = function()
+                  return vim.bo.tabstop
+                end,
+                on_set = function(v)
+                  vim.bo.tabstop = v
+                end,
+              },
+            },
+          },
+          {
+            -- toggle features provided by other plugins
+            id = 'Features',
+            items = {
+              {
+                id = 'Render Markdown',
+                get = function()
+                  return require('render-markdown').get()
+                end,
+                on_toggle = function()
+                  require('render-markdown').toggle()
+                end,
+              },
+              {
+                id = 'Autopairs',
+                get = function()
+                  -- check if plugin is loaded by Lazy
+                  -- only needed if you lazy load the plugin
+                  local lc = require 'lazy.core.config'
+                  if not (lc.plugins['nvim-autopairs'] and lc.plugins['nvim-autopairs']._.loaded) then
+                    return false
+                  end
+
+                  return not require('nvim-autopairs').state.disabled
+                end,
+                on_toggle = function(on)
+                  -- avoid lazy loading the plugin if on == false
+                  if on == false then
+                    local lc = require 'lazy.core.config'
+                    if not (lc.plugins['nvim-autopairs'] and lc.plugins['nvim-autopairs']._.loaded) then
+                      return
+                    end
+                  end
+
+                  if on then
+                    require('nvim-autopairs').enable()
+                  else
+                    require('nvim-autopairs').disable()
+                  end
+                end,
+              },
+              {
+                id = 'Smooth scrolling',
+                -- disable persistence when it's difficult to get the plugin's internal state
+                persist = false,
+                get = function()
+                  return true
+                end,
+                on_toggle = function()
+                  vim.cmd 'ToggleNeoscroll'
+                end,
+                -- set custom icons for plugins where it's difficult to get the state
+                icons = { checked = '', unchecked = '' },
+              },
+            },
+          },
+        },
+      }
+    end,
+  },
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = true,
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
+  },
+  {
+    'karb94/neoscroll.nvim',
+    config = function()
+      require('neoscroll').setup {
+        mappings = { -- Keys to be mapped to their corresponding default scrolling animation
+          '<C-u>',
+          '<C-d>',
+          '<C-b>',
+          '<C-f>',
+          '<C-y>',
+          '<C-e>',
+          'zt',
+          'zz',
+          'zb',
+        },
+        hide_cursor = true, -- Hide cursor while scrolling
+        stop_eof = true, -- Stop at <EOF> when scrolling downwards
+        respect_scrolloff = false, -- Stop scrolling when the cursor reaches the scrolloff margin of the file
+        cursor_scrolls_alone = true, -- The cursor will keep on scrolling even if the window cannot scroll further
+        duration_multiplier = 1.0, -- Global duration multiplier
+        easing = 'linear', -- Default easing function
+        pre_hook = nil, -- Function to run before the scrolling animation starts
+        post_hook = nil, -- Function to run after the scrolling animation ends
+        performance_mode = false, -- Disable "Performance Mode" on all buffers.
+        ignored_events = { -- Events ignored while scrolling
+          'WinScrolled',
+          'CursorMoved',
+        },
+      }
+    end,
+  },
 }
