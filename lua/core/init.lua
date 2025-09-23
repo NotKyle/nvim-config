@@ -6,4 +6,5 @@ require("core.autocmds")
 
 -- require("core.theme")
 -- require("core.mini")
+
 require("core.lualine")

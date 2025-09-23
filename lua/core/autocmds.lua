@@ -53,9 +53,30 @@ local function setup_formatters()
 	})
 end
 
+-- highlight on yank
+local function setup_yank_highlight()
+	api.nvim_create_autocmd("TextYankPost", {
+		callback = function()
+			vim.highlight.on_yank({ higroup = "IncSearch", timeout = 40 })
+		end,
+	})
+end
+
+local function resize_splits()
+	api.nvim_create_autocmd("VimResized", {
+		callback = function()
+			vim.cmd("tabdo wincmd =")
+		end,
+	})
+end
 local function setup_autocmds()
 	restore_cursor_position()
 	highlight_yank()
 	trim_whitespace()
 	check_file_changed()
+	-- setup_formatters()
+	setup_yank_highlight()
+	resize_splits()
 end
+
+setup_autocmds()

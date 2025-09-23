@@ -87,67 +87,81 @@ end, { desc = "Open Neogit" })
 -- Open Yazi with <leader>e
 vim.keymap.set("n", "<leader>e", "<cmd>Yazi<cr>", { desc = "Open Yazi" })
 
--- LSP Mappings
-local legacy_lsp = true
-if legacy_lsp then
-	vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
-	vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Code action" })
-	vim.keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", { desc = "Rename symbol" })
-	vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", { desc = "Go to definition" })
-	vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", { desc = "Go to references" })
-	vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", { desc = "Show hover documentation" })
-	vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", { desc = "Go to declaration" })
-	-- vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { desc = 'Go to implementation' })
-end
+local lsp_keymaps_enabled = false
 
--- vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', { desc = 'Format code' })
+if lsp_keymaps_enabled then
+	-- LSP Mappings
+	local legacy_lsp = false
+	if legacy_lsp then
+		-- vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Signature help" })
+		-- vim.keymap.set("n", "K", "<cmd>lua vim.lsp.buf.hover()<cr>", { desc = "Show hover documentation" })
+		vim.keymap.set("n", "<leader>ca", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Code action" })
+		vim.keymap.set("n", "<leader>cr", "<cmd>lua vim.lsp.buf.rename()<cr>", { desc = "Rename symbol" })
+		vim.keymap.set("n", "gd", "<cmd>lua vim.lsp.buf.definition()<cr>", { desc = "Go to definition" })
+		vim.keymap.set("n", "gr", "<cmd>lua vim.lsp.buf.references()<cr>", { desc = "Go to references" })
+		vim.keymap.set("n", "gD", "<cmd>lua vim.lsp.buf.declaration()<cr>", { desc = "Go to declaration" })
+		-- vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { desc = 'Go to implementation' })
+	end
 
--- LSP Saga
+	-- vim.keymap.set('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<cr>', { desc = 'Format code' })
 
-if not legacy_lsp then
-	-- Hover Doc (replaces vim.lsp.buf.hover)
-	vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { desc = "LSP Hover Docs", silent = true })
+	-- LSP Saga
 
-	-- Peek Definition (floating window)
-	vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition", silent = true })
+	if not legacy_lsp then
+		-- Hover Doc (replaces vim.lsp.buf.hover)
+		vim.keymap.set("n", "K", "<cmd>Lspsaga hover_doc<CR>", { desc = "LSP Hover Docs", silent = true })
 
-	-- Go to Definition
-	vim.keymap.set("n", "gD", "<cmd>Lspsaga goto_definition<CR>", { desc = "Goto Definition", silent = true })
+		-- Peek Definition (floating window)
+		vim.keymap.set("n", "gd", "<cmd>Lspsaga peek_definition<CR>", { desc = "Peek Definition", silent = true })
 
-	-- Find References
-	vim.keymap.set("n", "gr", "<cmd>Lspsaga finder<CR>", { desc = "LSP Finder", silent = true })
+		-- Go to Definition
+		vim.keymap.set("n", "gD", "<cmd>Lspsaga goto_definition<CR>", { desc = "Goto Definition", silent = true })
 
-	-- Rename
-	-- vim.keymap.set('n', '<leader>cr', '<cmd>Lspsaga rename<CR>', { desc = 'Rename Symbol', silent = true })
+		-- Find References
+		vim.keymap.set("n", "gr", "<cmd>Lspsaga finder<CR>", { desc = "LSP Finder", silent = true })
 
-	-- Code Action
-	-- vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<cmd>Lspsaga code_action<CR>', { desc = 'Code Action', silent = true })
+		-- Rename
+		-- vim.keymap.set('n', '<leader>cr', '<cmd>Lspsaga rename<CR>', { desc = 'Rename Symbol', silent = true })
 
-	-- Diagnostic Jump
-	vim.keymap.set("n", "[d", "<cmd>Lspsaga diagnostic_jump_prev<CR>", { desc = "Previous Diagnostic", silent = true })
-	vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { desc = "Next Diagnostic", silent = true })
+		-- Code Action
+		-- vim.keymap.set({ 'n', 'v' }, '<leader>ca', '<cmd>Lspsaga code_action<CR>', { desc = 'Code Action', silent = true })
 
-	-- Outline View
-	vim.keymap.set("n", "<leader>o", "<cmd>Lspsaga outline<CR>", { desc = "Toggle Outline", silent = true })
+		-- Diagnostic Jump
+		vim.keymap.set(
+			"n",
+			"[d",
+			"<cmd>Lspsaga diagnostic_jump_prev<CR>",
+			{ desc = "Previous Diagnostic", silent = true }
+		)
+		vim.keymap.set("n", "]d", "<cmd>Lspsaga diagnostic_jump_next<CR>", { desc = "Next Diagnostic", silent = true })
 
-	-- Show Line Diagnostics
-	vim.keymap.set(
-		"n",
-		"<leader>sl",
-		"<cmd>Lspsaga show_line_diagnostics<CR>",
-		{ desc = "Line Diagnostics", silent = true }
-	)
+		-- Outline View
+		vim.keymap.set("n", "<leader>o", "<cmd>Lspsaga outline<CR>", { desc = "Toggle Outline", silent = true })
 
-	-- Show Cursor Diagnostics
-	vim.keymap.set(
-		"n",
-		"<leader>sc",
-		"<cmd>Lspsaga show_cursor_diagnostics<CR>",
-		{ desc = "Cursor Diagnostics", silent = true }
-	)
+		-- Show Line Diagnostics
+		vim.keymap.set(
+			"n",
+			"<leader>sl",
+			"<cmd>Lspsaga show_line_diagnostics<CR>",
+			{ desc = "Line Diagnostics", silent = true }
+		)
 
-	-- Float Terminal
-	vim.keymap.set({ "n", "t" }, "<A-d>", "<cmd>Lspsaga term_toggle<CR>", { desc = "Toggle Terminal", silent = true })
+		-- Show Cursor Diagnostics
+		vim.keymap.set(
+			"n",
+			"<leader>sc",
+			"<cmd>Lspsaga show_cursor_diagnostics<CR>",
+			{ desc = "Cursor Diagnostics", silent = true }
+		)
+
+		-- Float Terminal
+		vim.keymap.set(
+			{ "n", "t" },
+			"<A-d>",
+			"<cmd>Lspsaga term_toggle<CR>",
+			{ desc = "Toggle Terminal", silent = true }
+		)
+	end
 end
 
 vim.keymap.set("n", "<Esc>", function()

@@ -93,10 +93,10 @@ return {
 			stubs = stubs,
 			environment = {
 				includePaths = {
-					-- vim.fn.expand("~/.config/nvim/lua/vendor/php-stubs/wordpress-stubs"),
-					-- Add cwd vendor and public directories
 					vim.fn.getcwd() .. "/vendor/",
 					vim.fn.getcwd() .. "/public/",
+					-- vim.fn.expand("~/.config/nvim/lua/vendor/php-stubs/wordpress-stubs"),
+					-- Add cwd vendor and public directories
 					-- "vendor/",
 					-- "public/",
 				},
