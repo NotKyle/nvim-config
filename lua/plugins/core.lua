@@ -9,6 +9,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
@@ -117,11 +118,6 @@ return {
 		end,
 	},
 
-	{
-		"L3MON4D3/LuaSnip",
-		build = "make install_jsregexp",
-	},
-
 	-- Treesitter & extras
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -202,14 +198,7 @@ return {
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = true,
 	},
-	-- {
-	--   'kdheepak/lazygit.nvim',
-	--   cmd = 'LazyGit',
-	--   dependencies = { 'nvim-lua/plenary.nvim' },
-	--   config = function()
-	--     vim.keymap.set('n', '<leader>gg', '<cmd>LazyGit<cr>', { desc = 'Open LazyGit' })
-	--   end,
-	-- },
+
 	{
 		"luckasRanarison/tailwind-tools.nvim",
 		name = "tailwind-tools",
@@ -259,10 +248,14 @@ return {
 		},
 	},
 	-- Prioritise window
-	-- {
-	--   'zimeg/newsflash.nvim',
-	--   event = 'VeryLazy',
-	-- },
+	{
+		"zimeg/newsflash.nvim",
+		event = "VeryLazy",
+		config = function()
+			local newsflash = require("newsflash")
+			vim.keymap.set("n", "<leader>q", newsflash.toggle)
+		end,
+	},
 	{
 		"nvim-lualine/lualine.nvim",
 	},
@@ -305,36 +298,6 @@ return {
 			})
 		end,
 	},
-	-- {
-	--   'jinh0/eyeliner.nvim',
-	--   config = function()
-	--     require('eyeliner').setup {
-	--       -- show highlights only after keypress
-	--       highlight_on_key = false,
-	--
-	--       -- dim all other characters if set to true (recommended!)
-	--       dim = true,
-	--
-	--       -- set the maximum number of characters eyeliner.nvim will check from
-	--       -- your current cursor position; this is useful if you are dealing with
-	--       -- large files: see https://github.com/jinh0/eyeliner.nvim/issues/41
-	--       max_length = 9999,
-	--
-	--       -- filetypes for which eyeliner should be disabled;
-	--       -- e.g., to disable on help files:
-	--       -- disabled_filetypes = {"help"}
-	--       disabled_filetypes = {},
-	--
-	--       -- buftypes for which eyeliner should be disabled
-	--       -- e.g., disabled_buftypes = {"nofile"}
-	--       disabled_buftypes = {},
-	--
-	--       -- add eyeliner to f/F/t/T keymaps;
-	--       -- see section on advanced configuration for more information
-	--       default_keymaps = true,
-	--     }
-	--   end,
-	-- },
 	{
 		"rmagatti/auto-session",
 		config = function()
@@ -421,22 +384,8 @@ return {
 	},
 	{
 		"github/copilot.vim",
-		event = "InsertEnter",
+		-- event = "InsertEnter",
 	},
-	{
-		"copilotlsp-nvim/copilot-lsp",
-		init = function()
-			vim.g.copilot_nes_debounce = 25
-			vim.lsp.enable("copilot")
-		end,
-	},
-	-- {
-	--   'Exafunction/windsurf.nvim',
-	--   enabled = false,
-	--   dependencies = {
-	--     'nvim-lua/plenary.nvim',
-	--   },
-	-- },
 	{
 		"Chaitanyabsprip/fastaction.nvim",
 		config = function()
@@ -459,40 +408,6 @@ return {
 		end,
 	},
 	{
-		"kwkarlwang/bufresize.nvim",
-	},
-	-- {
-	--   'tomasky/bookmarks.nvim',
-	--   enabled = false,
-	--   event = 'VimEnter',
-	--   config = function()
-	--     local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':t')
-	--     local bookmarks_dir = vim.fn.stdpath 'data' .. '/bookmarks'
-	--     vim.fn.mkdir(bookmarks_dir, 'p') -- Ensure the directory exists
-	--
-	--     require('bookmarks').setup {
-	--       save_file = bookmarks_dir .. '/' .. project_name .. '.json',
-	--       keywords = {
-	--         ['@t'] = '☑️ ',
-	--         ['@w'] = '⚠️ ',
-	--         ['@f'] = '⛏ ',
-	--         ['@n'] = ' ',
-	--       },
-	--       on_attach = function(bufnr)
-	--         local bm = require 'bookmarks'
-	--         local map = vim.keymap.set
-	--         map('n', 'mm', bm.bookmark_toggle)
-	--         map('n', 'mi', bm.bookmark_ann)
-	--         map('n', 'mc', bm.bookmark_clean)
-	--         map('n', 'mn', bm.bookmark_next)
-	--         map('n', 'mp', bm.bookmark_prev)
-	--         map('n', 'ml', bm.bookmark_list)
-	--         map('n', 'mx', bm.bookmark_clear_all)
-	--       end,
-	--     }
-	--   end,
-	-- },
-	{
 		"f-person/git-blame.nvim",
 		opts = {
 			enabled = false, -- If you want to enable the plugin
@@ -502,17 +417,8 @@ return {
 		},
 	},
 	{
-		"folke/drop.nvim",
-		opts = {},
-		enabled = false,
-	},
-	{
 		"MeanderingProgrammer/render-markdown.nvim",
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
-		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-mini/mini.icons' }, -- if you use standalone mini plugins
-		-- dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
-		---@module 'render-markdown'
-		---@type render.md.UserConfig
 		opts = {},
 	},
 	{
@@ -523,112 +429,6 @@ return {
 		end,
 	},
 	{
-		"xiyaowong/transparent.nvim",
-	},
-	{
-		"VidocqH/lsp-lens.nvim",
-		config = function()
-			require("lsp-lens").setup({
-				enable = true,
-				include_declaration = false, -- Reference include declaration
-				sections = { -- Enable / Disable specific request, formatter example looks 'Format Requests'
-					definition = false,
-					references = true,
-					implements = true,
-					git_authors = false,
-				},
-				ignore = {
-					"prisma",
-				},
-			})
-		end,
-	},
-
-	{
-		"ThePrimeagen/harpoon",
-		branch = "harpoon2",
-		dependencies = { "nvim-lua/plenary.nvim" },
-	},
-	-- {
-	--   'iamkarasik/sonarqube.nvim',
-	--   config = function()
-	--     require('sonarqube').setup {}
-	--   end,
-	--   enabled = false,
-	-- },
-	{
-		"SyedAsimShah1/quick-todo.nvim",
-		config = function()
-			require("quick-todo").setup({
-				keys = {
-					open = "<leader>T",
-				},
-				window = {
-					height = 0.5,
-					width = 0.5,
-					winblend = 0,
-					border = "rounded",
-				},
-			})
-		end,
-	},
-
-	-- {
-	--   'rachartier/tiny-code-action.nvim',
-	--   dependencies = {
-	--     { 'nvim-lua/plenary.nvim' },
-	--     {
-	--       'folke/snacks.nvim',
-	--       opts = {
-	--         terminal = {},
-	--       },
-	--     },
-	--   },
-	--   event = 'LspAttach',
-	--   opts = {
-	--     backend = 'vim',
-	--
-	--     picker = 'buffer', -- must be 'buffer' to use auto_preview and hotkeys
-	--
-	--     opts = {
-	--       auto_preview = true,
-	--       hotkeys = true,
-	--       hotkeys_mode = 'text_diff_based',
-	--     },
-	--
-	--     -- Options specific to the buffer picker
-	--     backend_opts = {
-	--       delta = {
-	--         header_lines_to_remove = 4,
-	--         args = { '--line-numbers' },
-	--       },
-	--       difftastic = {
-	--         header_lines_to_remove = 1,
-	--         args = {
-	--           '--color=always',
-	--           '--display=inline',
-	--           '--syntax-highlight=on',
-	--         },
-	--       },
-	--       diffsofancy = {
-	--         header_lines_to_remove = 4,
-	--       },
-	--     },
-	--     signs = {
-	--       quickfix = { '', { link = 'DiagnosticWarning' } },
-	--       others = { '', { link = 'DiagnosticWarning' } },
-	--       refactor = { '', { link = 'DiagnosticInfo' } },
-	--       ['refactor.move'] = { '󰪹', { link = 'DiagnosticInfo' } },
-	--       ['refactor.extract'] = { '', { link = 'DiagnosticError' } },
-	--       ['source.organizeImports'] = { '', { link = 'DiagnosticWarning' } },
-	--       ['source.fixAll'] = { '󰃢', { link = 'DiagnosticError' } },
-	--       ['source'] = { '', { link = 'DiagnosticError' } },
-	--       ['rename'] = { '󰑕', { link = 'DiagnosticWarning' } },
-	--       ['codeAction'] = { '', { link = 'DiagnosticWarning' } },
-	--     },
-	--   },
-	-- },
-	{
 		"rachartier/tiny-inline-diagnostic.nvim",
 		event = "VeryLazy", -- Or `LspAttach`
 		priority = 1000, -- needs to be loaded in first
@@ -637,6 +437,7 @@ return {
 			vim.diagnostic.config({ virtual_text = false }) -- Only if needed in your configuration, if you already have native LSP diagnostics
 		end,
 	},
+
 	{
 		"fei6409/log-highlight.nvim",
 		config = function()
@@ -659,46 +460,6 @@ return {
 	},
 	{
 		"nvim-pack/nvim-spectre",
-	},
-	{
-		"rvaccone/wind.nvim",
-		---@type WindConfig
-		opts = {
-			windows = {
-				excluded_filetypes = { "help", "neo-tree" },
-				index_help_windows = false,
-				max_windows = 9,
-				zero_based_indexing = false,
-				notify = true,
-				keymaps = {
-					focus_or_create_horizontal_window = "<leader>",
-					focus_or_create_vertical_window = "<leader>v",
-					swap_window = "<leader>x",
-					close_window = "<leader>q",
-					close_window_and_swap = "<leader>z",
-				},
-			},
-
-			clipboard = {
-				empty_filepath = "[No Name]",
-				notify = true,
-				ai = {
-					file_begin_text = "=== FILE BEGIN ===",
-					content_begin_text = "--- CONTENT ---",
-					file_end_text = "=== FILE END ===",
-					separator = "\n",
-					include_filetype = true,
-					include_line_count = true,
-					include_path = true,
-				},
-				keymaps = {
-					yank_current_window = "<leader>ya",
-					yank_current_window_ai = "<leader>y#",
-					yank_windows_ai = "<leader>y*",
-					yank_filename = "<leader>yn",
-				},
-			},
-		},
 	},
 
 	{
