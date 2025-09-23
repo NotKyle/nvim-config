@@ -62,6 +62,13 @@ local function setup_yank_highlight()
 	})
 end
 
+local function resize_splits()
+	api.nvim_create_autocmd("VimResized", {
+		callback = function()
+			vim.cmd("tabdo wincmd =")
+		end,
+	})
+end
 local function setup_autocmds()
 	restore_cursor_position()
 	highlight_yank()
@@ -69,6 +76,7 @@ local function setup_autocmds()
 	check_file_changed()
 	-- setup_formatters()
 	setup_yank_highlight()
+	resize_splits()
 end
 
 setup_autocmds()
