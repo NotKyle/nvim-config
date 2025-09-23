@@ -1,44 +1,4 @@
----@diagnostic disable: undefined-doc-name
 return {
-  {
-    'neovim/nvim-lspconfig',
-  },
-  -- Mason & LSP management
-  {
-    'williamboman/mason.nvim',
-    build = ':MasonUpdate',
-    config = true,
-  },
-  {
-    'williamboman/mason-lspconfig.nvim',
-    dependencies = { 'mason.nvim' },
-    config = true,
-  },
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    config = function()
-      require('mason-tool-installer').setup {
-        ensure_installed = {
-          'intelephense',
-          'html-lsp',
-          'css-lsp',
-          'lua-language-server',
-          'stylua',
-        },
-        auto_update = true,
-      }
-    end,
-  },
-
-  -- Noice (UI)
-  {
-    'rcarriga/nvim-notify',
-    config = function()
-      require('notify').setup {
-        background_colour = '#000000', -- Solid black background for notify popups
-      }
-    end,
-  },
   {
     'folke/noice.nvim',
     event = 'VeryLazy',
@@ -147,11 +107,6 @@ return {
     end,
   },
 
-  {
-    'L3MON4D3/LuaSnip',
-    build = 'make install_jsregexp',
-  },
-
   -- Treesitter & extras
   {
     'nvim-treesitter/nvim-treesitter',
@@ -247,7 +202,7 @@ return {
     dependencies = {
       'nvim-treesitter/nvim-treesitter',
       'nvim-telescope/telescope.nvim', -- optional
-      'neovim/nvim-lspconfig', -- optional
+      -- 'neovim/nvim-lspconfig', -- optional
     },
     ---@type TailwindTools.Option
     opts = {
@@ -417,113 +372,13 @@ return {
       }
     end,
   },
-  {
-    'onsails/lspkind.nvim',
-    config = function()
-      -- setup() is also available as an alias
-      require('lspkind').init {
-        -- DEPRECATED (use mode instead): enables text annotations
-        --
-        -- default: true
-        -- with_text = true,
 
-        -- defines how annotations are shown
-        -- default: symbol
-        -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
-        mode = 'symbol_text',
-
-        -- default symbol map
-        -- can be either 'default' (requires nerd-fonts font) or
-        -- 'codicons' for codicon preset (requires vscode-codicons font)
-        --
-        -- default: 'default'
-        preset = 'codicons',
-
-        -- override preset symbols
-        --
-        -- default: {}
-        symbol_map = {
-          Text = '󰉿',
-          Method = '󰆧',
-          Function = '󰊕',
-          Constructor = '',
-          Field = '󰜢',
-          Variable = '󰀫',
-          Class = '󰠱',
-          Interface = '',
-          Module = '',
-          Property = '󰜢',
-          Unit = '󰑭',
-          Value = '󰎠',
-          Enum = '',
-          Keyword = '󰌋',
-          Snippet = '',
-          Color = '󰏘',
-          File = '󰈙',
-          Reference = '󰈇',
-          Folder = '󰉋',
-          EnumMember = '',
-          Constant = '󰏿',
-          Struct = '󰙅',
-          Event = '',
-          Operator = '󰆕',
-          TypeParameter = '',
-        },
-      }
-    end,
-  },
-  {
-    'nvimdev/lspsaga.nvim',
-    event = 'LspAttach',
-    enabled = true,
-    config = function()
-      require('lspsaga').setup {}
-    end,
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter', -- optional
-      'nvim-tree/nvim-web-devicons', -- optional
-    },
-  },
-  {
+	{
     'github/copilot.vim',
     event = 'InsertEnter',
   },
-  {
-    'copilotlsp-nvim/copilot-lsp',
-    init = function()
-      vim.g.copilot_nes_debounce = 25
-      vim.lsp.enable 'copilot'
-    end,
-  },
-  -- {
-  --   'Exafunction/windsurf.nvim',
-  --   enabled = false,
-  --   dependencies = {
-  --     'nvim-lua/plenary.nvim',
-  --   },
-  -- },
-  {
-    'Chaitanyabsprip/fastaction.nvim',
-    config = function()
-      require('fastaction').setup {
-        keys = 'abcdefghijklmnopqrstuvwxyz1234567890', -- Expanded to avoid missing key errors
-        max_items = 20,
-      }
-    end,
-  },
-  {
-    'tzachar/local-highlight.nvim',
-    config = function()
-      require('local-highlight').setup {
-        animate = {
-          enabled = false,
-          timeout = 100,
-          easing = 'linear',
-        },
-      }
-    end,
-  },
-  {
+
+	{
     'kwkarlwang/bufresize.nvim',
   },
   -- {
@@ -938,3 +793,4 @@ return {
     end,
   },
 }
+
