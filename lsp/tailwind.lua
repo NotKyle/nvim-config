@@ -10,6 +10,8 @@ return {
 		"typescriptreact",
 		"svelte",
 		"vue",
+		"js",
+		"jsx",
 	},
 	root_markers = { ".git", "composer.json", "index.php" },
 }

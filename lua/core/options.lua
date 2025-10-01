@@ -155,4 +155,7 @@ vim.opt.scrolloff = 10
 
 vim.opt.completeopt = "menu,menuone,noinsert,popup,fuzzy"
 
+-- In your Neovim config
+-- vim.lsp.handlers["textDocument/hover"] = function() end
+
 return {}
