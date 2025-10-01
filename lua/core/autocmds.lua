@@ -1,6 +1,5 @@
 local api = vim.api
 local fn = vim.fn
-local o = vim.o
 
 local function restore_cursor_position()
 	api.nvim_create_autocmd("BufReadPost", {
@@ -32,36 +31,6 @@ local function trim_whitespace()
 	})
 end
 
-local function check_file_changed()
-	api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
-		callback = function()
-			if o.modifiable and not o.readonly then
-				if fn.getcmdwintype() == "" then
-					vim.cmd("checktime")
-				end
-			end
-		end,
-	})
-end
-
-local function setup_formatters()
-	api.nvim_create_autocmd("BufWritePre", {
-		pattern = { "*.js", "*.ts", "*.jsx", "*.tsx", "*.css", "*.scss", "*.md", "*.json", "*.yaml", "*.yml" },
-		callback = function()
-			vim.lsp.buf.format({ async = false })
-		end,
-	})
-end
-
--- highlight on yank
-local function setup_yank_highlight()
-	api.nvim_create_autocmd("TextYankPost", {
-		callback = function()
-			vim.highlight.on_yank({ higroup = "IncSearch", timeout = 40 })
-		end,
-	})
-end
-
 local function resize_splits()
 	api.nvim_create_autocmd("VimResized", {
 		callback = function()
@@ -69,13 +38,11 @@ local function resize_splits()
 		end,
 	})
 end
+
 local function setup_autocmds()
 	restore_cursor_position()
 	highlight_yank()
 	trim_whitespace()
-	check_file_changed()
-	-- setup_formatters()
-	setup_yank_highlight()
 	resize_splits()
 end
 

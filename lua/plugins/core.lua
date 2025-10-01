@@ -167,12 +167,13 @@ return {
 	-- Telescope (no keymaps)
 	{
 		"nvim-telescope/telescope.nvim",
+		cmd = "Telescope",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 
 	-- Productivity
 	{ "folke/todo-comments.nvim", config = true },
-	{ "mbbill/undotree" },
+	{ "mbbill/undotree", cmd = "UndotreeToggle" },
 	{ "folke/trouble.nvim", config = true },
 	{
 		"folke/which-key.nvim",
@@ -384,7 +385,7 @@ return {
 	},
 	{
 		"github/copilot.vim",
-		-- event = "InsertEnter",
+		event = "InsertEnter",
 	},
 	{
 		"Chaitanyabsprip/fastaction.nvim",
@@ -418,6 +419,7 @@ return {
 	},
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
+		ft = "markdown",
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
 		opts = {},
 	},
@@ -447,6 +449,7 @@ return {
 
 	{
 		"NeogitOrg/neogit",
+		cmd = "Neogit",
 		dependencies = {
 			"nvim-lua/plenary.nvim", -- required
 			"sindrets/diffview.nvim", -- optional - Diff integration
