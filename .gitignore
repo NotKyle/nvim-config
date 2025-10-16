@@ -7,3 +7,5 @@ spell/
 lazy-lock.json
 
 vendor/
+node_modules/
+lua/node_modules/
