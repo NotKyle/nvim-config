@@ -158,4 +158,8 @@ vim.opt.completeopt = "menu,menuone,noinsert,popup,fuzzy"
 -- In your Neovim config
 -- vim.lsp.handlers["textDocument/hover"] = function() end
 
+vim.o.laststatus = 3
+
+vim.o.winborder = "single"
+
 return {}

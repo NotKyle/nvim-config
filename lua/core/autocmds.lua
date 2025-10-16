@@ -39,7 +39,33 @@ local function resize_splits()
 	})
 end
 
+-- For PHP only, replace 'period' with '->' in insert mode when the context is appropriate (such as after a variable or object)
+local function php_object_operator()
+	api.nvim_create_autocmd("InsertCharPre", {
+		pattern = "*.php",
+		callback = function()
+			-- when we hit . replace with ->
+			-- dont run inside a comment or string
+
+			if vim.v.char == "." then
+				local context = fn.synIDattr(fn.synID(fn.line("."), fn.col(".") - 1, true), "name")
+				if context:match("Comment") or context:match("String") then
+					return
+				end
+
+				local prev_char = fn.getline("."):sub(fn.col(".") - 1, fn.col(".") - 1)
+				if prev_char:match("[%w_]") then
+					vim.schedule(function()
+						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<BS>->", true, false, true), "n", true)
+					end)
+				end
+			end
+		end,
+	})
+end
+
 local function setup_autocmds()
+	php_object_operator()
 	restore_cursor_position()
 	highlight_yank()
 	trim_whitespace()

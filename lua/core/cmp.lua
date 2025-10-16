@@ -73,5 +73,5 @@ blink.setup({
 	},
 })
 -- Register optional sources if using
--- require('blink.sources.lsp').register()
--- require('blink.sources.snippet').register()
+require("blink.sources.lsp").register()
+require("blink.sources.snippet").register()
