@@ -39,14 +39,14 @@ map("n", "<leader>fg", function()
 end, opts)
 
 -- Buffer Picker with mini.pick
-vim.keymap.set("n", "<leader><leader>", function()
-	local pick = require("mini.pick")
-	local fs = vim.fs
-
-	local root = fs.dirname(fs.find({ "composer.json", ".git" }, { upward = true })[1] or vim.loop.cwd())
-
-	pick.builtin.files({ cwd = root })
-end, { desc = "Find file (project root)" })
+-- vim.keymap.set("n", "<leader><leader>", function()
+-- 	local pick = require("mini.pick")
+-- 	local fs = vim.fs
+--
+-- 	local root = fs.dirname(fs.find({ "composer.json", ".git" }, { upward = true })[1] or vim.loop.cwd())
+--
+-- 	pick.builtin.files({ cwd = root })
+-- end, { desc = "Find file (project root)" })
 
 -- Additional useful mappings
 map("n", "<leader>q", ":q<CR>", opts) -- Quit
@@ -57,7 +57,7 @@ map("n", "<leader>h", ":nohlsearch<CR>", opts) -- Clear search highlight
 -- Window Navigation
 map("n", "<C-h>", "<C-w>h", opts)
 map("n", "<C-j>", "<C-w>j", opts)
-map("n", "<C-k>", "<C-w>k", opts)
+-- map("n", "<C-k>", "<C-w>k", opts)
 map("n", "<C-l>", "<C-w>l", opts)
 
 -- Buffer Navigation
@@ -85,7 +85,7 @@ vim.keymap.set("n", "<leader>gg", function()
 end, { desc = "Open Neogit" })
 
 -- Open Yazi with <leader>e
-vim.keymap.set("n", "<leader>e", "<cmd>Yazi<cr>", { desc = "Open Yazi" })
+-- vim.keymap.set("n", "<leader>e", "<cmd>Yazi<cr>", { desc = "Open Yazi" })
 
 local lsp_keymaps_enabled = false
 

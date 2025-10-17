@@ -159,12 +159,28 @@ return {
 			})
 		end,
 	},
-
 	{ "nvim-treesitter/nvim-treesitter-textobjects" },
+	{
+		"HiPhish/rainbow-delimiters.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			local rainbow_delimiters = require("rainbow-delimiters")
+			vim.g.rainbow_delimiters = {
+				highlight = {
+					"RainbowDelimiterRed",
+					"RainbowDelimiterYellow",
+					"RainbowDelimiterBlue",
+					"RainbowDelimiterOrange",
+					"RainbowDelimiterGreen",
+					"RainbowDelimiterViolet",
+					"RainbowDelimiterCyan",
+				},
+			}
+		end,
+	},
 
 	-- UI
 	{ "nvim-tree/nvim-web-devicons", lazy = true },
-	{ "folke/snacks.nvim", config = true },
 
 	-- Telescope (no keymaps)
 	{
@@ -737,12 +753,11 @@ return {
 						score_offset = 100,
 						async = true,
 						-- LSP
-						lsp = {
-							name = "nvim_lsp",
-							score_offset = 90,
-							async = true,
-							priority = 1000, -- Higher priority for LSP suggestions
-						},
+					},
+					lsp = {
+						name = "nvim_lsp",
+						score_offset = 90,
+						async = true,
 					},
 				},
 			},
@@ -767,7 +782,9 @@ return {
 					"fallback",
 				},
 			},
-			signature = { window = { border = "single" } },
+			signature = {
+				enabled = true,
+			},
 			completion = {
 				menu = {
 					draw = {

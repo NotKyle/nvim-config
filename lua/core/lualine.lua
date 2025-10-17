@@ -23,7 +23,7 @@ function lualine()
 
 	local function lsp_status()
 		-- Show LSP status
-		local clients = vim.lsp.get_active_clients()
+		local clients = vim.lsp.get_clients()
 		if #clients == 0 then
 			return "No LSP"
 		end

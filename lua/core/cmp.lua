@@ -32,7 +32,7 @@ blink.setup({
 		-- Docs and signature
 		["<C-b>"] = { "scroll_documentation_up", "fallback" },
 		["<C-f>"] = { "scroll_documentation_down", "fallback" },
-		["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
+		-- ["<C-k>"] = { "show_signature", "hide_signature", "fallback" },
 
 		-- Tab with Copilot NES integration
 
