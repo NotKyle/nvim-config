@@ -416,7 +416,9 @@ return {
 		{
 			"<leader>.",
 			function()
-				Snacks.scratch()
+				Snacks.scratch({
+					ft = "lua",
+				})
 			end,
 			desc = "[Snacks] Toggle Scratch Buffer",
 		},
