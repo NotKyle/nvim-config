@@ -15,6 +15,7 @@ return {
 				typescript = { "prettier" },
 				html = { "prettier" },
 				css = { "prettier" },
+				scss = { "prettier" },
 				json = { "prettier" },
 				sh = { "shfmt" },
 				blade = { "blade-formatter" },

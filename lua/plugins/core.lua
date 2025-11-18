@@ -21,10 +21,10 @@ return {
 			require("noice").setup({
 				-- Turn off UI extras for LSP
 				lsp = {
-					progress = { enabled = false }, -- Turn off LSP progress
-					signature = { enabled = false }, -- Turn off signature help
-					hover = { enabled = false }, -- Turn off hover
-					message = { enabled = false }, -- Turn off LSP messages
+					progress = { enabled = false },
+					signature = { enabled = false },
+					hover = { enabled = false },
+					message = { enabled = false },
 				},
 
 				-- Filter noisy messages even more aggressively
@@ -70,6 +70,16 @@ return {
 						opts = { skip = true },
 					},
 
+					-- Suppress delete messages like "3 lines deleted"
+					{
+						filter = {
+							event = "msg_show",
+							kind = "",
+							find = "deleted",
+						},
+						opts = { skip = true },
+					},
+
 					-- Suppress search hit bottom/top messages
 					{
 						filter = {
@@ -88,7 +98,7 @@ return {
 					level = vim.log.levels.WARN,
 				},
 
-				-- UI tweaks (feel free to tweak further!)
+				-- UI tweaks
 				presets = {
 					bottom_search = false,
 					command_palette = false,
@@ -105,17 +115,6 @@ return {
 		dependencies = {
 			"tpope/vim-repeat",
 		},
-	},
-
-	-- CMP (completion)
-	{
-		"Saghen/blink.cmp",
-		event = "InsertEnter",
-		version = "*", -- ✅ this makes it track stable tags, not commits
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			require("core.cmp")
-		end,
 	},
 
 	-- Treesitter & extras
@@ -139,6 +138,7 @@ return {
 					"php",
 					"html",
 					"css",
+					"scss",
 					"javascript",
 					"json",
 				},
@@ -148,6 +148,7 @@ return {
 			})
 		end,
 	},
+
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		config = function()
@@ -159,20 +160,38 @@ return {
 		end,
 	},
 	{ "nvim-treesitter/nvim-treesitter-textobjects" },
+	{
+		"HiPhish/rainbow-delimiters.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			local rainbow_delimiters = require("rainbow-delimiters")
+			vim.g.rainbow_delimiters = {
+				highlight = {
+					"RainbowDelimiterRed",
+					"RainbowDelimiterYellow",
+					"RainbowDelimiterBlue",
+					"RainbowDelimiterOrange",
+					"RainbowDelimiterGreen",
+					"RainbowDelimiterViolet",
+					"RainbowDelimiterCyan",
+				},
+			}
+		end,
+	},
 
 	-- UI
 	{ "nvim-tree/nvim-web-devicons", lazy = true },
-	{ "folke/snacks.nvim", config = true },
 
 	-- Telescope (no keymaps)
 	{
 		"nvim-telescope/telescope.nvim",
+		cmd = "Telescope",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 
 	-- Productivity
 	{ "folke/todo-comments.nvim", config = true },
-	{ "mbbill/undotree" },
+	{ "mbbill/undotree", cmd = "UndotreeToggle" },
 	{ "folke/trouble.nvim", config = true },
 	{
 		"folke/which-key.nvim",
@@ -382,10 +401,74 @@ return {
 			"nvim-tree/nvim-web-devicons", -- optional
 		},
 	},
+
 	{
 		"github/copilot.vim",
-		-- event = "InsertEnter",
+		event = "InsertEnter",
+		enabled = false,
 	},
+
+	{
+		"copilotlsp-nvim/copilot-lsp",
+		init = function()
+			vim.g.copilot_nes_debounce = 500
+			vim.lsp.config("copilot", {
+				on_init = function(client)
+					vim.api.nvim_set_hl(0, "NesAdd", { link = "DiffAdd", default = true })
+					vim.api.nvim_set_hl(0, "NesDelete", { link = "DiffDelete", default = true })
+					vim.api.nvim_set_hl(0, "NesApply", { link = "DiffText", default = true })
+
+					local au = vim.api.nvim_create_augroup("copilot-language-server", { clear = true })
+
+					--NOTE: didFocus
+					vim.api.nvim_create_autocmd("BufEnter", {
+						callback = function()
+							local td_params = vim.lsp.util.make_text_document_params()
+							client:notify("textDocument/didFocus", {
+								textDocument = {
+									uri = td_params.uri,
+								},
+							})
+						end,
+						group = au,
+					})
+
+					vim.keymap.set("n", "<leader>rn", function()
+						require("copilot-lsp.nes").request_nes(client)
+					end)
+				end,
+			})
+			vim.lsp.enable("copilot")
+			vim.keymap.set("n", "<tab>", function()
+				require("copilot-lsp.nes").apply_pending_nes()
+			end)
+		end,
+	},
+
+	{
+		"zbirenbaum/copilot.lua",
+		requires = {
+			"copilotlsp-nvim/copilot-lsp",
+			init = function()
+				vim.g.copilot_nes_debounce = 800
+			end,
+		},
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				nes = {
+					enabled = false,
+					keymap = {
+						accept_and_goto = "<leader>p",
+						accept = false,
+						dismiss = "<Esc>",
+					},
+				},
+			})
+		end,
+	},
+
 	{
 		"Chaitanyabsprip/fastaction.nvim",
 		config = function()
@@ -410,7 +493,7 @@ return {
 	{
 		"f-person/git-blame.nvim",
 		opts = {
-			enabled = false, -- If you want to enable the plugin
+			enabled = true, -- If you want to enable the plugin
 			message_template = " <summary> • <date> • <author> • <<sha>>", -- Template for the blame message, check the Message template section for more options
 			date_format = "%m-%d-%Y %H:%M:%S", -- Template for the date, check Date format section for more options
 			virtual_text_column = 1, -- Virtual text start column, check Start virtual text at column section for more options
@@ -418,6 +501,7 @@ return {
 	},
 	{
 		"MeanderingProgrammer/render-markdown.nvim",
+		ft = "markdown",
 		dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
 		opts = {},
 	},
@@ -447,6 +531,7 @@ return {
 
 	{
 		"NeogitOrg/neogit",
+		cmd = "Neogit",
 		dependencies = {
 			"nvim-lua/plenary.nvim", -- required
 			"sindrets/diffview.nvim", -- optional - Diff integration
@@ -458,8 +543,16 @@ return {
 			"folke/snacks.nvim", -- optional
 		},
 	},
+
+	-- Search & Replace
 	{
 		"nvim-pack/nvim-spectre",
+		enabled = false,
+	},
+
+	{
+		"thomasschafer/scooter",
+		dependencies = { "akinsho/toggleterm.nvim" },
 	},
 
 	{
@@ -634,5 +727,313 @@ return {
 				},
 			})
 		end,
+	},
+	{
+		"ThePrimeagen/refactoring.nvim",
+		-- config = function()
+		-- require("refactoring").setup({})
+		-- end,
+	},
+
+	{
+		"saghen/blink.cmp",
+		dependencies = { "fang2hou/blink-copilot" },
+		-- build = "cargo +nightly build --release",
+		version = "*",
+		opts = {
+			fuzzy = {
+				implementation = "prefer_rust_with_warning",
+			},
+			sources = {
+				default = { "copilot", "lsp", "buffer", "snippets", "path" },
+				providers = {
+					copilot = {
+						name = "copilot",
+						module = "blink-copilot",
+						score_offset = 100,
+						async = true,
+						-- LSP
+					},
+					lsp = {
+						name = "nvim_lsp",
+						score_offset = 90,
+						async = true,
+					},
+				},
+			},
+			keymap = {
+				preset = "super-tab",
+				["<Tab>"] = {
+					function(cmp)
+						if vim.b[vim.api.nvim_get_current_buf()].nes_state then
+							cmp.hide()
+							return (
+								require("copilot-lsp.nes").apply_pending_nes()
+								and require("copilot-lsp.nes").walk_cursor_end_edit()
+							)
+						end
+						if cmp.snippet_active() then
+							return cmp.accept()
+						else
+							return cmp.select_and_accept()
+						end
+					end,
+					"snippet_forward",
+					"fallback",
+				},
+			},
+			signature = {
+				enabled = true,
+			},
+			completion = {
+				menu = {
+					draw = {
+						components = {
+							kind_icon = {
+								text = function(ctx)
+									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+										local mini_icon, _ =
+											require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
+										if mini_icon then
+											return mini_icon .. ctx.icon_gap
+										end
+									end
+
+									local icon = require("lspkind").symbolic(ctx.kind, { mode = "symbol" })
+									return icon .. ctx.icon_gap
+								end,
+
+								-- Optionally, use the highlight groups from mini.icons
+								-- You can also add the same function for `kind.highlight` if you want to
+								-- keep the highlight groups in sync with the icons.
+								highlight = function(ctx)
+									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+										local mini_icon, mini_hl =
+											require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
+										if mini_icon then
+											return mini_hl
+										end
+									end
+									return ctx.kind_hl
+								end,
+							},
+							kind = {
+								-- Optional, use highlights from mini.icons
+								highlight = function(ctx)
+									if vim.tbl_contains({ "Path" }, ctx.source_name) then
+										local mini_icon, mini_hl =
+											require("mini.icons").get_icon(ctx.item.data.type, ctx.label)
+										if mini_icon then
+											return mini_hl
+										end
+									end
+									return ctx.kind_hl
+								end,
+							},
+						},
+					},
+				},
+			},
+		},
+	},
+
+	{
+		"jbuck95/recollect.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+
+		config = function()
+			require("recollect").setup({
+				-- All configuration options are optional.
+				-- Below are some examples you can override.
+
+				-- The start date for your grid.
+				birthday = "1990-01-01",
+
+				-- The path to your daily notes folder.
+				-- IMPORTANT: Make sure to change this to your actual notes path.
+				daily_notes_path = vim.fn.expand("~") .. "/Documents/Notes/Dailies",
+
+				-- A function to generate the content for a new daily note.
+				note_template = function(date_str)
+					local year, month, day = date_str:match("(%d+)-(%d+)-(%d+)")
+					local date_obj = os.time({
+						year = tonumber(year),
+						month = tonumber(month),
+						day = tonumber(day),
+					})
+
+					local weekdays = {
+						"Sunday",
+						"Monday",
+						"Tuesday",
+						"Wednesday",
+						"Thursday",
+						"Friday",
+						"Saturday",
+					}
+
+					local months = {
+						"January",
+						"February",
+						"March",
+						"April",
+						"May",
+						"June",
+						"July",
+						"August",
+						"September",
+						"October",
+						"November",
+						"December",
+					}
+
+					local wday = tonumber(os.date("%w", date_obj)) + 1
+					local formatted_date =
+						string.format("%s, %d %s %s", weekdays[wday], tonumber(day), months[tonumber(month)], year)
+
+					return string.format(
+						[[---
+date: %s
+---
+
+### %s
+
+]],
+						date_str,
+						formatted_date
+					)
+				end,
+
+				-- You can define custom time periods that get highlighted in the grid.
+				periods = {
+					{
+						start = "2020-03-11",
+						finish = "2022-05-01",
+						color = "red",
+						label = "Pandemic",
+					},
+				},
+
+				-- Symbols used for notes that have a specific tag in their YAML frontmatter.
+				tag_symbols = {
+					birthday = "🎂",
+					event = "🎉",
+					gym = "💪🏼",
+					trip = "✈️",
+					holiday = "☘",
+					party = "🍻",
+					work = "💼",
+					project = "🛠️",
+					deadline = "❗",
+					health = "❤️",
+					special = "⭐",
+				},
+
+				-- Customize the colors of the grid.
+				colors = {
+					background = "#1e1e2e",
+					default_dot = "#45475a",
+					today_dot = "#f38ba8",
+					note_exists = "#a6e3a1",
+					grid_lines = "#313244",
+					text = "#cdd6f4",
+					year_header = "#89b4fa",
+					yellow = "#f9e2af",
+					blue = "#89b4fa",
+					green = "#a6e3a1",
+					red = "#f38ba8",
+					purple = "#cba6f7",
+					orange = "#fab387",
+				},
+			})
+		end,
+	},
+
+	-- Witch Line
+	{
+		"sontungexpt/witch-line",
+		enabled = false,
+		dependencies = {
+			"nvim-tree/nvim-web-devicons",
+		},
+		lazy = false,
+		-- opts = {},
+		config = function()
+			require("witch-line").setup({
+				--- @type CombinedComponent[]
+				abstract = {
+					"file.name",
+					{
+						id = "file", -- Abstract component for file-related info
+						padding = { left = 1, right = 1 }, -- Padding around the component
+						static = { some_key = "some_value" }, -- Static metadata
+						style = { fg = "#ffffff", bg = "#000000", bold = true }, -- Style override
+						min_screen_width = 80, -- Hide if screen width < 80
+					},
+				},
+				--- @type CombinedComponent[]
+				components = {
+					"mode",
+					"file.name",
+					"file.icon",
+					"file.size",
+					"lsp.lua",
+					"%=",
+					"diagnostic.error",
+					"diagnostic.warn",
+					"diagnostic.info",
+					{
+						id = "component_id", -- Unique identifier
+						padding = { left = 1, right = 1 }, -- Padding around the component
+						static = { some_key = "some_value" }, -- Static metadata
+						timing = false, -- No timing updates
+						style = { fg = "#ffffff", bg = "#000000", bold = true }, -- Style override
+						min_screen_width = 80, -- Hide if screen width < 80
+						hidden = function() -- Hide condition
+							return vim.bo.buftype == "nofile"
+						end,
+						left_style = { fg = "#ff0000" }, -- Left style override
+						update = function(self, ctx, static, session_id) -- Main content generator
+							return vim.fn.expand("%:t")
+						end,
+						ref = { -- References to other components
+							events = { "file.name" },
+							style = "file.name",
+							static = "file.name",
+						},
+					},
+				},
+				-- disabled = {
+				-- 	filetypes = { "help", "TelescopePrompt" },
+				-- 	buftypes = { "nofile", "terminal" },
+				-- },
+			})
+		end,
+	},
+
+	{
+		"ptdewey/pendulum-nvim",
+		config = function()
+			require("pendulum").setup()
+		end,
+	},
+
+	{
+		"kawre/leetcode.nvim",
+		lazy = false,
+		build = ":TSUpdate html", -- if you have `nvim-treesitter` installed
+		dependencies = {
+			-- include a picker of your choice, see picker section for more details
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+			"nvim-treesitter",
+		},
+		opts = {
+			-- configuration goes here
+			lang = "php",
+		},
+	},
+	{
+		"shortcuts/no-neck-pain.nvim",
 	},
 }

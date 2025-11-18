@@ -1,6 +1,5 @@
 local api = vim.api
 local fn = vim.fn
-local o = vim.o
 
 local function restore_cursor_position()
 	api.nvim_create_autocmd("BufReadPost", {
@@ -32,36 +31,6 @@ local function trim_whitespace()
 	})
 end
 
-local function check_file_changed()
-	api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
-		callback = function()
-			if o.modifiable and not o.readonly then
-				if fn.getcmdwintype() == "" then
-					vim.cmd("checktime")
-				end
-			end
-		end,
-	})
-end
-
-local function setup_formatters()
-	api.nvim_create_autocmd("BufWritePre", {
-		pattern = { "*.js", "*.ts", "*.jsx", "*.tsx", "*.css", "*.scss", "*.md", "*.json", "*.yaml", "*.yml" },
-		callback = function()
-			vim.lsp.buf.format({ async = false })
-		end,
-	})
-end
-
--- highlight on yank
-local function setup_yank_highlight()
-	api.nvim_create_autocmd("TextYankPost", {
-		callback = function()
-			vim.highlight.on_yank({ higroup = "IncSearch", timeout = 40 })
-		end,
-	})
-end
-
 local function resize_splits()
 	api.nvim_create_autocmd("VimResized", {
 		callback = function()
@@ -69,13 +38,37 @@ local function resize_splits()
 		end,
 	})
 end
+
+-- For PHP only, replace 'period' with '->' in insert mode when the context is appropriate (such as after a variable or object)
+local function php_object_operator()
+	api.nvim_create_autocmd("InsertCharPre", {
+		pattern = "*.php",
+		callback = function()
+			-- when we hit . replace with ->
+			-- dont run inside a comment or string
+
+			if vim.v.char == "." then
+				local context = fn.synIDattr(fn.synID(fn.line("."), fn.col(".") - 1, true), "name")
+				if context:match("Comment") or context:match("String") then
+					return
+				end
+
+				local prev_char = fn.getline("."):sub(fn.col(".") - 1, fn.col(".") - 1)
+				if prev_char:match("[%w_]") then
+					vim.schedule(function()
+						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<BS>->", true, false, true), "n", true)
+					end)
+				end
+			end
+		end,
+	})
+end
+
 local function setup_autocmds()
+	php_object_operator()
 	restore_cursor_position()
 	highlight_yank()
 	trim_whitespace()
-	check_file_changed()
-	-- setup_formatters()
-	setup_yank_highlight()
 	resize_splits()
 end
 
