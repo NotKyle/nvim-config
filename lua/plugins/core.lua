@@ -1033,4 +1033,7 @@ date: %s
 			lang = "php",
 		},
 	},
+	{
+		"shortcuts/no-neck-pain.nvim",
+	},
 }
